@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "tRQOlO7DILRMY9IEEIvSjM1oUkWKnkbRTHWVmerG+40=",
+  "Source": "backEndAjedrez",
+  "BasePath": "_content/backEndAjedrez",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
