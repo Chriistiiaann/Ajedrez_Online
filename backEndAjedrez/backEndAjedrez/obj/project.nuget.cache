@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rZYC9co+qyw=",
+  "dgSpecHash": "IHw/XYDA8P0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj",
+  "projectFilePath": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\chrro\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\chrro\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.12\\microsoft.aspnetcore.authentication.jwtbearer.8.0.12.nupkg.sha512",

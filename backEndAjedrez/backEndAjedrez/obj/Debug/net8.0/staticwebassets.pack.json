@@ -1,23 +1,39 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\hola.jpg",
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\default.png",
+      "PackagePath": "staticwebassets\\images\\default.png"
+    },
+    {
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\giovi.jpg",
+      "PackagePath": "staticwebassets\\images\\giovi.jpg"
+    },
+    {
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\hola.jpg",
       "PackagePath": "staticwebassets\\images\\hola.jpg"
     },
     {
-      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\kilian.png",
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\juanjo.jpg",
+      "PackagePath": "staticwebassets\\images\\juanjo.jpg"
+    },
+    {
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\kilian.png",
       "PackagePath": "staticwebassets\\images\\kilian.png"
     },
     {
-      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\login.png",
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\login.png",
       "PackagePath": "staticwebassets\\images\\login.png"
     },
     {
-      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\manolo.png",
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\loro.png",
+      "PackagePath": "staticwebassets\\images\\loro.png"
+    },
+    {
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\manolo.png",
       "PackagePath": "staticwebassets\\images\\manolo.png"
     },
     {
-      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\prueba.png",
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\prueba.png",
       "PackagePath": "staticwebassets\\images\\prueba.png"
     },
     {

@@ -37,16 +37,13 @@ namespace backEndAjedrez.Controllers
 
             try
             {
-                // Intentar obtener los usuarios desde el repositorio
                 var users = await _userRepository.GetUsersAsync();
 
-                // Comprobar si la lista de usuarios es nula o está vacía
                 if (users == null || !users.Any())
                 {
                     return NotFound("No users found.");
                 }
 
-                // Creación del user DTO por cada User en la base de datos
                 IEnumerable<UserDto> usersDto = _userMapper.usersToDto(users);
 
                 return Ok(usersDto);
@@ -101,8 +98,9 @@ namespace backEndAjedrez.Controllers
             {
                 return BadRequest(ModelState);
             }
+            string normalizedNickname = await _userRepository.NormalizeNickname(userToAddDto.NickName);
 
-            var existingNickname = await _userRepository.GetUserByNickNameAsync(userToAddDto.NickName);
+            var existingNickname = await _userRepository.GetUserByNickNameAsync(normalizedNickname);
             if (existingNickname != null)
             {
                 return Conflict(new
@@ -112,7 +110,9 @@ namespace backEndAjedrez.Controllers
                 });
             }
 
-            var existingEmail = await _userRepository.GetUserByEmailAsync(userToAddDto.Email);
+            string normalizedEmail = await _userRepository.NormalizeNickname(userToAddDto.Email);
+
+            var existingEmail = await _userRepository.GetUserByEmailAsync(normalizedEmail);
             if (existingEmail != null)
             {
                 return Conflict(new

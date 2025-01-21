@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj": {}
+    "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj": {}
   },
   "projects": {
-    "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj": {
+    "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj",
+        "projectUniqueName": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj",
         "projectName": "backEndAjedrez",
-        "projectPath": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj",
+        "projectPath": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\backEndAjedrez.csproj",
         "packagesPath": "C:\\Users\\chrro\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\chrro\\OneDrive\\Escritorio\\backEndAjedrez\\backEndAjedrez\\obj\\",
+        "outputPath": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\chrro\\AppData\\Roaming\\NuGet\\NuGet.Config",

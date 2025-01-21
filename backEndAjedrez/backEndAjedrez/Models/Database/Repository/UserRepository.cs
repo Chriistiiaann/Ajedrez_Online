@@ -5,6 +5,8 @@ using backEndAjedrez.Models.Database.Entities;
 using backEndAjedrez.Models.Interfaces;
 using backEndAjedrez.Models.Database;
 using backEndAjedrez.Services;
+using System.Globalization;
+using System.Text;
 
 namespace backEndAjedrez.Models.Database.Repositories
 {
@@ -25,16 +27,43 @@ namespace backEndAjedrez.Models.Database.Repositories
 
         public async Task<User> GetUserByNickNameAsync(string nickname)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.NickName == nickname);
+            string normalizedNickname = await NormalizeNickname(nickname);
+            return await _context.Users.FirstOrDefaultAsync(u => u.NickName == normalizedNickname);
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
+            string normalizedEmail = await NormalizeNickname(email);
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<string> NormalizeNickname(string nickname)
+        {
+            var normalized = await NormalizeIdentifier(nickname);
+            return normalized;
+        }
+        
+        public async Task<string> NormalizeIdentifier(string identifier)
+        {
+            var normalizedIdentifier = identifier.ToLower();
+            
+            normalizedIdentifier = new string(normalizedIdentifier
+                .Normalize(NormalizationForm.FormD)  
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark) 
+                .ToArray());
+
+            return normalizedIdentifier;
         }
 
         public async Task<string> StoreImageAsync(IFormFile file, string modelName)
         {
+            var validImageTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/webp" };
+
+            if (!validImageTypes.Contains(file.ContentType))
+            {
+                throw new ArgumentException("El archivo no es un formato de imagen válido.");
+            }
+
             string fileExtension = Path.GetExtension(file.FileName);
             string fileName = modelName + fileExtension;
 
@@ -47,7 +76,7 @@ namespace backEndAjedrez.Models.Database.Repositories
                 await file.CopyToAsync(stream);
             }
 
-            return fileName;
+            return Path.Combine("images", fileName).Replace("\\", "/");
         }
 
         public async Task CreateUserAsync(UserCreateDto userCreateDto)
@@ -71,14 +100,14 @@ namespace backEndAjedrez.Models.Database.Repositories
                 catch(Exception ex) {
                     throw new Exception("Error al guardar la imagen: " + ex.Message);
                 }
-
-                // Agregar el usuario al contexto
-                await _context.Users.AddAsync(user);
-
-                // Guardar los cambios en la base de datos
-                await _context.SaveChangesAsync();
             }
-            
+            else
+            {
+                user.Avatar = Path.Combine("images", "default.png").Replace("\\", "/");
+            }
+            await _context.Users.AddAsync(user);
+
+            await _context.SaveChangesAsync();
         }
     }
 }
