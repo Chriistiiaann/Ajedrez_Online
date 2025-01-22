@@ -21,16 +21,16 @@ export default function InboxButton() {
     const [friendRequests] = useState<FriendRequest[]>(mockFriendRequests)
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen} >
         <DialogTrigger asChild>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full bg-foreground">
             <Inbox className="mr-2 h-4 w-4" />
-            Inbox ({friendRequests.length})
+            Bandeja de entrada ({friendRequests.length})
             </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className='text-white'>
             <DialogHeader>
-            <DialogTitle>Friend Requests</DialogTitle>
+            <DialogTitle >Solicitudes de amistad</DialogTitle>
             </DialogHeader>
             <ul className="space-y-2">
             {friendRequests.map(request => (
@@ -40,8 +40,8 @@ export default function InboxButton() {
                     <span>{request.name}</span>
                 </div>
                 <div>
-                    <Button size="sm" className="mr-2">Accept</Button>
-                    <Button size="sm" variant="outline">Decline</Button>
+                    <Button size="sm" className="mr-2">Aceptar</Button>
+                    <Button size="sm" variant="outline">Rechazar</Button>
                 </div>
                 </li>
             ))}

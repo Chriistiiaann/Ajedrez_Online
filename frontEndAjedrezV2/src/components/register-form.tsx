@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,13 +11,19 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import { useActionState } from "react"
 
-import { register } from "@/actions/authentication-actions"
+import { registerAction } from "@/actions/authentication-actions"
 
 export function RegisterForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+
+  const [actionState, action] = useActionState(registerAction, {
+      message: "",
+      fieldErrors: {},
+    });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -24,7 +32,7 @@ export function RegisterForm({
           <CardTitle className="text-xl">¡Regístrate!</CardTitle>
         </CardHeader>
         <CardContent>
-          <form action={register}>
+          <form action={action}>
             <div className="grid gap-6">
             <div className="grid gap-2">
                 <Label htmlFor="avatar">Avatar</Label>
@@ -34,6 +42,11 @@ export function RegisterForm({
                   name="avatar"
                   required
                 />
+                {actionState?.fieldErrors?.avatar && (
+                  <p className="px-1 text-xs text-red-600">
+                    {actionState.fieldErrors.avatar}
+                  </p>
+                )}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="apodo">Apodo</Label>
@@ -42,8 +55,14 @@ export function RegisterForm({
                   type="text"
                   name="nickname"
                   placeholder="Ejemplo"
+                  defaultValue={actionState?.payload?.get("nickname") as string}
                   required
                 />
+                {actionState?.fieldErrors?.nickname && (
+                  <p className="px-1 text-xs text-red-600">
+                    {actionState.fieldErrors.nickname}
+                  </p>
+                )}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Correo Electrónico</Label>
@@ -52,8 +71,14 @@ export function RegisterForm({
                   type="email"
                   name="email"
                   placeholder="Ejemplo@gmail.com"
+                  defaultValue={actionState?.payload?.get("email") as string}
                   required
                 />
+                {actionState?.fieldErrors?.email && (
+                  <p className="px-1 text-xs text-red-600">
+                    {actionState.fieldErrors.email}
+                  </p>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -65,6 +90,11 @@ export function RegisterForm({
                   name="password"
                   placeholder="Contraseña"
                   required />
+                {actionState?.fieldErrors?.password && (
+                  <p className="px-1 text-xs text-red-600">
+                    {actionState.fieldErrors.password}
+                  </p>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -76,6 +106,11 @@ export function RegisterForm({
                   name="password-Check"
                   placeholder="Contraseña"
                   required />
+                {actionState?.fieldErrors?.passwordCheck && (
+                  <p className="px-1 text-xs text-red-600">
+                    {actionState.fieldErrors.passwordCheck}
+                  </p>
+                )}
               </div>
               <Button type="submit" className="w-full">
                 Regístrarse

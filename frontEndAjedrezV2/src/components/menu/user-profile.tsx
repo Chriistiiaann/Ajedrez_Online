@@ -1,29 +1,94 @@
-'use client'
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { logoutAction } from "@/actions/authentication-actions";
 
+// Define la interfaz para los datos del usuario
+interface UserData {
+    token: {
+        accessToken: string;
+    };
+    user: {
+        Id: number;
+        NickName: string;
+        Email: string;
+        Avatar: string;
+        nbf: number;
+        exp: number;
+        iat: number;
+    };
+}
 
 export default function UserProfile() {
-  // Assume we get the user data from a context or prop
-    const user = {
-        name: "ChessMaster2000",
-        avatar: "/placeholder.svg?height=40&width=40"
+    const [userData, setUserData] = useState<UserData | null>(null);
+
+    useEffect(() => {
+        const userCookie = Cookies.get("userData");
+        console.log("Cookie obtenida (sin decodificar):", userCookie);
+
+        if (userCookie) {
+        try {
+            // Decodifica y parsea la cookie
+            const decodedCookie = decodeURIComponent(userCookie);
+            console.log("Cookie decodificada:", decodedCookie);
+
+            const parsedData: UserData = JSON.parse(decodedCookie);
+            console.log("Datos parseados:", parsedData);
+
+            setUserData(parsedData);
+        } catch (error) {
+            console.error("Error al decodificar o parsear la cookie:", error);
+        }
+        } else {
+        console.warn("La cookie userData no está disponible.");
+        }
+    }, []);
+
+    // Si los datos del usuario no están listos, muestra un estado de carga
+    if (!userData) {
+        return <div>Cargando...</div>;
     }
 
     return (
-        <div className="flex items-center justify-between bg-card p-4 rounded-lg shadow">
-        <div className="flex items-center space-x-4">
-            <Avatar>
-            <AvatarImage src={user.avatar} alt={user.name} />
-            <AvatarFallback>{user.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-            </Avatar>
-            <span className="font-semibold">{user.name}</span>
+        <div className="bg-gradient-to-r from-accent to-primary p-6 rounded-lg shadow-lg text-white">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                <Avatar className="h-20 w-20 border-2 border-white">
+                    <AvatarImage src={userData.user.Avatar} alt={userData.user.NickName} />
+                    <AvatarFallback>
+                    {userData.user.NickName.slice(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                </Avatar>
+                <div>
+                    <h2 className="text-2xl font-bold">{userData.user.NickName}</h2>
+                    <p className="text-sm opacity-75">{userData.user.Email}</p>
+                </div>
+                </div>
+                <Button className="bg-foreground hover:border-accent hover:bg-background" variant="outline" onClick={() => logoutAction()}>
+                Logout
+                </Button>
+            </div>
+            <div className="mt-4 flex justify-around">
+                <div className="text-center">
+                <p className="text-2xl font-bold">ID: {userData.user.Id}</p>
+                <p className="text-sm opacity-75">Unique Identifier</p>
+                </div>
+                <div className="text-center">
+                <p className="text-2xl font-bold">{"24"}</p>
+                <p className="text-sm opacity-75">Wins</p>
+                </div>
+                <div className="text-center">
+                <p className="text-2xl font-bold">{"12"}</p>
+                <p className="text-sm opacity-75">Losses</p>
+                </div>
+                <div className="text-center">
+                <p className="text-2xl font-bold">{"54.0"}%</p>
+                <p className="text-sm opacity-75">Win Rate</p>
+                </div>
+            </div>
         </div>
-        <Button variant="outline" onClick={ () => {console.log('logout')}}>
-            Logout
-        </Button>
-        </div>
-    )
+    );
 }
-

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { CastleIcon as ChessKnight } from 'lucide-react'
 
 export default function Navbar() {
+
     return (
         <nav className="bg-foreground border-b text-white">
         <div className="container mx-auto px-4">
@@ -12,7 +13,7 @@ export default function Navbar() {
             <div className="flex items-center">
                 <Link href="/" className="flex items-center space-x-2">
                 <ChessKnight className="h-8 w-8" />
-                <span className="text-xl font-bold">ChessMaster</span>
+                <span className="text-xl font-bold">Scacchi</span>
                 </Link>
             </div>
             <div className="hidden md:flex items-center space-x-4">
@@ -26,7 +27,7 @@ export default function Navbar() {
             </div>
             <div className="md:hidden">
                 <Button variant="ghost" size="icon" className="text-white">
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">Toggle Menu</span>
                 <svg
                     className="h-6 w-6"
                     fill="none"
