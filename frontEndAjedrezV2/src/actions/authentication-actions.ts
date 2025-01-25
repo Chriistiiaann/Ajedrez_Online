@@ -131,7 +131,17 @@ export const registerAction = async (_actionState: ActionState, formData: FormDa
             const data = await response.json();
             console.log("Registration successful:", data);
 
-            const loginState = await loginAction(_actionState, new FormData(), email, password);
+            
+        } else {
+            const errorText = await response.text();
+            console.error("Registration failed with error:", errorText);
+            return { status: "ERROR", message: errorText };
+        }
+    } catch (err) {
+        console.error("Error during registration:", err);
+        return { status: "ERROR", message: "Error durante el registro" };
+    }
+    const loginState = await loginAction(_actionState, new FormData(), email, password);
 
             if (loginState.status === "SUCCESS") {
                 console.log("User logged in successfully after registration");
@@ -142,15 +152,6 @@ export const registerAction = async (_actionState: ActionState, formData: FormDa
                     message: `Registro exitoso, pero inicio de sesión fallido: ${loginState.message}`,
                 };
             }
-        } else {
-            const errorText = await response.text();
-            console.error("Registration failed with error:", errorText);
-            return { status: "ERROR", message: errorText };
-        }
-    } catch (err) {
-        console.error("Error during registration:", err);
-        return { status: "ERROR", message: "Error durante el registro" };
-    }
 };
 
 

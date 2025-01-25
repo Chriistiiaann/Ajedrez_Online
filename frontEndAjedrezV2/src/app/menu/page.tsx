@@ -6,6 +6,7 @@ import GlobalStats from '@/components/menu/global-stats'
 import { PlaySection } from '@/components/menu/play-section'
 
 export default function MenuPage() {
+
     return (
         <div className="flex h-screen">
             <main className="flex-1 overflow-y-auto p-4 md:p-6">

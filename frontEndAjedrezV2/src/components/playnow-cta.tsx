@@ -1,6 +1,5 @@
 import { Button } from "./ui/button";
 import Image from "next/image";
-import chessBoard from "@/public/chess-board-cta.png";
 import Link from "next/link";
 
 export default function Example() {
@@ -37,7 +36,7 @@ export default function Example() {
                 </div>
                 <div className="relative mt-16 h-80 lg:mt-8">
                 <Image
-                    src={chessBoard.src}
+                    src="/chess-board-cta.png"
                     width={800}
                     height={247}
                     alt=""
