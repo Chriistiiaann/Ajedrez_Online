@@ -9,71 +9,71 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 
-namespace backEndAjedrez
+namespace backEndAjedrez;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Add services to the container.
+
+        builder.Services.AddControllers();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddScoped<DataContext>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<UserMapper>();
+        builder.Services.AddScoped<IPasswordHasher, PasswordService>();
+        builder.Services.AddScoped<SmartSearchService>();
+     
+
+        builder.Services.AddAuthentication(options =>
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<DataContext>();
-            builder.Services.AddScoped<UserRepository>();
-            builder.Services.AddScoped<UserMapper>();
-            builder.Services.AddScoped<IPasswordHasher, PasswordService>();
-         
-
-            builder.Services.AddAuthentication(options =>
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            string key = Environment.GetEnvironmentVariable("JWT_KEY");
+            if (string.IsNullOrEmpty(key))
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                string key = Environment.GetEnvironmentVariable("JWT_KEY");
-                if (string.IsNullOrEmpty(key))
-                {
-                    throw new Exception("JWT_KEY variable de entorno no esta configurada.");
-                }
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-                };
-            });
-
-            var app = builder.Build();
-
-            using (IServiceScope scope = app.Services.CreateScope())
-            {
-                DataContext dbContext = scope.ServiceProvider.GetService<DataContext>();
-                dbContext.Database.EnsureCreated();
+                throw new Exception("JWT_KEY variable de entorno no esta configurada.");
             }
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+            };
+        });
 
-            app.UseHttpsRedirection();
-            
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseStaticFiles();
+        var app = builder.Build();
 
-
-            app.MapControllers();
-
-            app.Run();
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            DataContext dbContext = scope.ServiceProvider.GetService<DataContext>();
+            dbContext.Database.EnsureCreated();
         }
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+        
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseStaticFiles();
+
+
+        app.MapControllers();
+
+        app.Run();
     }
 }

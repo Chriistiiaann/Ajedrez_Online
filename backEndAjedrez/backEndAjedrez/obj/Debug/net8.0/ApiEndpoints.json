@@ -36,8 +36,24 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "backEndAjedrez.Controllers.SmartSearchController",
+    "Method": "SearchAsync",
+    "RelativePath": "api/SmartSearch/Search",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "backEndAjedrez.Models.Dtos.PeopleSearch",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "backEndAjedrez.Controllers.UserController",
-    "Method": "GetUsersAsync",
+    "Method": "GetUsers",
     "RelativePath": "api/User",
     "HttpMethod": "GET",
     "IsController": true,
@@ -66,6 +82,42 @@
     "Method": "AddUserAsync",
     "RelativePath": "api/User/register",
     "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "NickName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.UserController",
+    "Method": "UpdateUserAsync",
+    "RelativePath": "api/User/update",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [

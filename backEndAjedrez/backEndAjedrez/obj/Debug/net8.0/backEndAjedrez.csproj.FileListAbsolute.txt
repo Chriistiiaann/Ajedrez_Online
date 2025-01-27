@@ -503,3 +503,4 @@ C:\Users\chrro\OneDrive\Escritorio\Ajedrez_Online\backEndAjedrez\backEndAjedrez\
 C:\Users\chrro\OneDrive\Escritorio\Ajedrez_Online\backEndAjedrez\backEndAjedrez\obj\Debug\net8.0\backEndAjedrez.pdb
 C:\Users\chrro\OneDrive\Escritorio\Ajedrez_Online\backEndAjedrez\backEndAjedrez\obj\Debug\net8.0\backEndAjedrez.genruntimeconfig.cache
 C:\Users\chrro\OneDrive\Escritorio\Ajedrez_Online\backEndAjedrez\backEndAjedrez\obj\Debug\net8.0\ref\backEndAjedrez.dll
+C:\Users\chrro\OneDrive\Escritorio\Ajedrez_Online\backEndAjedrez\backEndAjedrez\bin\Debug\net8.0\F23.StringSimilarity.dll

@@ -1,106 +1,153 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using backEndAjedrez.Models.Dtos;
-using backEndAjedrez.Models.Database.Entities;
 using backEndAjedrez.Models.Mappers;
-using backEndAjedrez.Models.Database.Repositories;
-using backEndAjedrez.Services;
-using Microsoft.AspNetCore.Identity;
 using backEndAjedrez.Models.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using backEndAjedrez.Models.Database;
 
-namespace backEndAjedrez.Controllers
+namespace backEndAjedrez.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UserController : Controller
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : Controller
+    private readonly IUserRepository _userIRepository;
+    private readonly UserMapper _userMapper;
+    private readonly DataContext _dataContext;
+
+    public UserController(IUserRepository userIRepository, UserMapper userMapper, DataContext dataContext)
     {
-        private readonly UserRepository _userRepository;
-        private readonly UserMapper _userMapper;
-    
+        _userIRepository = userIRepository;
+        _userMapper = userMapper;
+        _dataContext = dataContext;
+    }
 
-        public UserController(UserRepository userRepository, UserMapper userMapper)
+
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        if (!ModelState.IsValid)
         {
-            _userRepository = userRepository;
-            _userMapper = userMapper;
-       
+            return BadRequest(ModelState);
         }
 
-
-        [HttpGet]
-        public async Task<IActionResult> GetUsersAsync()
+        try
         {
-            if (!ModelState.IsValid)
+            var users = await _userIRepository.GetUsers();
+
+            if (users == null || !users.Any())
             {
-                return BadRequest(ModelState);
+                return NotFound("No users found.");
             }
 
-            try
-            {
-                var users = await _userRepository.GetUsersAsync();
+            return Ok(users);
+        }
+        catch (Exception ex)
+        {
+            // Captura cualquier error inesperado y devuelve una respuesta de error 500
+            return StatusCode(500, "Internal server error: " + ex.Message);
+        }
+    }
 
-                if (users == null || !users.Any())
-                {
-                    return NotFound("No users found.");
-                }
-
-                IEnumerable<UserDto> usersDto = _userMapper.usersToDto(users);
-
-                return Ok(usersDto);
-            }
-            catch (Exception ex)
-            {
-                // Captura cualquier error inesperado y devuelve una respuesta de error 500
-                return StatusCode(500, "Internal server error: " + ex.Message);
-            }
+    [HttpGet("{nickname}")]
+    public async Task<IActionResult> GetUserByNickNameAsync(string nickname)
+    {
+        if (nickname == "")
+        {
+            return BadRequest("Invalid user Nick Name.");
         }
 
-        [HttpGet("{nickname}")]
-        public async Task<IActionResult> GetUserByNickNameAsync(string nickname)
+        try
         {
-            if (nickname == "")
+            var user = await _userIRepository.GetUserByNickNameAsync(nickname);
+
+            if (user == null)
             {
-                return BadRequest("Invalid user Nick Name.");
+                return NotFound($"User with Nick Name {nickname} not found.");
             }
 
-            try
+            UserDto userDto = _userMapper.ToDto(user);
+
+            return Ok(userDto);
+        } 
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Internal server error: " + ex.Message);
+        }
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> AddUserAsync([FromForm] UserCreateDto userToAddDto)
+    {
+        if (userToAddDto == null)
+        {
+            return BadRequest(new
             {
-                var user = await _userRepository.GetUserByNickNameAsync(nickname);
-
-                if (user == null)
-                {
-                    return NotFound($"User with Nick Name {nickname} not found.");
-                }
-
-                UserDto userDto = _userMapper.ToDto(user);
-
-                return Ok(userDto);
-            } 
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error: " + ex.Message);
-            }
+                message = "Información necesaria no enviada.",
+                code = "MISSING_REQUIRED_INFORMATION"
+            });
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> AddUserAsync([FromForm] UserCreateDto userToAddDto)
+        if (!ModelState.IsValid)
         {
-            if (userToAddDto == null)
-            {
-                return BadRequest(new
-                {
-                    message = "Información necesaria no enviada.",
-                    code = "MISSING_REQUIRED_INFORMATION"
-                });
-            }
+            return BadRequest(ModelState);
+        }
+        string normalizedNickname = await _userIRepository.NormalizeNickname(userToAddDto.NickName);
 
-            if (!ModelState.IsValid)
+        var existingNickname = await _userIRepository.GetUserByNickNameAsync(normalizedNickname);
+        if (existingNickname != null)
+        {
+            return Conflict(new
             {
-                return BadRequest(ModelState);
-            }
-            string normalizedNickname = await _userRepository.NormalizeNickname(userToAddDto.NickName);
+                message = "Nickname existente, por favor introduzca otro.",
+                code = "NICKNAME_ALREADY_EXISTS"
+            });
+        }
 
-            var existingNickname = await _userRepository.GetUserByNickNameAsync(normalizedNickname);
+        string normalizedEmail = await _userIRepository.NormalizeNickname(userToAddDto.Email);
+
+        var existingEmail = await _userIRepository.GetUserByEmailAsync(normalizedEmail);
+        if (existingEmail != null)
+        {
+            return Conflict(new
+            {
+                message = "Email existente, por favor introduzca otro.",
+                code = "EMAIL_ALREADY_EXISTS"
+            });
+        }
+
+        try
+        {
+            await _userIRepository.CreateUserAsync(userToAddDto);
+            return Ok(new {message = "Usuario registrado con éxito"});
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}. Inner Exception: {ex.InnerException?.Message}");
+        }
+        
+    }
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateUserAsync([FromForm] UserCreateDto userToAddDto)
+    {
+        if (userToAddDto == null)
+        {
+            return BadRequest(new
+            {
+                message = "Información necesaria no enviada.",
+                code = "MISSING_REQUIRED_INFORMATION"
+            });
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (userToAddDto.NickName != null)
+        {
+           string normalizedNickname = await _userIRepository.NormalizeNickname(userToAddDto.NickName);
+
+            var existingNickname = await _userIRepository.GetUserByNickNameAsync(normalizedNickname);
             if (existingNickname != null)
             {
                 return Conflict(new
@@ -108,11 +155,14 @@ namespace backEndAjedrez.Controllers
                     message = "Nickname existente, por favor introduzca otro.",
                     code = "NICKNAME_ALREADY_EXISTS"
                 });
-            }
+            } 
+        }
 
-            string normalizedEmail = await _userRepository.NormalizeNickname(userToAddDto.Email);
+        if (userToAddDto.Email != null)
+        {
+            string normalizedEmail = await _userIRepository.NormalizeNickname(userToAddDto.Email);
 
-            var existingEmail = await _userRepository.GetUserByEmailAsync(normalizedEmail);
+            var existingEmail = await _userIRepository.GetUserByEmailAsync(normalizedEmail);
             if (existingEmail != null)
             {
                 return Conflict(new
@@ -121,18 +171,19 @@ namespace backEndAjedrez.Controllers
                     code = "EMAIL_ALREADY_EXISTS"
                 });
             }
-
-            try
-            {
-                await _userRepository.CreateUserAsync(userToAddDto);
-                return Ok(new {message = "Usuario registrado con éxito"});
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}. Inner Exception: {ex.InnerException?.Message}");
-            }
-            
         }
+
+        try
+        {
+            await _userIRepository.UpdateUserAsync(userToAddDto);
+            return Ok(new { message = "Usuario actualizado con éxito" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}. Inner Exception: {ex.InnerException?.Message}");
+        }
+
     }
-    }
+}
+
 
