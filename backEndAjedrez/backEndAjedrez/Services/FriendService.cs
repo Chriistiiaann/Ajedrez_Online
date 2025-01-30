@@ -1,0 +1,116 @@
+﻿using backEndAjedrez.Models.Database;
+using backEndAjedrez.Models.Database.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
+
+namespace backEndAjedrez.Services;
+
+public class FriendService
+{
+    private readonly DataContext _context;
+
+    public FriendService(DataContext context)
+    {
+        _context = context;
+    }
+
+    // Enviar solicitud de amistad
+    public async Task<bool> SendFriendRequest(string fromUserId, string toUserId)
+    {
+        if (fromUserId == toUserId) return false; // No se puede agregar a sí mismo
+
+        // Verificar si ya existe una solicitud pendiente
+        var existingRequest = await _context.FriendRequests
+            .FirstOrDefaultAsync(r =>
+                (r.FromUserId == fromUserId && r.ToUserId == toUserId) ||
+                (r.FromUserId == toUserId && r.ToUserId == fromUserId) // Si ya hay solicitud en ambas direcciones
+            );
+
+        if (existingRequest != null && existingRequest.Status == "Pending")
+        {
+            return false; // Ya existe una solicitud pendiente
+        }
+
+        // Verificar si ya son amigos
+        var existingFriendship = await _context.Friends
+            .FirstOrDefaultAsync(f =>
+                (f.UserId == fromUserId && f.FriendId == toUserId) ||
+                (f.UserId == toUserId && f.FriendId == fromUserId)
+            );
+
+        if (existingFriendship != null)
+        {
+            return false; // Ya son amigos
+        }
+
+        // Si pasa todas las verificaciones, se puede enviar la solicitud
+        var request = new FriendRequest
+        {
+            FromUserId = fromUserId,
+            ToUserId = toUserId,
+            Status = "Pending"
+        };
+
+        _context.FriendRequests.Add(request);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+
+    // Aceptar solicitud de amistad
+    public async Task<bool> AcceptFriendRequest(int requestId)
+    {
+        var request = await _context.FriendRequests.FindAsync(requestId);
+        if (request == null || request.Status != "Pending") return false;
+
+        // Cambiar estado a "Accepted"
+        request.Status = "Accepted";
+
+        // Crear la relación de amistad en la tabla Friends
+        var friend1 = new Friend
+        {
+            UserId = request.FromUserId,
+            FriendId = request.ToUserId
+        };
+        var friend2 = new Friend
+        {
+            UserId = request.ToUserId,
+            FriendId = request.FromUserId
+        };
+
+        _context.Friends.Add(friend1);
+        _context.Friends.Add(friend2);
+        await _context.SaveChangesAsync();
+
+        // Actualizar solicitud
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    // Rechazar solicitud de amistad
+    public async Task<bool> RejectFriendRequest(int requestId)
+    {
+        var request = await _context.FriendRequests.FindAsync(requestId);
+        if (request == null || request.Status != "Pending") return false;
+
+        request.Status = "Rejected";
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    // Obtener solicitudes pendientes
+    public async Task<List<FriendRequest>> GetPendingRequests(string userId)
+    {
+        return await _context.FriendRequests
+            .Where(r => r.ToUserId == userId && r.Status == "Pending")
+            .ToListAsync();
+    }
+
+    // Obtener amigos de un usuario
+    public async Task<List<Friend>> GetFriends(string userId)
+    {
+        return await _context.Friends
+            .Where(f => f.FriendId == userId || f.UserId == userId)
+            .ToListAsync();
+    }
+}

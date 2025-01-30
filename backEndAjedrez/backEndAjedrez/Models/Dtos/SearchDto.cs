@@ -10,4 +10,5 @@ public class PorfileSearch
 public class PeopleSearch
 {
     public string Query { get; set; } = "";   
+    public int UserId { get; set; } 
 }

@@ -10,6 +10,7 @@ using System.Text;
 
 namespace backEndAjedrez.Services;
 
+
 public class SmartSearchService
 {
     private const double THRESHOLD = 0.75;
@@ -24,20 +25,22 @@ public class SmartSearchService
         _userMapper = userMapper;
     }
 
-    public IEnumerable<UserDto> Search(string query)
+    public IEnumerable<UserDto> Search(int userId, string query)
     {
         IEnumerable<UserDto> result;
 
         if (string.IsNullOrWhiteSpace(query))
         {
-             result = _userMapper.usersToDto(_dbContext.Users.ToList());
+            result = _userMapper.usersToDto(
+                _dbContext.Users.Where(u => u.Id != userId).ToList() // Excluir al usuario
+            );
         }
         else
         {
             string[] queryKeys = GetKeys(ClearText(query));
             List<UserDto> matches = new List<UserDto>();
 
-            var users = _dbContext.Users.ToList();
+            var users = _dbContext.Users.Where(u => u.Id != userId).ToList(); // Excluir al usuario
 
             foreach (var user in users)
             {
@@ -54,11 +57,14 @@ public class SmartSearchService
 
         return result;
     }
-    public async Task<IEnumerable<UserDto>> SearchAsync(string query)
+
+    public async Task<IEnumerable<UserDto>> SearchAsync(int userId, string query)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
-            var users = await _dbContext.Users.ToListAsync();
+            var users = await _dbContext.Users
+                .Where(u => u.Id != userId) // Excluir al usuario
+                .ToListAsync();
             return _userMapper.usersToDto(users);
         }
         else
@@ -66,7 +72,9 @@ public class SmartSearchService
             string[] queryKeys = GetKeys(ClearText(query));
             var matches = new List<UserDto>();
 
-            var users = await _dbContext.Users.ToListAsync(); 
+            var users = await _dbContext.Users
+                .Where(u => u.Id != userId) // Excluir al usuario
+                .ToListAsync();
 
             foreach (var user in users)
             {
@@ -81,6 +89,7 @@ public class SmartSearchService
             return matches;
         }
     }
+
     private bool IsMatch(string[] queryKeys, string[] itemKeys)
     {
         bool isMatch = false;
@@ -100,7 +109,6 @@ public class SmartSearchService
         return isMatch;
     }
 
-    // Hay coincidencia si las palabras son las mismas o si item contiene query o si son similares
     private bool IsMatch(string itemKey, string queryKey)
     {
         return itemKey == queryKey
@@ -108,19 +116,16 @@ public class SmartSearchService
             || _stringSimilarityComparer.Similarity(itemKey, queryKey) >= THRESHOLD;
     }
 
-    // Separa las palabras quitando los espacios
     private string[] GetKeys(string query)
     {
         return query.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
-    // Normaliza el texto 
     private string ClearText(string text)
     {
         return RemoveDiacritics(text.ToLower());
     }
 
-    // Quita las tildes a un texto
     private string RemoveDiacritics(string text)
     {
         string normalizedString = text.Normalize(NormalizationForm.FormD);
@@ -139,3 +144,4 @@ public class SmartSearchService
         return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
     }
 }
+

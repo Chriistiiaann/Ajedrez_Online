@@ -35,6 +35,18 @@ namespace backEndAjedrez.Models.Database.Repositories
             return users.Select(user => _mapper.ToDto(user));
         }
 
+        public async Task<IEnumerable<UserDto>> GetUsers(int userId)
+        {
+            var users = await _context.Users
+                .Where(u => u.Id != userId) // Excluir al usuario que realiza la búsqueda
+                .OrderBy(u => u.Id)
+                .ToListAsync();
+
+            // Mapeamos los usuarios a UserDto
+            return users.Select(user => _mapper.ToDto(user));
+        }
+
+
         public async Task<User> GetUserByNickNameAsync(string nickname)
         {
             string normalizedNickname = await NormalizeNickname(nickname);

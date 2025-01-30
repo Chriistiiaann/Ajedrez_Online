@@ -4,6 +4,7 @@ using backEndAjedrez.Models.Database.Repository;
 using backEndAjedrez.Models.Interfaces;
 using backEndAjedrez.Models.Mappers;
 using backEndAjedrez.Services;
+using backEndAjedrez.WebSockets;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -23,12 +24,18 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddScoped<DataContext>();
+        builder.Services.AddSingleton<DataContext>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<UserMapper>();
         builder.Services.AddScoped<IPasswordHasher, PasswordService>();
         builder.Services.AddScoped<SmartSearchService>();
-     
+        builder.Services.AddTransient<FriendService>();
+        builder.Services.AddScoped<WebSocketService>();
+        builder.Services.AddSingleton<WebSocketNetwork>();
+        builder.Services.AddSingleton<Handler>();
+
+
+
 
         builder.Services.AddAuthentication(options =>
         {
@@ -50,6 +57,16 @@ public class Program
             };
         });
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowFrontend",
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+        });
         var app = builder.Build();
 
         using (IServiceScope scope = app.Services.CreateScope())
@@ -70,7 +87,8 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseStaticFiles();
-
+        app.UseWebSockets();
+        app.UseCors("AllowFrontend");
 
         app.MapControllers();
 

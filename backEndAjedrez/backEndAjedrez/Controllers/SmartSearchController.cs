@@ -29,30 +29,28 @@ namespace backEndAjedrez.Controllers
                     return BadRequest("Invalid request data.");
                 }
 
-                IEnumerable<UserDto> users = string.IsNullOrWhiteSpace(request.Query)
-                    ? await _userRepository.GetUsers()
-                    : await _smartSearchService.SearchAsync(request.Query);
+                if (request.UserId <= 0) // Validación extra para evitar valores incorrectos
+                {
+                    return BadRequest("Invalid user ID.");
+                }
 
-                // Validar si no se encontraron resultados
+                IEnumerable<UserDto> users = string.IsNullOrWhiteSpace(request.Query)
+                    ? await _userRepository.GetUsers(request.UserId)
+                    : await _smartSearchService.SearchAsync(request.UserId, request.Query);
+
                 if (users == null || !users.Any())
                 {
                     return NotFound("No users found.");
                 }
 
-                // Formatear el resultado
-                var result = new
-                {
-                    users = users
-                };
-
-                return Ok(result);
+                return Ok(new { users });
             }
             catch (Exception ex)
             {
-                // Manejo de errores y devolver código 500
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
 
     }
 }

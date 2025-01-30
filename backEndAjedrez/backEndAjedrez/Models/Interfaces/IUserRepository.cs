@@ -7,6 +7,7 @@ namespace backEndAjedrez.Models.Interfaces
     {
 
         Task<ICollection<User>> GetUsersAsync();
+        Task<IEnumerable<UserDto>> GetUsers(int userId);
         Task<IEnumerable<UserDto>> GetUsers();
         Task<User> GetUserByNickNameAsync(string nickname);
         Task CreateUserAsync(UserCreateDto user);

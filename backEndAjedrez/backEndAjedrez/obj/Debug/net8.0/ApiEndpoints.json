@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
+    "Method": "ConnectAsync",
+    "RelativePath": "api",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
+    "Method": "AdvancedConnectAsync",
+    "RelativePath": "api/advanced",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "backEndAjedrez.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/Auth/login",
@@ -34,6 +66,22 @@
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
+    "Method": "ConnectHandler",
+    "RelativePath": "api/handler",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "backEndAjedrez.Controllers.SmartSearchController",
