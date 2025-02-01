@@ -65,6 +65,7 @@ export default function UserEditModal({ isOpen, onClose, onSave, initialData }: 
                     value={userData.user.Email}
                     onChange={handleChange}
                     className="col-span-3"
+                    
                 />
                 </div>
             </div>

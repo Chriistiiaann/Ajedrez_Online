@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-import { Play, Zap } from 'lucide-react'
+import { Play } from 'lucide-react'
 import Image from "next/image"
 
 import Link from "next/link"
@@ -30,15 +30,12 @@ export function PlaySection() {
         </div>
         <CardContent className="relative pt-4">
             <div className="flex flex-wrap gap-4">
-            <Button className="flex-1" onClick={() => ""}>
-                <Play className="mr-2 h-4 w-4" /> vs Jugador
-            </Button>
-            <Button className="flex-1" variant="secondary">
-                <Link href="/menu/juego" className="flex items-center">
-                    <Zap className="mr-2 h-4 w-4" /> vs Computer
+                <Link href="/menu/emparejamiento" className="flex items-center flex-1">
+                    <Button className="flex-1 text-black" variant="secondary">
+                            <Play className="mr-2 h-4 w-4" /> Jugar
+                    </Button>
                 </Link>
-                
-            </Button>
+            
             </div>
         </CardContent>
     </Card>
