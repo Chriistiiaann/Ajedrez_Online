@@ -1,11 +1,12 @@
 "use client";
-
+import { usePathname } from "next/navigation";
 import { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import { getAuth } from "@/actions/get-auth";
 
+
 interface WebsocketContextType {
-    sendMessage: (message: object) => void;
-    isConnected: boolean;
+   socket: WebSocket | null;
+  
 }
 
 export const WebsocketContext = createContext<WebsocketContextType | undefined>(undefined);
@@ -26,46 +27,54 @@ interface WebsocketProviderProps {
 export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     const [socket, setSocket] = useState<WebSocket | null>(null);
     const [IdToken, setIdToken] = useState<number | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
+   
+    const pathname = usePathname();
     useEffect(() => {
         async function LeerToken() {
             const authData = await getAuth();
-            const idToken = authData.decodedToken?.Id ?? null;
+            const idToken = authData?.decodedToken?.Id ?? null;
             setIdToken(idToken);
         }
         LeerToken();
-    }, []);
+    }, [pathname]);
 
 
     useEffect(() => {
         if (!IdToken || socket) return; // No conectar si no hay token o ya hay un socket activo
-
-        const ws = new WebSocket(`wss://localhost:7218/api/handler?userId=${IdToken}`);
+        try{
+            const ws = new WebSocket(`wss://localhost:7218/api/handler?userId=${IdToken}`);
+        
+        
 
         ws.onopen = () => {
             console.log("WebSocket conectado.");
             setSocket(ws);
-            setIsConnected(true);
+           
         };
 
-        ws.onmessage = (event: MessageEvent) => {
+      /*   ws.onmessage = (event: MessageEvent) => {
             const data = JSON.parse(event.data);
             console.log("Mensaje recibido:", data);
-        };
+        }; */
 
         ws.onclose = () => {
             console.log("WebSocket desconectado.");
             setSocket(null);
-            setIsConnected(false);
+          
         };
 
         ws.onerror = (error) => {
             console.error("Error en WebSocket:", error);
-        };
-
+        }; 
         return () => {
             ws.close();
         };
+    }
+    catch(error){
+        console.log("error websocket", error);
+    }
+
+       
     }, [IdToken]);
 
     const sendMessage = (message: object) => {
@@ -77,8 +86,8 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     };
 
     const contextValue: WebsocketContextType = {
-        sendMessage,
-        isConnected,
+        socket,
+        
     };
 
     return (

@@ -34,9 +34,9 @@ export default  async function RootLayout({
           {!idToken && <Navbar />}
 
           <main className="bg-gray-100 dark:bg-background text-gray-800 dark:text-gray-200 overflow-y-auto">
-            <WebsocketProvider >
+            <WebsocketProvider > 
               {children}
-            </WebsocketProvider>
+             </WebsocketProvider> 
           </main>
         </div>
       </body>

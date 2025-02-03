@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Swords, UserCheck } from "lucide-react"
 
-async function getGlobalStats() {
+ function getGlobalStats() {
   // In a real application, you would fetch this data from an API
   // For this example, we'll use mock data
     return {
@@ -11,8 +11,8 @@ async function getGlobalStats() {
     }
 }
 
-export default async function GlobalStats() {
-    const stats = await getGlobalStats()
+export default  function GlobalStats() {
+    const stats =  getGlobalStats()
 
     return (
         <Card className="bg-foreground">

@@ -29,6 +29,7 @@ namespace backEndAjedrez.Models.Database.Repositories
         {
             return await _context.Users.OrderBy(u => u.Id).ToListAsync();
         }
+
         public async Task<IEnumerable<UserDto>> GetUsers()
         {
             var users = await _context.Users.ToListAsync();

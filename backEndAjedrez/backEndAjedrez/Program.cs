@@ -28,6 +28,9 @@ public class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<UserMapper>();
         builder.Services.AddScoped<IPasswordHasher, PasswordService>();
+        builder.Services.AddScoped<IFriendRepository, FriendRepository>();
+        builder.Services.AddSingleton<StatusService>();
+
         builder.Services.AddScoped<SmartSearchService>();
         builder.Services.AddTransient<FriendService>();
         builder.Services.AddScoped<WebSocketService>();

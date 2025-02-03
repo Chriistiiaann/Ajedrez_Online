@@ -68,6 +68,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "backEndAjedrez.Controllers.FriendController",
+    "Method": "GetFriends",
+    "RelativePath": "api/Friend",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "backEndAjedrez.Models.Dtos.SearchFriendsDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
     "Method": "ConnectHandler",
     "RelativePath": "api/handler",

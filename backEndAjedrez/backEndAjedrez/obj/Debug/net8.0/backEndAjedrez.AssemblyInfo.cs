@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("backEndAjedrez")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f47139332c1ee729d0642acc299d9802a5805101")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4e125ade0ccd98c22dda4960a923a3dd54122500")]
 [assembly: System.Reflection.AssemblyProductAttribute("backEndAjedrez")]
 [assembly: System.Reflection.AssemblyTitleAttribute("backEndAjedrez")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

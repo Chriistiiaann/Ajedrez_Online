@@ -12,8 +12,8 @@ public class UserMapper
             Id = user.Id,
             NickName = user.NickName,
             Email = user.Email,
-            Avatar = user.Avatar
-            
+            Avatar = user.Avatar,
+            Status = user.Status            
         };
     }
 

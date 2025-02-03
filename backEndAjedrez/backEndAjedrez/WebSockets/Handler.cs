@@ -10,11 +10,13 @@ public class Handler
 {
     private static readonly ConcurrentDictionary<string, WebSocket> _connections = new();
     private readonly FriendService _friendService;  // Corregido el nombre aquí
+    private readonly StatusService _statusService;
 
     // Constructor para inyectar FriendService
-    public Handler(FriendService friendService)
+    public Handler(FriendService friendService, StatusService statusService)
     {
         _friendService = friendService;
+        _statusService = statusService;
     }
 
     public async Task HandleAsync(HttpContext context, WebSocket webSocket)
@@ -27,8 +29,12 @@ public class Handler
             return;
         }
 
+        await _statusService.ChangeStatusAsync(int.Parse(userId), "Connected");
         _connections[userId] = webSocket;
         Console.WriteLine($"🔗 Usuario {userId} conectado");
+
+        await SendTotalUsersConnectedToAll();
+
 
         var buffer = new byte[1024 * 4];
 
@@ -90,6 +96,14 @@ public class Handler
                         var pendingRequests = await _friendService.GetPendingRequests(userId);
                         await SendMessageToUser(userId, JsonSerializer.Serialize(pendingRequests));
                     }
+
+                    if (action == "changeStatus" && request.ContainsKey("userId") && request.ContainsKey("status"))
+                    {
+                        var idUser = int.Parse(request["userId"]);
+                        var newStatus = request["status"];
+
+                        var changeStatus = await _statusService.ChangeStatusAsync(idUser, newStatus);
+                    }
                 }
             }
 
@@ -102,7 +116,11 @@ public class Handler
         }
         finally
         {
+            var idUser = int.Parse(userId);
             _connections.TryRemove(userId, out _);
+            await SendTotalUsersConnectedToAll();
+
+            await _statusService.ChangeStatusAsync(idUser, "Disconnected");
             Console.WriteLine($"❌ Usuario {userId} desconectado");
         }
     }
@@ -113,6 +131,24 @@ public class Handler
         {
             var response = Encoding.UTF8.GetBytes(message);
             await webSocket.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+    }
+
+    private async Task SendTotalUsersConnectedToAll()
+    {
+        // Contar el número total de usuarios conectados
+        int totalUsersConnected = _connections.Count;
+
+        // Crear el mensaje en formato JSON
+        var message = JsonSerializer.Serialize(new { totalUsersConnected });
+
+        // Enviar el mensaje a todos los clientes conectados
+        foreach (var webSocket in _connections.Values)
+        {
+            if (webSocket.State == WebSocketState.Open)
+            {
+                await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message)), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
         }
     }
 }
