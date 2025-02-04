@@ -84,6 +84,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "backEndAjedrez.Controllers.FriendController",
+    "Method": "DeleteFriend",
+    "RelativePath": "api/Friend",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "friendId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
     "Method": "ConnectHandler",
     "RelativePath": "api/handler",
@@ -101,8 +122,24 @@
   },
   {
     "ContainingType": "backEndAjedrez.Controllers.SmartSearchController",
+    "Method": "SearchFriendsAsync",
+    "RelativePath": "api/SearchFriends",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "backEndAjedrez.Models.Dtos.PeopleSearch",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.SmartSearchController",
     "Method": "SearchAsync",
-    "RelativePath": "api/SmartSearch/Search",
+    "RelativePath": "api/SearchUsers",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

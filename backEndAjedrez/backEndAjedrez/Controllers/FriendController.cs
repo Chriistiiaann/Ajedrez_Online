@@ -1,5 +1,6 @@
 ﻿using backEndAjedrez.Models.Dtos;
 using backEndAjedrez.Models.Interfaces;
+using backEndAjedrez.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,5 +27,21 @@ public class FriendController : ControllerBase
         
 
         return Ok(new { friends });
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteFriend(int userId, int friendId)
+    {
+        bool deleted = await _friendRepository.DeleteFriendsAsync(userId, friendId);
+
+        if (deleted)
+        {
+            return Ok(new { message = "Amigo eliminado correctamente" });
+        }
+        else
+        {
+            return BadRequest(new { message = "Amigo Inexistente"});
+        }
+
     }
 }

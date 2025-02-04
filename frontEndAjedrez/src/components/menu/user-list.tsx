@@ -34,7 +34,7 @@ export default function FriendsList() {
             try {
                 const authData = await getAuth();
                 console.log(authData.decodedToken?.Id)
-                const response = await fetch('https://localhost:7218/api/SmartSearch/Search', { 
+                const response = await fetch('https://localhost:7218/api/SearchUsers', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ query: searchTerm, userId: authData.decodedToken?.Id}),

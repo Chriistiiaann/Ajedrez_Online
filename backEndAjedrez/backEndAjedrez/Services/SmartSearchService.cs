@@ -25,7 +25,7 @@ public class SmartSearchService
         _userMapper = userMapper;
     }
 
-    public IEnumerable<UserDto> Search(int userId, string query)
+    public IEnumerable<UserDto> SearchFriends(int userId, string query)
     {
         IEnumerable<UserDto> result;
 

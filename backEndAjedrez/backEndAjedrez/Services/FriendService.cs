@@ -14,24 +14,21 @@ public class FriendService
         _context = context;
     }
 
-    // Enviar solicitud de amistad
     public async Task<bool> SendFriendRequest(string fromUserId, string toUserId)
     {
-        if (fromUserId == toUserId) return false; // No se puede agregar a sí mismo
+        if (fromUserId == toUserId) return false; 
 
-        // Verificar si ya existe una solicitud pendiente
         var existingRequest = await _context.FriendRequests
             .FirstOrDefaultAsync(r =>
                 (r.FromUserId == fromUserId && r.ToUserId == toUserId) ||
-                (r.FromUserId == toUserId && r.ToUserId == fromUserId) // Si ya hay solicitud en ambas direcciones
+                (r.FromUserId == toUserId && r.ToUserId == fromUserId)
             );
 
         if (existingRequest != null && existingRequest.Status == "Pending")
         {
-            return false; // Ya existe una solicitud pendiente
+            return false;
         }
 
-        // Verificar si ya son amigos
         var existingFriendship = await _context.Friends
             .FirstOrDefaultAsync(f =>
                 (f.UserId == fromUserId && f.FriendId == toUserId) ||
@@ -40,10 +37,9 @@ public class FriendService
 
         if (existingFriendship != null)
         {
-            return false; // Ya son amigos
+            return false; 
         }
 
-        // Si pasa todas las verificaciones, se puede enviar la solicitud
         var request = new FriendRequest
         {
             FromUserId = fromUserId,
@@ -57,16 +53,14 @@ public class FriendService
     }
 
 
-    // Aceptar solicitud de amistad
     public async Task<bool> AcceptFriendRequest(int requestId)
     {
         var request = await _context.FriendRequests.FindAsync(requestId);
         if (request == null || request.Status != "Pending") return false;
 
-        // Cambiar estado a "Accepted"
+        
         request.Status = "Accepted";
 
-        // Crear la relación de amistad en la tabla Friends
         var friend1 = new Friend
         {
             UserId = request.FromUserId,
