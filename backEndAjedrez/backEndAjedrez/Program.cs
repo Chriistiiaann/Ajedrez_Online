@@ -24,7 +24,7 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddSingleton<DataContext>();
+        builder.Services.AddScoped<DataContext>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<UserMapper>();
         builder.Services.AddScoped<IPasswordHasher, PasswordService>();
@@ -32,7 +32,7 @@ public class Program
         builder.Services.AddSingleton<StatusService>();
 
         builder.Services.AddScoped<SmartSearchService>();
-        builder.Services.AddTransient<FriendService>();
+        builder.Services.AddSingleton<FriendService>();
         builder.Services.AddScoped<WebSocketService>();
         builder.Services.AddSingleton<WebSocketNetwork>();
         builder.Services.AddSingleton<Handler>();
@@ -65,7 +65,7 @@ public class Program
             options.AddPolicy("AllowFrontend",
                 policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000")
+                    policy.AllowAnyOrigin()
                           .AllowAnyMethod()
                           .AllowAnyHeader();
                 });

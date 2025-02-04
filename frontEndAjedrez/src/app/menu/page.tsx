@@ -13,26 +13,17 @@ import { PlaySection } from '@/components/menu/play-section'
   };
 
 export default function MenuPage() {
-    const [messages, setMessages] = useState<WebSocketMessage>();
-   const {socket} = useWebsocketContext();
+    
+   const {messages} = useWebsocketContext();
+   const [totalUsersConnected, setTotalUsersConnected] = useState(0);
    useEffect(() =>{
-    if (socket){
-        const handleMessage =  (event: MessageEvent) => {
-            try {
-                const newMessage: WebSocketMessage = JSON.parse(event.data); 
-             //   setMessages((prev) => [...prev, newMessage]); 
-                setMessages(newMessage); 
-              } catch (error) {
-                console.error("Error al parsear mensaje:", error);
-              }
-
-        }
-        socket.addEventListener("message", handleMessage);
-        return () => {
-            socket.removeEventListener("message", handleMessage); 
-          };
+    console.log("mensaje recibido", messages);
+    if (messages.totalUsersConnected !=undefined ){
+      setTotalUsersConnected(messages.totalUsersConnected);
     }
-   }, [socket])
+   }, [messages])
+   console.log(messages?.totalUsersConnected ?? "Cargando...");
+
 
 /*    const sendMessage = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -49,9 +40,9 @@ export default function MenuPage() {
             <main className="flex-1 overflow-y-auto p-4 md:p-6">
 
             <div>
-      <h2>Mensajes probando del WebSocket</h2>
+      <h2>Usuarios totales Conectados:</h2>
       
-      <strong>{messages?.totalUsersConnected ?? "Cargando..."}</strong>
+      <strong>{totalUsersConnected}</strong>
 
        
     </div>
@@ -78,5 +69,6 @@ export default function MenuPage() {
             </div>
             </main>
         </div>
+        
     )
 }

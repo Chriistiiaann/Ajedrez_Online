@@ -7,19 +7,21 @@ namespace backEndAjedrez.Services;
 
 public class StatusService
 {
-    private readonly DataContext _context;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public StatusService(DataContext context)
+    public StatusService(IServiceScopeFactory serviceScopeFactory)
     {
-        _context = context;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     public async Task<bool> ChangeStatusAsync(int userId, string newStatus)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+        using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
 
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         if (user == null)
-            return false; 
+            return false;
 
         user.Status = newStatus;
         await _context.SaveChangesAsync();
@@ -29,8 +31,11 @@ public class StatusService
 
     public async Task<int> TotalUserConected()
     {
+        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+        using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
         return await _context.Users
-                         .Where(u => u.Status.Equals("Connected"))
-                         .CountAsync();
+                             .Where(u => u.Status.Equals("Connected"))
+                             .CountAsync();
     }
 }

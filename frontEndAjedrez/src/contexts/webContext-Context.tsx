@@ -4,8 +4,11 @@ import { createContext, useState, useContext, ReactNode, useEffect } from "react
 import { getAuth } from "@/actions/get-auth";
 
 
+
+
 interface WebsocketContextType {
    socket: WebSocket | null;
+   messages: Record<string, any>; 
   
 }
 
@@ -24,9 +27,13 @@ interface WebsocketProviderProps {
     
 }
 
+
+
 export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     const [socket, setSocket] = useState<WebSocket | null>(null);
     const [IdToken, setIdToken] = useState<number | null>(null);
+    const [messages, setMessages] = useState<Record<string, any>>({});
+
    
     const pathname = usePathname();
     useEffect(() => {
@@ -40,7 +47,17 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
 
 
     useEffect(() => {
-        if (!IdToken || socket) return; // No conectar si no hay token o ya hay un socket activo
+
+        if (!IdToken){
+            if (socket){
+                socket.close(); setSocket(null); console.log("cerrando socket");
+            }
+            return;
+        }
+
+        if(socket) return;
+       
+    
         try{
             const ws = new WebSocket(`wss://localhost:7218/api/handler?userId=${IdToken}`);
         
@@ -52,10 +69,22 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
            
         };
 
-      /*   ws.onmessage = (event: MessageEvent) => {
-            const data = JSON.parse(event.data);
-            console.log("Mensaje recibido:", data);
-        }; */
+        ws.onmessage = (event: MessageEvent) => {
+            try {
+                const newMessage: Record<string, any> = JSON.parse(event.data);
+                console.log("Mensaje recibido:", newMessage);
+
+             
+                if (newMessage.totalUsersConnected) {
+                    setMessages((prevMessages) => ({
+                        ...prevMessages,
+                        ...newMessage, 
+                    }));
+                }
+            } catch (error) {
+                console.error("Error al parsear mensaje:", error);
+            }
+        };
 
         ws.onclose = () => {
             console.log("WebSocket desconectado.");
@@ -87,7 +116,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
 
     const contextValue: WebsocketContextType = {
         socket,
-        
+        messages,
     };
 
     return (
