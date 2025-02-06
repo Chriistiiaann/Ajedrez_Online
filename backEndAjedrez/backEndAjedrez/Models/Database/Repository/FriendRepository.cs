@@ -1,4 +1,5 @@
-﻿using backEndAjedrez.Models.Dtos;
+﻿using backEndAjedrez.Models.Database.Entities;
+using backEndAjedrez.Models.Dtos;
 using backEndAjedrez.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,11 +56,31 @@ public class FriendRepository : IFriendRepository
         {
             _context.Friends.Remove(friendship);
             await _context.SaveChangesAsync();
-            return true; // Indica que se eliminó correctamente
+            return true; 
         }
 
-        return false; // Indica que la amistad no existe
+        return false; 
     }
+
+    public async Task<List<PendingFriendRequestDto>> GetPendingRequestsAsync(string userId)
+    {
+        return await _context.FriendRequests
+            .Where(r => r.ToUserId == userId && r.Status == "Pending")
+            .Join(_context.Users,
+                  request => request.FromUserId,
+                  user => user.Id.ToString(),
+                  (request, user) => new PendingFriendRequestDto
+                  {
+                      RequestId = request.Id,
+                      NickName = user.NickName,
+                      Status = user.Status,
+                      Avatar = user.Avatar,
+                      Timestamp = request.Timestamp.ToString("yyyy-MM-dd HH:mm:ss") // Formato legible
+                  })
+            .ToListAsync();
+    }
+
+
 
 
 }

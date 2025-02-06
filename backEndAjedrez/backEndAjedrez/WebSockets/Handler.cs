@@ -91,11 +91,11 @@ public class Handler
                             await SendMessageToUser(userId, "Error al rechazar la solicitud.");
                         }
                     }
-                    else if (action == "getPendingRequests")
-                    {
-                        var pendingRequests = await _friendService.GetPendingRequests(userId);
-                        await SendMessageToUser(userId, JsonSerializer.Serialize(pendingRequests));
-                    }
+                    //else if (action == "getPendingRequests")
+                    //{
+                    //    var pendingRequests = await _friendService.GetPendingRequests(userId);
+                    //    await SendMessageToUser(userId, JsonSerializer.Serialize(pendingRequests));
+                    //}
 
                     if (action == "changeStatus" && request.ContainsKey("userId") && request.ContainsKey("status"))
                     {
@@ -113,6 +113,10 @@ public class Handler
             {
                 await SendMessageToUser(userId, JsonSerializer.Serialize(pendingRequestsOnConnect));
             }
+        }
+        catch(Exception ex)
+        {
+
         }
         finally
         {
@@ -145,6 +149,7 @@ public class Handler
         // Enviar el mensaje a todos los clientes conectados
         foreach (var webSocket in _connections.Values)
         {
+
             if (webSocket.State == WebSocketState.Open)
             {
                 await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(message)), WebSocketMessageType.Text, true, CancellationToken.None);

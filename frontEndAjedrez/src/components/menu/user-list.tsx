@@ -92,7 +92,8 @@ export default function FriendsList() {
                                 <span>{friend.nickName}</span>
                             </div>
 
-                            <InvitationBadge /> 
+                            <InvitationBadge userId={friend.id} />
+ 
                         </li>
                     ))
                 ) : (

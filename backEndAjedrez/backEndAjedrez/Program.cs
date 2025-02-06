@@ -37,6 +37,8 @@ public class Program
         builder.Services.AddSingleton<WebSocketNetwork>();
         builder.Services.AddSingleton<Handler>();
 
+        builder.Services.AddScoped<middleware>();
+
 
 
 
@@ -85,12 +87,16 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseWebSockets();
+        app.UseMiddleware<middleware>();
+
         app.UseHttpsRedirection();
+        app.UseRouting();  
         
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseStaticFiles();
-        app.UseWebSockets();
+
         app.UseCors("AllowFrontend");
 
         app.MapControllers();

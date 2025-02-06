@@ -2,7 +2,6 @@
 
 using backEndAjedrez.Models.Database.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 public class DataContext : DbContext
 {
@@ -12,6 +11,7 @@ public class DataContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Friend> Friends { get; set; }
     public DbSet<FriendRequest> FriendRequests { get; set; }
+    public DbSet<MatchRequest> MatchRequests { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string baseDir = AppDomain.CurrentDomain.BaseDirectory;

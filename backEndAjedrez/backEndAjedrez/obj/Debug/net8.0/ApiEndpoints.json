@@ -105,6 +105,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "backEndAjedrez.Controllers.FriendController",
+    "Method": "GetPendingRequests",
+    "RelativePath": "api/Friend/pending/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
     "Method": "ConnectHandler",
     "RelativePath": "api/handler",

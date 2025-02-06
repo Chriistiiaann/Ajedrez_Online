@@ -42,6 +42,25 @@ public class FriendController : ControllerBase
         {
             return BadRequest(new { message = "Amigo Inexistente"});
         }
-
     }
+
+    [HttpGet("pending/{userId}")]
+    public async Task<IActionResult> GetPendingRequests(string userId)
+    {
+        var requests = await _friendRepository.GetPendingRequestsAsync(userId);
+
+        if (requests == null || requests.Count == 0)
+        {
+            return BadRequest(new { Message = "¡Vaya! Aún no tienes solicitudes de amistad pendientes." });
+        }
+
+        // Creamos un objeto que contiene la colección bajo el nombre 'pendingFriendshipRequest'
+        var response = new
+        {
+            pendingFriendshipRequest = requests
+        };
+
+        return Ok(response);
+    }
+
 }

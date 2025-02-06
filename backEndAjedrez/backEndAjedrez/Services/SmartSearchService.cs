@@ -27,13 +27,23 @@ public class SmartSearchService
 
     public IEnumerable<UserDto> SearchFriends(int userId, string query)
     {
+        string userIdStr = userId.ToString(); // Convertimos userId a string
+
+        var friendIds = _dbContext.Friends
+        .Where(f => f.UserId == userId.ToString()) // Buscar los amigos del usuario
+        .Select(f => f.FriendId) // Obtener solo los FriendId
+        .ToList();
+
+        // Obtener los usuarios correspondientes a esos IDs
+        var friends = _dbContext.Users
+            .Where(u => friendIds.Contains(u.Id.ToString())) // Filtrar solo los amigos
+            .ToList();
+
         IEnumerable<UserDto> result;
 
         if (string.IsNullOrWhiteSpace(query))
         {
-            result = _userMapper.usersToDto(
-                _dbContext.Users.Where(u => u.Id != userId).ToList() // Excluir al usuario
-            );
+            result = _userMapper.usersToDto(friends);
         }
         else
         {
@@ -42,7 +52,7 @@ public class SmartSearchService
 
             var users = _dbContext.Users.Where(u => u.Id != userId).ToList(); // Excluir al usuario
 
-            foreach (var user in users)
+            foreach (var user in friends)
             {
                 string[] itemKeys = GetKeys(ClearText(user.NickName));
 
