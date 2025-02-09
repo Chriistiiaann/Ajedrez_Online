@@ -25,15 +25,19 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped<DataContext>();
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<UserMapper>();
+
         builder.Services.AddScoped<IPasswordHasher, PasswordService>();
         builder.Services.AddScoped<IFriendRepository, FriendRepository>();
-        builder.Services.AddSingleton<StatusService>();
+        builder.Services.AddSingleton<IMatchMaking, MatchMakingService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+        builder.Services.AddSingleton<StatusService>();
         builder.Services.AddScoped<SmartSearchService>();
         builder.Services.AddSingleton<FriendService>();
+        builder.Services.AddSingleton<MatchMakingService>();
         builder.Services.AddScoped<WebSocketService>();
+
         builder.Services.AddSingleton<WebSocketNetwork>();
         builder.Services.AddSingleton<Handler>();
 
@@ -80,7 +84,6 @@ public class Program
             dbContext.Database.EnsureCreated();
         }
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

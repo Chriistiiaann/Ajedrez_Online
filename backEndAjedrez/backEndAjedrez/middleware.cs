@@ -1,5 +1,4 @@
-﻿
-namespace backEndAjedrez.Services;
+﻿namespace backEndAjedrez;
 
 public class middleware : IMiddleware
 {

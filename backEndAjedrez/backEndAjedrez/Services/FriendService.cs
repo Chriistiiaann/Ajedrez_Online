@@ -82,8 +82,6 @@ public class FriendService
         _context.Friends.Add(friend2);
         await _context.SaveChangesAsync();
 
-        // Actualizar solicitud
-        await _context.SaveChangesAsync();
         return true;
     }
 
