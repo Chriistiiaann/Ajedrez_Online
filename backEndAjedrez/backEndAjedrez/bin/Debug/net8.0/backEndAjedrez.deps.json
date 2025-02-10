@@ -8,13 +8,26 @@
     ".NETCoreApp,Version=v8.0": {
       "backEndAjedrez/1.0.0": {
         "dependencies": {
+          "F23.StringSimilarity": "6.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.12",
           "Microsoft.EntityFrameworkCore.Sqlite": "9.0.1",
           "Microsoft.EntityFrameworkCore.Tools": "9.0.1",
+          "Newtonsoft.Json": "13.0.3",
           "Swashbuckle.AspNetCore": "6.4.0"
         },
         "runtime": {
           "backEndAjedrez.dll": {}
+        }
+      },
+      "F23.StringSimilarity/6.0.0": {
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        },
+        "runtime": {
+          "lib/netstandard2.0/F23.StringSimilarity.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
+          }
         }
       },
       "Humanizer.Core/2.14.1": {
@@ -636,6 +649,14 @@
           }
         }
       },
+      "Newtonsoft.Json/13.0.3": {
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.3.27908"
+          }
+        }
+      },
       "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
         "dependencies": {
           "SQLitePCLRaw.lib.e_sqlite3": "2.1.10",
@@ -650,7 +671,7 @@
       },
       "SQLitePCLRaw.core/2.1.10": {
         "dependencies": {
-          "System.Memory": "4.5.3"
+          "System.Memory": "4.5.4"
         },
         "runtime": {
           "lib/netstandard2.0/SQLitePCLRaw.core.dll": {
@@ -914,7 +935,7 @@
           }
         }
       },
-      "System.Memory/4.5.3": {},
+      "System.Memory/4.5.4": {},
       "System.Reflection.Metadata/7.0.0": {
         "dependencies": {
           "System.Collections.Immutable": "7.0.0"
@@ -957,6 +978,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "F23.StringSimilarity/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kzEjznD9nAOep+E3LGIMD6mIAc+xEAJ91ds633+PxrBHs6i0ly6AI7v98B8ueTkKnYufFt/W0lytkoa+k7/d8w==",
+      "path": "f23.stringsimilarity/6.0.0",
+      "hashPath": "f23.stringsimilarity.6.0.0.nupkg.sha512"
     },
     "Humanizer.Core/2.14.1": {
       "type": "package",
@@ -1231,6 +1259,13 @@
       "path": "mono.texttemplating/3.0.0",
       "hashPath": "mono.texttemplating.3.0.0.nupkg.sha512"
     },
+    "Newtonsoft.Json/13.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "path": "newtonsoft.json/13.0.3",
+      "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
+    },
     "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
       "type": "package",
       "serviceable": true,
@@ -1364,12 +1399,12 @@
       "path": "system.io.pipelines/9.0.1",
       "hashPath": "system.io.pipelines.9.0.1.nupkg.sha512"
     },
-    "System.Memory/4.5.3": {
+    "System.Memory/4.5.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
-      "path": "system.memory/4.5.3",
-      "hashPath": "system.memory.4.5.3.nupkg.sha512"
+      "sha512": "sha512-1MbJTHS1lZ4bS4FmsJjnuGJOu88ZzTT2rLvrhW7Ygic+pC0NWA+3hgAen0HRdsocuQXCkUTdFn9yHJJhsijDXw==",
+      "path": "system.memory/4.5.4",
+      "hashPath": "system.memory.4.5.4.nupkg.sha512"
     },
     "System.Reflection.Metadata/7.0.0": {
       "type": "package",

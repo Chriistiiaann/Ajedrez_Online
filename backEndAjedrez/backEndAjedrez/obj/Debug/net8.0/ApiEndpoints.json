@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
+    "Method": "ConnectAsync",
+    "RelativePath": "api",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
+    "Method": "AdvancedConnectAsync",
+    "RelativePath": "api/advanced",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "backEndAjedrez.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/Auth/login",
@@ -9,7 +41,7 @@
     "Parameters": [
       {
         "Name": "model",
-        "Type": "backEndAjedrez.Models.LoginModel",
+        "Type": "backEndAjedrez.Models.Dtos.LoginRequest",
         "IsRequired": true
       }
     ],
@@ -36,8 +68,109 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "backEndAjedrez.Controllers.FriendController",
+    "Method": "GetFriends",
+    "RelativePath": "api/Friend",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "backEndAjedrez.Models.Dtos.SearchFriendsDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.FriendController",
+    "Method": "DeleteFriend",
+    "RelativePath": "api/Friend",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "friendId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.FriendController",
+    "Method": "GetPendingRequests",
+    "RelativePath": "api/Friend/pending/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.WebSocketController",
+    "Method": "ConnectHandler",
+    "RelativePath": "api/handler",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.SmartSearchController",
+    "Method": "SearchFriendsAsync",
+    "RelativePath": "api/SearchFriends",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "backEndAjedrez.Models.Dtos.PeopleSearch",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.SmartSearchController",
+    "Method": "SearchAsync",
+    "RelativePath": "api/SearchUsers",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "backEndAjedrez.Models.Dtos.PeopleSearch",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "backEndAjedrez.Controllers.UserController",
-    "Method": "GetUsersAsync",
+    "Method": "GetUsers",
     "RelativePath": "api/User",
     "HttpMethod": "GET",
     "IsController": true,
@@ -70,9 +203,65 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userToAddDto",
-        "Type": "backEndAjedrez.DTOs.UserCreateDto",
-        "IsRequired": true
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "NickName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.UserController",
+    "Method": "UpdateUserAsync",
+    "RelativePath": "api/User/update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "NickName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

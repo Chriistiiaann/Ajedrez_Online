@@ -1,12 +1,228 @@
 {
   "Version": 1,
-  "Hash": "tRQOlO7DILRMY9IEEIvSjM1oUkWKnkbRTHWVmerG+40=",
+  "Hash": "w9Px4n/7ADZZB9fQ25yejq1uemF4bkPpdjbF1h6AxsQ=",
   "Source": "backEndAjedrez",
   "BasePath": "_content/backEndAjedrez",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "backEndAjedrez\\wwwroot",
+      "Source": "backEndAjedrez",
+      "ContentRoot": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\",
+      "BasePath": "_content/backEndAjedrez",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\default.png",
+      "SourceId": "backEndAjedrez",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\",
+      "BasePath": "_content/backEndAjedrez",
+      "RelativePath": "images/default#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ldjaqgz57a",
+      "Integrity": "Z3U+tVhOLYGwXrqlJK8Qi4S34RPfxFsMmFVCn/mYzXw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\default.png"
+    },
+    {
+      "Identity": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\manolo.jpg",
+      "SourceId": "backEndAjedrez",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\",
+      "BasePath": "_content/backEndAjedrez",
+      "RelativePath": "images/manolo#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "20q7xo1gwm",
+      "Integrity": "nk8iJovgixvTpbcBdwc/C173kuiewm3T9OINlfyLMTQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\manolo.jpg"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "images/default.ldjaqgz57a.png",
+      "AssetFile": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\default.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2516"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Z3U+tVhOLYGwXrqlJK8Qi4S34RPfxFsMmFVCn/mYzXw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Feb 2025 09:19:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ldjaqgz57a"
+        },
+        {
+          "Name": "label",
+          "Value": "images/default.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Z3U+tVhOLYGwXrqlJK8Qi4S34RPfxFsMmFVCn/mYzXw="
+        }
+      ]
+    },
+    {
+      "Route": "images/default.png",
+      "AssetFile": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\default.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2516"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Z3U+tVhOLYGwXrqlJK8Qi4S34RPfxFsMmFVCn/mYzXw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Feb 2025 09:19:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Z3U+tVhOLYGwXrqlJK8Qi4S34RPfxFsMmFVCn/mYzXw="
+        }
+      ]
+    },
+    {
+      "Route": "images/manolo.20q7xo1gwm.jpg",
+      "AssetFile": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\manolo.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "20801"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"nk8iJovgixvTpbcBdwc/C173kuiewm3T9OINlfyLMTQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Feb 2025 09:19:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "20q7xo1gwm"
+        },
+        {
+          "Name": "label",
+          "Value": "images/manolo.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-nk8iJovgixvTpbcBdwc/C173kuiewm3T9OINlfyLMTQ="
+        }
+      ]
+    },
+    {
+      "Route": "images/manolo.jpg",
+      "AssetFile": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\manolo.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "20801"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"nk8iJovgixvTpbcBdwc/C173kuiewm3T9OINlfyLMTQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 07 Feb 2025 09:19:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-nk8iJovgixvTpbcBdwc/C173kuiewm3T9OINlfyLMTQ="
+        }
+      ]
+    }
+  ]
 }

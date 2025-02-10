@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,21 +11,19 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import { useActionState } from "react"
+
+import { loginAction} from "@/actions/authentication-actions"
 
 export function LoginForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: React.ComponentPropsWithoutRef<"div">) { 
 
-  // const login = async (formData: FormData) => {
-  //   "use server"
-
-  //   const email = formData.get("email")
-  //   const password = formData.get("password")
-
-  //   console.log(email, password)
-
-  // }
+  const [actionState, action] = useActionState(loginAction, {
+    message: "",
+    fieldErrors: {},
+  });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -32,16 +32,19 @@ export function LoginForm({
           <CardTitle className="text-xl">¡Bienvenido de nuevo!</CardTitle>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={action}>
             <div className="grid gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Apodo o Correo Electrónico</Label>
                 <Input
-                  id="email"
+                  id="identifier"
                   type="text"
+                  name="identifier"
+                  defaultValue={actionState?.payload?.get("identifier") as string}
                   placeholder="Ejemplo || Ejemplo@gmail.com"
                   required
                 />
+
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -50,6 +53,7 @@ export function LoginForm({
                 <Input
                   id="password"
                   type="password"
+                  name="password"
                   placeholder="Ejemplo"
                   required />
               </div>

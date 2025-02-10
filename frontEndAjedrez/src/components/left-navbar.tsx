@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react';
-import Image from 'next/image';
+// import Image from 'next/image';
 import Link from 'next/link';
 import { Menu } from '@headlessui/react';
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,7 @@ import { Home, Gamepad, Users, User, Settings, ChevronDown, Globe, Bot } from 'l
 
 const LeftSideNavbar: React.FC = () => {
     return (
-        <nav className="bg-background text-white h-screen w-56 flex flex-col">
+        <nav className="bg-background border-r border-white text-white h-screen w-56 flex flex-col">
         {/* Logo */}
         <div className="p-4">
             {/* <Image src="/logo.svg" alt="App Logo" width={48} height={48} /> */}
@@ -18,13 +18,13 @@ const LeftSideNavbar: React.FC = () => {
 
         {/* Main Navigation Links */}
         <ul className="flex-grow">
-            <li className="px-4 py-2 hover:bg-gray-700">
+            <li className="px-4 py-2 hover:bg-white hover:text-background">
             <Link href="/" className="flex items-center">
                 <Home className="mr-2" size={20} />
                 Inicio
             </Link>
             </li>
-            <li className="px-4 py-2 hover:bg-gray-700">
+            <li className="px-4 py-2 hover:bg-white hover:text-background">
             <Menu as="div" className="relative">
                 <Menu.Button className="flex items-center w-full">
                 <Gamepad className="mr-2" size={20} />
@@ -61,7 +61,7 @@ const LeftSideNavbar: React.FC = () => {
                 </Menu.Items>
             </Menu>
             </li>
-            <li className="px-4 py-2 hover:bg-gray-700">
+            <li className="px-4 py-2 hover:bg-white hover:text-background">
             <Link href="/amigos" className="flex items-center">
                 <Users className="mr-2" size={20} />
                 Amigos
@@ -70,7 +70,7 @@ const LeftSideNavbar: React.FC = () => {
         </ul>
 
         {/* User Profile */}
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4">
             <Menu as="div" className="relative">
                 <Link href="/login" >
                     <Button className="w-full bg-accent text-white">

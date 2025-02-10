@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\default.png",
+      "PackagePath": "staticwebassets\\images\\default.png"
+    },
+    {
+      "Id": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\manolo.jpg",
+      "PackagePath": "staticwebassets\\images\\manolo.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.backEndAjedrez.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.backEndAjedrez.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.backEndAjedrez.props",
+      "PackagePath": "build\\backEndAjedrez.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.backEndAjedrez.props",
+      "PackagePath": "buildMultiTargeting\\backEndAjedrez.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.backEndAjedrez.props",
+      "PackagePath": "buildTransitive\\backEndAjedrez.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

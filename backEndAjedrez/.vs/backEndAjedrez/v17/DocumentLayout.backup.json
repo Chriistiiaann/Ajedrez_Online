@@ -1,50 +1,46 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\",
+  "WorkspaceRootPath": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\websockets\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\websockets\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\models\\dtos\\messagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\dtos\\messagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\services\\middleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\services\\middleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\controllers\\websocketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\controllers\\websocketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\services\\websocketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\services\\websocketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\datamappers\\usermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\datamappers\\usermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\models\\database\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\database\\datacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\models\\loginresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\loginresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\models\\interfaces\\igameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\interfaces\\igameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\loginmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\services\\joingameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\services\\joingameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\documentos\\webdev\\segundotrimestre\\back\\backendajedrez\\backendajedrez\\dbcontext\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\dbcontext\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\kylian\\onedrive\\escritorio\\07 02 25\\backendajedrez\\backendajedrez\\models\\database\\entities\\matchrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\database\\entities\\matchrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,159 +50,132 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 6,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{c9c0ae26-aa77-11d2-b3f0-0000f87570ee}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserMapper.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\DataMappers\\UserMapper.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\DataMappers\\UserMapper.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\DataMappers\\UserMapper.cs",
-              "RelativeToolTip": "backEndAjedrez\\DataMappers\\UserMapper.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T12:16:49.736Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "LoginResult.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Models\\LoginResult.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\LoginResult.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Models\\LoginResult.cs",
-              "RelativeToolTip": "backEndAjedrez\\Models\\LoginResult.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T19:25:26.654Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "backEndAjedrez\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAAwB0AAAAJAAAAAAAAAA==",
+              "Title": "MessageDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Models\\Dtos\\MessageDTO.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\Dtos\\MessageDTO.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Models\\Dtos\\MessageDTO.cs",
+              "RelativeToolTip": "backEndAjedrez\\Models\\Dtos\\MessageDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T19:22:58.738Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-07T12:49:55Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "LoginModel.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Models\\LoginModel.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\LoginModel.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Models\\LoginModel.cs",
-              "RelativeToolTip": "backEndAjedrez\\Models\\LoginModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Program.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Program.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Program.cs",
+              "RelativeToolTip": "backEndAjedrez\\Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAkwFcAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T19:20:58.638Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-06T17:16:24.839Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Controllers\\UserController.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Controllers\\UserController.cs",
-              "RelativeToolTip": "backEndAjedrez\\Controllers\\UserController.cs",
-              "ViewState": "AgIAAGkAAAAAAAAAAAAQwIEAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "middleware.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Services\\middleware.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Services\\middleware.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Services\\middleware.cs",
+              "RelativeToolTip": "backEndAjedrez\\Services\\middleware.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T10:08:55.954Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Repositories\\UserRepository.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Repositories\\UserRepository.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Repositories\\UserRepository.cs",
-              "RelativeToolTip": "backEndAjedrez\\Repositories\\UserRepository.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T09:59:45.051Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-06T17:14:12.955Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "IUserRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Interfaces\\IUserRepository.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Interfaces\\IUserRepository.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Interfaces\\IUserRepository.cs",
-              "RelativeToolTip": "backEndAjedrez\\Interfaces\\IUserRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "WebSocketService.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Services\\WebSocketService.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Services\\WebSocketService.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Services\\WebSocketService.cs",
+              "RelativeToolTip": "backEndAjedrez\\Services\\WebSocketService.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAYwCQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T09:55:33.007Z",
+              "WhenOpened": "2025-02-06T16:06:55.519Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WebSocketController.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Controllers\\WebSocketController.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Controllers\\WebSocketController.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Controllers\\WebSocketController.cs",
+              "RelativeToolTip": "backEndAjedrez\\Controllers\\WebSocketController.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAmwDEAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T15:38:27.809Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Handler.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\WebSockets\\Handler.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\WebSockets\\Handler.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\WebSockets\\Handler.cs",
+              "RelativeToolTip": "backEndAjedrez\\WebSockets\\Handler.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAYwEoAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T15:38:19.906Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "UserDto.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\DTOs\\UserDto.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\DTOs\\UserDto.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\DTOs\\UserDto.cs",
-              "RelativeToolTip": "backEndAjedrez\\DTOs\\UserDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Title": "JoinGameService.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Services\\JoinGameService.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Services\\JoinGameService.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Services\\JoinGameService.cs",
+              "RelativeToolTip": "backEndAjedrez\\Services\\JoinGameService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T09:41:27.137Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-06T14:33:47.986Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DataContext.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Models\\Database\\DataContext.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\Database\\DataContext.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Models\\Database\\DataContext.cs",
+              "RelativeToolTip": "backEndAjedrez\\Models\\Database\\DataContext.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAIA+wBMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T11:03:28.187Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IGameService.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Models\\Interfaces\\IGameService.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\Interfaces\\IGameService.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Models\\Interfaces\\IGameService.cs",
+              "RelativeToolTip": "backEndAjedrez\\Models\\Interfaces\\IGameService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T14:34:52.531Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Models\\User.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\User.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Models\\User.cs",
-              "RelativeToolTip": "backEndAjedrez\\Models\\User.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "MatchRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Models\\Database\\Entities\\MatchRequest.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\Database\\Entities\\MatchRequest.cs",
+              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Escritorio\\07 02 25\\backEndAjedrez\\backEndAjedrez\\Models\\Database\\Entities\\MatchRequest.cs",
+              "RelativeToolTip": "backEndAjedrez\\Models\\Database\\Entities\\MatchRequest.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T09:33:13.088Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "DataBaseContext.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\DbContext\\DataBaseContext.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\DbContext\\DataBaseContext.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\DbContext\\DataBaseContext.cs",
-              "RelativeToolTip": "backEndAjedrez\\DbContext\\DataBaseContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T09:28:43.849Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Program.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Program.cs",
-              "ToolTip": "C:\\Users\\Kylian\\OneDrive\\Documentos\\webdev\\SegundoTrimestre\\back\\backEndAjedrez\\backEndAjedrez\\Program.cs",
-              "RelativeToolTip": "backEndAjedrez\\Program.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAA/wC0AAABcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T09:17:46.564Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-06T11:05:24.419Z"
             }
           ]
         }

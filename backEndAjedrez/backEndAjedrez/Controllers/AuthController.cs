@@ -1,15 +1,14 @@
-﻿using backEndAjedrez.DbContext;
-using backEndAjedrez.Models;
+﻿using backEndAjedrez.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using backEndAjedrez.Models;
-using backEndAjedrez.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using backEndAjedrez.Models.Dtos;
+using backEndAjedrez.Models.Interfaces;
+using backEndAjedrez.Models.Database;
 
 namespace backEndAjedrez.Controllers
 {
@@ -18,10 +17,10 @@ namespace backEndAjedrez.Controllers
     public class AuthController : ControllerBase
     {
         private readonly TokenValidationParameters _tokenParameters;
-        private readonly DataBaseContext _context;
+        private readonly DataContext _context;
         private readonly IPasswordHasher _passwordHash;
 
-        public AuthController(IOptionsMonitor<JwtBearerOptions> jwOptions, DataBaseContext context, IPasswordHasher passwordHash)
+        public AuthController(IOptionsMonitor<JwtBearerOptions> jwOptions, DataContext context, IPasswordHasher passwordHash)
         {
             _tokenParameters = jwOptions.Get(JwtBearerDefaults.AuthenticationScheme)
                 .TokenValidationParameters;
@@ -30,12 +29,15 @@ namespace backEndAjedrez.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginModel model)
+        public async Task<ActionResult<string>> Login([FromBody] LoginRequest model)
         {
             string hashedPassword = _passwordHash.Hash(model.Password);
 
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == hashedPassword);
+    .FirstOrDefaultAsync(u => (u.Email == model.User || u.NickName == model.User) && u.Password == hashedPassword);
+
+
+            Console.WriteLine($"Login attempt with User: {model.User} and Password: {model.Password}");
 
             if (user != null)
             {
@@ -46,6 +48,7 @@ namespace backEndAjedrez.Controllers
                         { "Id", user.Id },
                         { "NickName", user.NickName },
                         { "Email", user.Email },
+                        { "Avatar", user.Avatar}
                         
                     },
                     Expires = DateTime.UtcNow.AddHours(2),

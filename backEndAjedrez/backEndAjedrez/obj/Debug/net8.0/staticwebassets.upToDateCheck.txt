@@ -1,0 +1,2 @@
+wwwroot\images\default.png
+wwwroot\images\manolo.jpg

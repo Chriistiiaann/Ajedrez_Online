@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import chessBoard from '@/public/chess-board-cta.png'
 
 export default function ChessGuidePage() {
     return (
@@ -14,7 +13,7 @@ export default function ChessGuidePage() {
             </p>
 
             {chessGuideContent.map((section, index) => (
-            <section key={index} className="mb-12 bg-zinc-700 bg-opacity-50 rounded-lg p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-opacity-70">
+            <section key={index} className="mb-12 bg-foreground border border-white bg-opacity-50 rounded-lg p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-opacity-70">
                 <h2 className="text-3xl font-semibold mb-4 text-primary">{section.title}</h2>
                 {section.content}
             </section>
@@ -51,7 +50,7 @@ export default function ChessGuidePage() {
             
             <div className="relative w-full h-64 mb-4">
             <Image 
-                src={chessBoard}
+                src="/chess-board-cta.png"
                 alt="Disposición inicial del tablero de ajedrez" 
                 layout="fill"
                 objectFit="contain"

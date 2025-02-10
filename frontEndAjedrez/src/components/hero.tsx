@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import bigQueen from "@/public/chess-piece-queen.png"
 
-
 export default function Hero() {
     return (
         <div className="flex-grow relative h-screen w-auto bg-foreground overflow-hidden">
