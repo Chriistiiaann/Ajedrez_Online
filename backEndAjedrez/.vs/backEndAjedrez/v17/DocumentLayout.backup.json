@@ -11,8 +11,8 @@
       "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\websockets\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\chrro\\onedrive\\escritorio\\ajedrez_online\\backendajedrez\\backendajedrez\\services\\statusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\services\\statusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\chrro\\onedrive\\escritorio\\ajedrez_online\\backendajedrez\\backendajedrez\\models\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\chrro\\onedrive\\escritorio\\ajedrez_online\\backendajedrez\\backendajedrez\\models\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -21,14 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\chrro\\onedrive\\escritorio\\ajedrez_online\\backendajedrez\\backendajedrez\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\chrro\\onedrive\\escritorio\\ajedrez_online\\backendajedrez\\backendajedrez\\models\\database\\entities\\matchrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\database\\entities\\matchrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|c:\\users\\chrro\\onedrive\\escritorio\\ajedrez_online\\backendajedrez\\backendajedrez\\models\\interfaces\\imatchmaking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB50EB43-E6C2-465D-9804-7AB59D22D927}|backEndAjedrez\\backEndAjedrez.csproj|solutionrelative:backendajedrez\\models\\interfaces\\imatchmaking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,8 +30,21 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Models\\Dtos\\UserDto.cs",
+              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\Dtos\\UserDto.cs",
+              "ToolTip": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Models\\Dtos\\UserDto.cs",
+              "RelativeToolTip": "backEndAjedrez\\Models\\Dtos\\UserDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T09:25:48.328Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 4,
@@ -50,8 +55,7 @@
               "RelativeToolTip": "backEndAjedrez\\Program.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAawCAAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-09T16:19:39.531Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-09T16:19:39.531Z"
             },
             {
               "$type": "Document",
@@ -68,52 +72,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "MatchRequest.cs",
-              "DocumentMoniker": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Models\\Database\\Entities\\MatchRequest.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\Database\\Entities\\MatchRequest.cs",
-              "ToolTip": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Models\\Database\\Entities\\MatchRequest.cs",
-              "RelativeToolTip": "backEndAjedrez\\Models\\Database\\Entities\\MatchRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-09T10:59:02.711Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "StatusService.cs",
-              "DocumentMoniker": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Services\\StatusService.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Services\\StatusService.cs",
-              "ToolTip": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Services\\StatusService.cs",
-              "RelativeToolTip": "backEndAjedrez\\Services\\StatusService.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAUwB0AAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T15:33:40.836Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IMatchMaking.cs",
-              "DocumentMoniker": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Models\\Interfaces\\IMatchMaking.cs",
-              "RelativeDocumentMoniker": "backEndAjedrez\\Models\\Interfaces\\IMatchMaking.cs",
-              "ToolTip": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Models\\Interfaces\\IMatchMaking.cs",
-              "RelativeToolTip": "backEndAjedrez\\Models\\Interfaces\\IMatchMaking.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T09:43:13.209Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "MatchMakingService.cs",
               "DocumentMoniker": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Services\\MatchMakingService.cs",
               "RelativeDocumentMoniker": "backEndAjedrez\\Services\\MatchMakingService.cs",
               "ToolTip": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\Services\\MatchMakingService.cs",
               "RelativeToolTip": "backEndAjedrez\\Services\\MatchMakingService.cs",
-              "ViewState": "AgIAABgBAAAAAAAAAAAmwDIBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAANkAAAAAAAAAAAAgwDYBAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-07T09:42:46.835Z",
               "EditorCaption": ""
@@ -126,7 +91,7 @@
               "RelativeDocumentMoniker": "backEndAjedrez\\WebSockets\\Handler.cs",
               "ToolTip": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\WebSockets\\Handler.cs",
               "RelativeToolTip": "backEndAjedrez\\WebSockets\\Handler.cs",
-              "ViewState": "AgIAANUAAAAAAAAAAAAAAOcAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAJIAAAAAAAAAAAAqwFEBAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-06T15:38:19.906Z",
               "EditorCaption": ""

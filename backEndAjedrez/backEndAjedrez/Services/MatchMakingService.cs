@@ -1,5 +1,6 @@
 ﻿using backEndAjedrez.Models.Database;
 using backEndAjedrez.Models.Database.Entities;
+using backEndAjedrez.Models.Dtos;
 using backEndAjedrez.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Net.WebSockets;
@@ -307,7 +308,24 @@ namespace backEndAjedrez.Services
                 await _context.SaveChangesAsync();
             }
 
-            return match.IsInvitedMatch;  
+            return match.IsInvitedMatch;
+        }
+        public async Task<UserDto?> GetUserInfoAsync(int userId)
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    NickName = u.NickName,
+                    Avatar = u.Avatar
+                })
+                .FirstOrDefaultAsync();
+
+            return user;
         }
 
         public async Task SendMessageToUser(string userId, string message)
