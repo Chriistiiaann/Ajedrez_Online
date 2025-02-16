@@ -15,12 +15,28 @@ interface UserEditModalProps {
     initialData: UserData
 }
 
+interface FormData {
+    Id: number
+    File: string
+    NickName: string
+    Email: string
+    Password: string
+}
+
+
 export default function UserEditModal({ isOpen, onClose, onSave, initialData }: UserEditModalProps) {
     const [userData, setUserData] = useState<UserData>(initialData)
+    const [dataToSend, setDataToSend] = useState<FormData>()
+    const [passwordConfirm, setPasswordConfirm] = useState("")
+    const [error, setError] = useState<string | null>(null)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setUserData((prev) => ({ ...prev, [name]: value }))
+    }
+
+    const handlePasswordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPasswordConfirm(e.target.value)
     }
 
     const handleImageChange = (image: string) => {
@@ -31,6 +47,17 @@ export default function UserEditModal({ isOpen, onClose, onSave, initialData }: 
         e.preventDefault()
         onSave(userData)
         onClose()
+    }
+
+    const updateUserData = () => {
+
+        if (dataToSend?.Password !== passwordConfirm) {
+            setError("Las contraseñas no coinciden.")
+            return
+        }
+        
+        
+
     }
 
     return (
@@ -64,6 +91,28 @@ export default function UserEditModal({ isOpen, onClose, onSave, initialData }: 
                     type="email"
                     value={userData.user.Email}
                     onChange={handleChange}
+                    className="col-span-3"
+                />
+                <Label htmlFor="password" className="text-right">
+                    Contraseña
+                </Label>
+                <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Introduce tu nueva contraseña"
+                    onChange={handleChange}
+                    className="col-span-3"
+                />
+                <Label htmlFor="passwordConfirm" className="text-right">
+                    Confirmar Contraseña
+                </Label>
+                <Input
+                    id="passwordConfirm"
+                    name="passwordConfirm"
+                    type="password"
+                    placeholder="Repite tu nueva contraseña"
+                    onChange={handlePasswordConfirm}
                     className="col-span-3"
                 />
                 </div>
