@@ -188,8 +188,8 @@ namespace backEndAjedrez.Services
             match.Status = "Matched";
             await _context.SaveChangesAsync();
 
-            await SendMatchUpdateAsync(match.GameId, "Invitación aceptada. Juego iniciado.");
-            await SendMessageToUser(match.HostId.ToString(), $"La invitacion a la partida fue aceptada");
+            await SendMatchUpdateAsync(match.GameId, "{\"message\": \"Invitación aceptada. Juego iniciado.\"}");
+            await SendMessageToUser(match.HostId.ToString(), "{\"message\": \"La invitación a la partida fue aceptada\"}");
 
             return true;
         }
@@ -210,8 +210,7 @@ namespace backEndAjedrez.Services
             match.Status = "Rejected";
             await _context.SaveChangesAsync();
 
-            await SendMessageToUser(match.HostId.ToString(), $"❌ {userId} ha rechazado tu invitación.");
-
+            await SendMessageToUser(match.HostId.ToString(), "{\"message\": \"❌ {userId} ha rechazado tu invitación.\"}");
             return true;
         }
 
@@ -235,14 +234,14 @@ namespace backEndAjedrez.Services
                     match.Status = "Pending";
                     await _context.SaveChangesAsync();
 
-                    await SendMessageToUser(match.HostId.ToString(), "⚠️ El host ha abandonado. Ahora eres el nuevo host.");
+                    await SendMessageToUser(match.HostId.ToString(), "{\"message\": \"⚠️ El host ha abandonado. Ahora eres el nuevo host.\"}");
                     return true;
                 }
                 else
                 {
                     _context.MatchRequests.Remove(match);
                     await _context.SaveChangesAsync();
-                    await SendMatchUpdateAsync(gameId, "❌ La sala ha sido eliminada porque ambos jugadores abandonaron.");
+                    await SendMatchUpdateAsync(gameId, "{\"message\": \"❌ La sala ha sido eliminada porque ambos jugadores abandonaron.\"}");
                     return true;
                 }
             }
@@ -251,7 +250,7 @@ namespace backEndAjedrez.Services
                 match.GuestId = null;
                 match.Status = "Pending";
                 await _context.SaveChangesAsync();
-                await SendMessageToUser(match.HostId.ToString(), "⚠️ Tu oponente ha abandonado la partida.");
+                await SendMessageToUser(match.HostId.ToString(), "{\"message\": \"⚠️ Tu oponente ha abandonado la partida.\"}");
                 return true;
             }
 
@@ -326,6 +325,20 @@ namespace backEndAjedrez.Services
                 .FirstOrDefaultAsync();
 
             return user;
+        }
+
+        public string GetHostId(string gameId)
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+            var hostId = _context.MatchRequests
+                .Where(g => g.GameId == gameId)
+                .Select(h => h.HostId.ToString())
+                .FirstOrDefault();
+
+
+            return hostId;
         }
 
         public async Task SendMessageToUser(string userId, string message)

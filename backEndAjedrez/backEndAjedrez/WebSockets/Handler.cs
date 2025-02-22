@@ -61,12 +61,13 @@ public class Handler
                                 bool success = await _friendService.SendFriendRequest(userId, toUserId);
                                 var messageDto = new MessageDTO
                                 {
-                                    Message = success
+                                    message = success
                                         ? $"{userId} te ha enviado una solicitud de amistad."
                                         : "Ya existe una solicitud pendiente o no puedes enviarla a ti mismo."
                                 };
 
                                 var jsonMessage = JsonSerializer.Serialize(messageDto);
+                                await SendMessageToUser(success ? userId : userId, jsonMessage);
 
                                 await SendMessageToUser(success ? toUserId : userId, jsonMessage);
                             }
@@ -86,6 +87,7 @@ public class Handler
                                 };
 
                                 var response = JsonSerializer.Serialize(responseInfo);
+
                                 await SendMessageToUser(userId, response);
                             }
                             break;
@@ -170,9 +172,21 @@ public class Handler
                                             ? $"🎮 Has aceptado la invitación. ¡Partida {gameId} iniciada!"
                                             : "❌ No se pudo aceptar la invitación."
                                 };
+                                var responseHost = new
+                                {
+                                    success = accepted,
+                                    gameId = gameId,
+                                    message = accepted
+                                            ? $"🎮 Han aceptado la invitación. ¡Partida {gameId} iniciada!"
+                                            : "❌ No se pudo aceptar la invitación."
+                                };
 
+                                var hostId = _matchMakingService.GetHostId(gameId);
                                 var response = JsonSerializer.Serialize(responseInfo);
+                                var responseHosts = JsonSerializer.Serialize(responseHost);
+
                                 await SendMessageToUser(userId, response);
+                                await SendMessageToUser(hostId, responseHosts);
                             }
                             break;
 
@@ -190,9 +204,22 @@ public class Handler
                                             ? $"❌ Has rechazado la invitación a la partida."
                                             : "⚠ No se pudo rechazar la invitación."
                                 };
+                                var responseHost = new
+                                {
+                                    success = rejected,
+                                    gameId = gameId,
+                                    message = rejected
+                                            ? $"❌ Han rechazado la invitación a la partida."
+                                            : "⚠ No se pudo rechazar la invitación."
+                                };
+
+                                var hostId = _matchMakingService.GetHostId(gameId);
+                                var responseHosts = JsonSerializer.Serialize(responseHost);
 
                                 var response = JsonSerializer.Serialize(responseInfo);
                                 await SendMessageToUser(userId, response);
+                                await SendMessageToUser(hostId, responseHosts);
+
                             }
                             break;
 
@@ -339,7 +366,7 @@ public class Handler
                         };
 
                         string jsonResponse = JsonSerializer.Serialize(responseData);
-                        await SendMessageToUser(opponentId, $"⚠️ Tu amigo {userId} se ha desconectado de la partida {gameId}, pero puede volver.");
+                        await SendMessageToUser(opponentId, jsonResponse);
                     }
                 }
             }
