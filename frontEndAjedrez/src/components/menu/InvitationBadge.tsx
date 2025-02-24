@@ -30,7 +30,7 @@ export default function InvitationBadge({ userId }: InvitationBadgeProps) {
             description: "Ya has enviado una solicitud de amistad a este usuario.",
             duration: 3000,
             });
-        } else if (lastMessage === "sent") {
+        } else if (lastMessage === "!!Falta por poner!!") {
             toast({
             variant: "success",
             title: "Solicitud enviada ✅",

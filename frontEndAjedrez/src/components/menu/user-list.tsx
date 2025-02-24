@@ -33,11 +33,10 @@ export default function FriendsList() {
             
             try {
                 const authData = await getAuth();
-                console.log(authData.decodedToken?.Id)
                 const response = await fetch('https://localhost:7218/api/SearchFriends', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query: searchTerm, userId: authData.decodedToken?.Id}),
+                    body: JSON.stringify({ query: searchTerm, userId: authData.decodedToken?.Id }),
                 });
 
                 if (!response.ok) throw new Error('Error al obtener los amigos');

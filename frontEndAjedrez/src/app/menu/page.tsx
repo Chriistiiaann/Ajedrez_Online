@@ -20,12 +20,8 @@ export default function MenuPage() {
     return (
         <div className="flex h-screen">
             <main className="flex-1 overflow-y-auto p-4 md:p-6">
-
             <div>
-
-
-    </div>
-
+            </div>
             <div className="container mx-auto space-y-6">
                 <UserProfile /> 
                 <div>

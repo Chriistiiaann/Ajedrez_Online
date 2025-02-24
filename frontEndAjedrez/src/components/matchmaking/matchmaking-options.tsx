@@ -1,30 +1,55 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Users, UserPlus, Cpu } from "lucide-react"
 import VsScreen from "./vs-screen"
 import InviteFriendModal from "./invite-friend-modal"
+import { useWebsocketContext } from "@/contexts/webContext-Context";
+import { useUserContext } from "@/contexts/user-context";
 
 interface MatchmakingOptionsProps {
     onGameModeSelect: () => void
+}
+
+interface MatchMakingMessageType {
+    opponentNickName: string;
+    opponentAvatar: string;
 }
 
 export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOptionsProps) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null)
     const [showVsScreen, setShowVsScreen] = useState(false)
     const [showInviteModal, setShowInviteModal] = useState(false)
+    const { sendMessage, matchMakingState, matchMakingMessage } = useWebsocketContext();
+    const { userDataContext } = useUserContext();
 
     const handleOptionClick = (option: string) => {
         setSelectedOption(option)
         onGameModeSelect()
         if (option === "friend") {
         setShowInviteModal(true)
-        } else {
+        } else if(option === "random") {
         // Simulate a delay before showing the VS screen
-        setTimeout(() => setShowVsScreen(true), 1500)
+            sendMessage("findRandomMatch");
+            
+        } else if(option === "computer") {
+            sendMessage("playWithBot");
+            setTimeout(() => setShowVsScreen(true), 3500)
         }
     }
+
+    useEffect(() => {
+        if(matchMakingState === "searching") {
+            console.log("Buscando oponente...");
+        } else if(matchMakingState === "found") {
+            console.log("Oponente encontrado!");
+            setTimeout(() => setShowVsScreen(true), 3500)
+        } else if(matchMakingState === "botMatch") {
+            console.log("Partida contra la maquina iniciada!");
+            setTimeout(() => setShowVsScreen(true), 3500)
+        }
+    }, [matchMakingState])
 
     const handleInviteSent = () => {
         setShowInviteModal(false)
@@ -33,8 +58,34 @@ export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOpti
     }
 
     if (showVsScreen) {
-        return <VsScreen gameMode={selectedOption} />
+        if (selectedOption === "computer") {
+            console.log(userDataContext);
+            return (
+                <VsScreen
+                gameMode={selectedOption}
+                opponentData={{ name: "CPU", image: "/profilePics/botAvatar.png" }}
+                userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                />
+            );
+        } else {
+            // Asumimos que matchMakingMessage es de tipo MatchMakingMessageType
+            const message = matchMakingMessage as MatchMakingMessageType;
+            
+            // Verificamos que message tenga las propiedades esperadas
+            if (!message || !message.opponentNickName || !message.opponentAvatar) {
+                return <div>Cargando datos del oponente...</div>;
+            }
+            
+            return (
+                <VsScreen
+                gameMode={selectedOption}
+                opponentData={{ name: message.opponentNickName, image: message.opponentAvatar }}
+                userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                />
+            );
+        }
     }
+
 
     return (
         <div className="space-y-6">
@@ -79,6 +130,7 @@ export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOpti
             isOpen={showInviteModal}
             onClose={() => setShowInviteModal(false)}
             onInviteSent={handleInviteSent}
+            userId={userDataContext?.user.Id || 0}
         />
         </div>
     )

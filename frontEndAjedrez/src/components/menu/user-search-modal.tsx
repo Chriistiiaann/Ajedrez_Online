@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { getAuth } from '@/actions/get-auth'
 import InvitationBadge from "./InvitationBadge"
 
 type User = {
@@ -23,6 +24,7 @@ export function UserSearchModal({ isOpen, onClose }: { isOpen: boolean; onClose:
         setSearchQuery("")
         const searchUsers = async () => {
             try {
+                const authData = await getAuth();
                 const response = await fetch("https://localhost:7218/api/SearchUsers", {
                     method: "POST",
                     headers: {
@@ -30,7 +32,7 @@ export function UserSearchModal({ isOpen, onClose }: { isOpen: boolean; onClose:
                     },
                     body: JSON.stringify({
                         query: "",
-                        userId: 1,
+                        userId: authData.decodedToken?.Id,
                     }),
                 });
             
@@ -54,6 +56,7 @@ export function UserSearchModal({ isOpen, onClose }: { isOpen: boolean; onClose:
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                const authData = await getAuth();
                 const response = await fetch("https://localhost:7218/api/SearchUsers", {
                     method: "POST",
                     headers: {
@@ -61,7 +64,7 @@ export function UserSearchModal({ isOpen, onClose }: { isOpen: boolean; onClose:
                     },
                     body: JSON.stringify({
                         query: searchQuery,
-                        userId: 1,
+                        userId: authData.decodedToken?.Id,
                     }),
                 });
             

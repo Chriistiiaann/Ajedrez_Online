@@ -5,6 +5,7 @@ import { WebsocketProvider } from "@/contexts/webContext-Context";
 import { Toaster } from "@/components/ui/toaster"
 import Navbar from "@/components/navbar";
 import { getAuth } from "@/actions/get-auth";
+import { UserProvider } from "@/contexts/user-context";
 
 
 const geistSans = Geist({
@@ -38,8 +39,10 @@ export default  async function RootLayout({
 
           <main className="bg-gray-100 dark:bg-background text-gray-800 dark:text-gray-200 overflow-y-auto">
             <WebsocketProvider > 
-              <Toaster />
-              {children}
+              <UserProvider>
+                <Toaster />
+                {children}
+              </UserProvider>
             </WebsocketProvider> 
           </main>
         </div>
