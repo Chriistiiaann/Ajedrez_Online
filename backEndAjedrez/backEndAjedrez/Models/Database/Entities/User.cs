@@ -4,7 +4,6 @@ namespace backEndAjedrez.Models.Database.Entities;
 
 public class User
 {
-    [Key]
     public int Id { get; set; }
     public string NickName { get; set; }
     public string Email { get; set; }

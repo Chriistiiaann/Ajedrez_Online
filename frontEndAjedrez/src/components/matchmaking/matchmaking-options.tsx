@@ -17,6 +17,11 @@ interface MatchMakingMessageType {
     opponentAvatar: string;
 }
 
+interface MatchMakingMessageTypeFriend {
+    senderNickname: string;
+    senderAvatar: string;
+}
+
 export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOptionsProps) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null)
     const [showVsScreen, setShowVsScreen] = useState(false)
@@ -67,6 +72,16 @@ export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOpti
                 userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
                 />
             );
+        
+        } else if (selectedOption === "friend"){
+            const message = matchMakingMessage as MatchMakingMessageTypeFriend;
+                            return (
+                                <VsScreen
+                                gameMode="friend"
+                                opponentData={{ name: message.senderNickname, image: message.senderAvatar }}
+                                userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                                />
+                            );
         } else {
             // Asumimos que matchMakingMessage es de tipo MatchMakingMessageType
             const message = matchMakingMessage as MatchMakingMessageType;

@@ -4,10 +4,17 @@ import { useWebsocketContext } from "@/contexts/webContext-Context";
 import { Badge } from "@/components/ui/badge";
 import { MailPlus, CheckCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import VsScreen from "./vs-screen";
+import { useUserContext } from "@/contexts/user-context";
 
 interface InvitationBadgeProps {
     friendId: string;
+}
+
+interface MatchMakingMessageType {
+    senderNickName: string;
+    senderAvatar: string;
 }
 
 export default function InviteToMatchBadge({ friendId }: InvitationBadgeProps) {
@@ -15,6 +22,8 @@ export default function InviteToMatchBadge({ friendId }: InvitationBadgeProps) {
     const { toast } = useToast();
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [showVsScreen, setShowVsScreen] = useState(false)
+    const { userDataContext } = useUserContext();
 
     const handleClick = () => {
         if (isConfirmed || isLoading) return;
@@ -33,6 +42,28 @@ export default function InviteToMatchBadge({ friendId }: InvitationBadgeProps) {
         setIsConfirmed(true);
     };
 
+    useEffect(() => {
+            if(matchMakingState === "searching") {
+                console.log("Buscando oponente...");
+            } else if(matchMakingState === "found") {
+                console.log("Oponente encontrado!");
+                setTimeout(() => setShowVsScreen(true), 3500)
+            } else if(matchMakingState === "botMatch") {
+                console.log("Partida contra la maquina iniciada!");
+                setTimeout(() => setShowVsScreen(true), 3500)
+            }
+    }, [matchMakingState])
+
+    if (showVsScreen) {
+        const message = matchMakingMessage as MatchMakingMessageType;
+                return (
+                    <VsScreen
+                    gameMode="friend"
+                    opponentData={{ name: message.senderNickName, image: message.senderAvatar }}
+                    userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                    />
+                );
+    }
 
 
     return (

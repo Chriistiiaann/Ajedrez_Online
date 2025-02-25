@@ -88,6 +88,13 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         setScreenMessages([newMessage])
                     }
 
+                    if (newMessage.senderId) {
+                        setMatchMakingState("found");
+                        setMatchMakingMessage(newMessage);
+                        console.log("Entrando al if: partida encontrada con amigo...");
+                        return
+                    }
+
                     if (newMessage.success !== true) {
                         setMatchMakingState("searching");
                         setMatchMakingMessage(newMessage);
@@ -100,9 +107,8 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         setMatchMakingState("botMatch");
                         setMatchMakingMessage(newMessage);
                         console.log("Entrando al if: partida con bot...");
-                    }  
+                    } 
                     
-
 
                 } catch (error) {
                     console.error("Error al parsear mensaje:", error);
