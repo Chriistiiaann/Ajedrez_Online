@@ -14,15 +14,43 @@ public class King : Piece
         int dX = Math.Abs(startX - endX);
         int dY = Math.Abs(startY - endY);
 
-        if (dX > 1 || dY > 1)
-            return false;
+        // Enroque
+        if (dX == 2 && dY == 0 && !HasMoved)
+        {
+            bool isKingside = endX > startX;
+            int rookX = isKingside ? 7 : 0;
+            int rookY = startY;
 
-        if (endX < 0 || endX >= 8 || endY < 0 || endY >= 8)
-            return false;
+            Piece rook = board.GetPiece(rookX, rookY);
+            if (rook == null || rook.GetType() != typeof(Rook) || rook.Color != this.Color || ((Rook)rook).HasMoved)
+                return false;
 
-        Piece targetPiece = board.GetPiece(endX, endY);
-        return targetPiece == null || targetPiece.Color != this.Color;
+            int step = isKingside ? 1 : -1;
+            for (int x = startX + step; x != rookX; x += step)
+            {
+                if (board.GetPiece(x, startY) != null)
+                    return false;
+            }
+
+            if (board.EstaEnJaque(this.Color) || board.IsSquareAttacked(startX + step, startY, this.Color))
+                return false;
+
+            return true;
+        }
+
+        // Movimiento estándar del rey (una casilla)
+        if (dX <= 1 && dY <= 1 && (dX != 0 || dY != 0))
+        {
+            if (endX < 0 || endX >= 8 || endY < 0 || endY >= 8)
+                return false;
+
+            Piece targetPiece = board.GetPiece(endX, endY);
+            return targetPiece == null || targetPiece.Color != this.Color;
+        }
+
+        return false;
     }
+
     public override List<(int, int)> GetValidMoves(int startX, int startY, Board board)
     {
         List<(int, int)> validMoves = new List<(int, int)>();
@@ -50,7 +78,23 @@ public class King : Piece
             }
         }
 
+        if (!HasMoved)
+        {
+            if (!board.EstaEnJaque(this.Color))
+            {
+                if (IsValidMove(startX, startY, startX + 2, startY, board))
+                    validMoves.Add((startX + 2, startY));
+
+                if (IsValidMove(startX, startY, startX - 2, startY, board))
+                    validMoves.Add((startX - 2, startY));
+            }
+        }
+
         return validMoves;
+    }
+    public void Move()
+    {
+        HasMoved = true;
     }
 
 }

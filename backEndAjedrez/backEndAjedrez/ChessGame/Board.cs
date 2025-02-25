@@ -30,13 +30,13 @@ public class Board
         Grid[1, 7] = new Knight("White");
         Grid[6, 7] = new Knight("White");
 
-        // Alfiles
+        //// Alfiles
         Grid[2, 0] = new Bishop("Black");
         Grid[5, 0] = new Bishop("Black");
         Grid[2, 7] = new Bishop("White");
         Grid[5, 7] = new Bishop("White");
 
-        // Reinas
+        //// Reinas
         Grid[3, 0] = new Queen("Black");
         Grid[3, 7] = new Queen("White");
 
@@ -83,6 +83,26 @@ public class Board
         Console.WriteLine("   a  b  c  d  e  f  g  h");
     }
 
+    //public void MovePiece(int startX, int startY, int endX, int endY)
+    //{
+    //    Piece piece = Grid[startX, startY];
+    //    if (piece == null)
+    //    {
+    //        Console.WriteLine("No hay una pieza en la posición de origen.");
+    //        return;
+    //    }
+
+    //    if (piece.IsValidMove(startX, startY, endX, endY, this))
+    //    {
+    //        Grid[endX, endY] = piece;
+    //        Grid[startX, startY] = null;
+    //        Console.WriteLine($"Pieza {piece.Symbol} movida de {startX},{startY} a {endX},{endY}");
+    //    }
+    //    else
+    //    {
+    //        Console.WriteLine("Movimiento inválido.");
+    //    }
+    //}
     public void MovePiece(int startX, int startY, int endX, int endY)
     {
         Piece piece = Grid[startX, startY];
@@ -94,9 +114,34 @@ public class Board
 
         if (piece.IsValidMove(startX, startY, endX, endY, this))
         {
-            Grid[endX, endY] = piece;
-            Grid[startX, startY] = null;
-            Console.WriteLine($"Pieza {piece.Symbol} movida de {startX},{startY} a {endX},{endY}");
+            // Caso especial: enroque
+            if (piece is King && Math.Abs(startX - endX) == 2)
+            {
+                int rookStartX = (endX > startX) ? 7 : 0; // Torre en h (7) para corto, a (0) para largo
+                int rookEndX = (endX > startX) ? startX + 1 : startX - 1; // f o d
+                Piece rook = Grid[rookStartX, startY];
+
+                // Mover rey
+                Grid[endX, endY] = piece;
+                Grid[startX, startY] = null;
+                ((King)piece).Move(); // Marcar rey como movido
+
+                // Mover torre
+                Grid[rookEndX, startY] = rook;
+                Grid[rookStartX, startY] = null;
+                if (rook is Rook) ((Rook)rook).Move(); // Marcar torre como movida (necesitas este método en Rook)
+
+                Console.WriteLine($"Enroque realizado: Rey de ({startX},{startY}) a ({endX},{endY}), Torre de ({rookStartX},{startY}) a ({rookEndX},{startY})");
+            }
+            else
+            {
+                // Movimiento normal
+                Grid[endX, endY] = piece;
+                Grid[startX, startY] = null;
+                if (piece is King) ((King)piece).Move(); // Marcar rey como movido
+                else if (piece is Rook) ((Rook)piece).Move(); // Marcar torre como movida
+                Console.WriteLine($"Pieza {piece.Symbol} movida de ({startX},{startY}) a ({endX},{endY})");
+            }
         }
         else
         {
@@ -132,11 +177,24 @@ public class Board
                 Piece pieza = Grid[x, y];
                 if (pieza != null && pieza.Color == colorOponente)
                 {
-                    List<(int, int)> movimientos = pieza.GetValidMoves(x, y, this);
-                    if (movimientos.Contains((reyX, reyY)))
+                    if (pieza is King)
                     {
-                        Console.WriteLine($"El rey {color} está en jaque por {pieza.Symbol} en ({x}, {y}).");
-                        return true;
+                        int dX = Math.Abs(x - reyX);
+                        int dY = Math.Abs(y - reyY);
+                        if (dX <= 1 && dY <= 1 && (dX != 0 || dY != 0))
+                        {
+                            Console.WriteLine($"El rey {color} está en jaque por el rey {colorOponente} en ({x}, {y}).");
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        List<(int, int)> movimientos = pieza.GetValidMoves(x, y, this);
+                        if (movimientos.Contains((reyX, reyY)))
+                        {
+                            Console.WriteLine($"El rey {color} está en jaque por {pieza.Symbol} en ({x}, {y}).");
+                            return true;
+                        }
                     }
                 }
             }
@@ -185,6 +243,39 @@ public class Board
 
         Console.WriteLine($"¡Jaque mate confirmado para {color}!");
         return true;
+    }
+    public bool IsSquareAttacked(int x, int y, string color)
+    {
+        string colorOponente = (color == "White") ? "Black" : "White";
+
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                Piece pieza = Grid[i, j];
+                if (pieza != null && pieza.Color == colorOponente)
+                {
+                    if (pieza is King)
+                    {
+                        int dX = Math.Abs(i - x);
+                        int dY = Math.Abs(j - y);
+                        if (dX <= 1 && dY <= 1 && (dX != 0 || dY != 0))
+                        {
+                            return true; 
+                        }
+                    }
+                    else
+                    {
+                        List<(int, int)> movimientos = pieza.GetValidMoves(i, j, this);
+                        if (movimientos.Contains((x, y)))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 
 namespace backEndAjedrez.WebSockets;
@@ -164,24 +165,29 @@ public class Handler
                                 var gameId = request["gameId"];
                                 bool accepted = await _matchMakingService.AcceptMatchInvitationAsync(gameId, int.Parse(userId));
 
+                                var hostId = _matchMakingService.GetHostId(gameId);
+                                var invitedInfo = await _matchMakingService.GetUserInfoAsync(int.Parse(hostId));
+
                                 var responseInfo = new
                                 {
-                                    success = accepted,
+                                    senderId = invitedInfo.Id,
+                                    senderNickname = invitedInfo.NickName,
+                                    senderAvatar = invitedInfo.Avatar,
                                     gameId = gameId,
-                                    message = accepted
-                                            ? $"🎮 Has aceptado la invitación. ¡Partida {gameId} iniciada!"
-                                            : "❌ No se pudo aceptar la invitación."
-                                };
-                                var responseHost = new
-                                {
-                                    success = accepted,
-                                    gameId = gameId,
-                                    message = accepted
-                                            ? $"🎮 Han aceptado la invitación. ¡Partida {gameId} iniciada!"
-                                            : "❌ No se pudo aceptar la invitación."
+                                    message = $"🎮 Has aceptado la invitación. ¡Partida {gameId} iniciada!"
                                 };
 
-                                var hostId = _matchMakingService.GetHostId(gameId);
+                                var userInfo = await _matchMakingService.GetUserInfoAsync(int.Parse(userId));
+                                var responseHost = new
+                                {
+                                    senderId = userInfo.Id,
+                                    senderNickname = userInfo.NickName,
+                                    senderAvatar = userInfo.Avatar,
+                                    gameId = gameId,
+                                    message = $"🎮 Han aceptado la invitación. ¡Partida {gameId} iniciada!"
+                                };
+
+                                string jsonInvitation = System.Text.Json.JsonSerializer.Serialize(responseHost);
                                 var response = JsonSerializer.Serialize(responseInfo);
                                 var responseHosts = JsonSerializer.Serialize(responseHost);
 

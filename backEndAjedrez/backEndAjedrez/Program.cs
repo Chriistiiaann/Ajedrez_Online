@@ -19,78 +19,78 @@ public class Program
     public static void Main(string[] args)
     {
 
-        //Board board = new Board();
-        //Console.WriteLine("¡Bienvenido al ajedrez! Turnos alternados entre blancas y negras.");
-        //bool turnoBlancas = true;
+        Board board = new Board();
+        Console.WriteLine("¡Bienvenido al ajedrez! Turnos alternados entre blancas y negras.");
+        bool turnoBlancas = true;
 
-        //while (true)
-        //{
-        //    board.PrintBoard();
-        //    Console.WriteLine($"Turno de las {(turnoBlancas ? "Blancas" : "Negras")}");
-        //    Console.WriteLine("¿El rey blanco está en jaque? " + (board.EstaEnJaque("White") ? "Sí" : "No"));
-        //    Console.WriteLine("¿El rey negro está en jaque? " + (board.EstaEnJaque("Black") ? "Sí" : "No"));
+        while (true)
+        {
+            board.PrintBoard();
+            Console.WriteLine($"Turno de las {(turnoBlancas ? "Blancas" : "Negras")}");
+            Console.WriteLine("¿El rey blanco está en jaque? " + (board.EstaEnJaque("White") ? "Sí" : "No"));
+            Console.WriteLine("¿El rey negro está en jaque? " + (board.EstaEnJaque("Black") ? "Sí" : "No"));
 
-        //    string colorActual = turnoBlancas ? "White" : "Black";
-        //    string colorOponente = turnoBlancas ? "Black" : "White";
+            string colorActual = turnoBlancas ? "White" : "Black";
+            string colorOponente = turnoBlancas ? "Black" : "White";
 
-        //    if (board.EstaEnJaqueMate(colorOponente))
-        //    {
-        //        Console.WriteLine($"¡Jaque mate! Las {(turnoBlancas ? "Blancas" : "Negras")} ganan.");
-        //        break;
-        //    }
+            if (board.EstaEnJaqueMate(colorOponente))
+            {
+                Console.WriteLine($"¡Jaque mate! Las {(turnoBlancas ? "Blancas" : "Negras")} ganan.");
+                break;
+            }
 
-        //    Console.WriteLine("Ingrese el movimiento en formato 'x1 y1 x2 y2' (o 'exit' para salir):");
-        //    string input = Console.ReadLine();
-        //    if (input.ToLower() == "exit") break;
+            Console.WriteLine("Ingrese el movimiento en formato 'x1 y1 x2 y2' (o 'exit' para salir):");
+            string input = Console.ReadLine();
+            if (input.ToLower() == "exit") break;
 
-        //    string[] parts = input.Split(' ');
-        //    if (parts.Length != 4 ||
-        //        !int.TryParse(parts[0], out int startX) ||
-        //        !int.TryParse(parts[1], out int startY) ||
-        //        !int.TryParse(parts[2], out int endX) ||
-        //        !int.TryParse(parts[3], out int endY))
-        //    {
-        //        Console.WriteLine("Formato inválido. Intente de nuevo.");
-        //        continue;
-        //    }
+            string[] parts = input.Split(' ');
+            if (parts.Length != 4 ||
+                !int.TryParse(parts[0], out int startX) ||
+                !int.TryParse(parts[1], out int startY) ||
+                !int.TryParse(parts[2], out int endX) ||
+                !int.TryParse(parts[3], out int endY))
+            {
+                Console.WriteLine("Formato inválido. Intente de nuevo.");
+                continue;
+            }
 
-        //    Piece piece = board.GetPiece(startX, startY);
-        //    if (piece == null || piece.Color != colorActual)
-        //    {
-        //        Console.WriteLine($"Solo puedes mover piezas {(turnoBlancas ? "blancas" : "negras")} en este turno.");
-        //        continue;
-        //    }
+            Piece piece = board.GetPiece(startX, startY);
+            if (piece == null || piece.Color != colorActual)
+            {
+                Console.WriteLine($"Solo puedes mover piezas {(turnoBlancas ? "blancas" : "negras")} en este turno.");
+                continue;
+            }
 
-        //    if (!piece.IsValidMove(startX, startY, endX, endY, board))
-        //    {
-        //        Console.WriteLine("Movimiento inválido según las reglas de la pieza.");
-        //        continue;
-        //    }
+            if (!piece.IsValidMove(startX, startY, endX, endY, board))
+            {
+                Console.WriteLine("Movimiento inválido según las reglas de la pieza.");
+                continue;
+            }
 
-        //    Piece piezaDestinoOriginal = board.GetPiece(endX, endY);
-        //    Piece piezaOrigen = board.GetPiece(startX, startY);
-        //    board.MovePiece(startX, startY, endX, endY);
+            Piece piezaDestinoOriginal = board.GetPiece(endX, endY);
+            Piece piezaOrigen = board.GetPiece(startX, startY);
+            board.MovePiece(startX, startY, endX, endY);
 
-        //    if (board.EstaEnJaque(colorActual))
-        //    {
-        //        Console.WriteLine($"Movimiento inválido: deja a tu rey {colorActual} en jaque.");
-        //        board.Grid[startX, startY] = piezaOrigen;
-        //        board.Grid[endX, endY] = piezaDestinoOriginal;
-        //        continue;
-        //    }
+            if (board.EstaEnJaque(colorActual))
+            {
+                Console.WriteLine($"Movimiento inválido: deja a tu rey {colorActual} en jaque.");
+                board.Grid[startX, startY] = piezaOrigen;
+                board.Grid[endX, endY] = piezaDestinoOriginal;
+                continue;
+            }
 
-        //    if (board.EstaEnJaque(colorOponente))
-        //    {
-        //        Console.WriteLine($"¡Bien hecho! El rey {colorOponente} está en jaque.");
-        //        if (board.EstaEnJaqueMate(colorOponente))
-        //        {
-        //            Console.WriteLine($"¡Jaque mate! Las {(turnoBlancas ? "Blancas" : "Negras")} ganan.");
-        //            break;
-        //        }
-        //    }
+            if (board.EstaEnJaque(colorOponente))
+            {
+                Console.WriteLine($"¡Bien hecho! El rey {colorOponente} está en jaque.");
+                if (board.EstaEnJaqueMate(colorOponente))
+                {
+                    Console.WriteLine($"¡Jaque mate! Las {(turnoBlancas ? "Blancas" : "Negras")} ganan.");
+                    break;
+                }
+            }
 
-        //    turnoBlancas = !turnoBlancas;
-        //}
+            turnoBlancas = !turnoBlancas;
+        }
 
         Console.WriteLine("Juego terminado.");
 
