@@ -30,7 +30,7 @@ export default function InviteFriendModal({ isOpen, onClose, onInviteSent, userI
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         // Here you would typically send the invite to the backend
-        console.log(`Inviting friend: ${friendUsername}`)
+        console.log(`Inviting friend: ${userId}`)
         onInviteSent()
     }
 

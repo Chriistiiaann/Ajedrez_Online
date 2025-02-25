@@ -11,7 +11,7 @@ interface InvitationBadgeProps {
 }
 
 export default function InviteToMatchBadge({ friendId }: InvitationBadgeProps) {
-    const { sendMessage } = useWebsocketContext();
+    const { sendMessage, matchMakingState, matchMakingMessage } = useWebsocketContext();
     const { toast } = useToast();
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +21,7 @@ export default function InviteToMatchBadge({ friendId }: InvitationBadgeProps) {
 
         setIsLoading(true);
         sendMessage("inviteFriendToGame", friendId);
-        console.log(`Solicitud de amistad enviada a usuario ${friendId}`);
+        console.log(`Solicitud de partida enviada a usuario con ID: ${friendId}`);
 
         toast({
             title: "Enviando invitación a partida 🕹️...",
@@ -32,6 +32,8 @@ export default function InviteToMatchBadge({ friendId }: InvitationBadgeProps) {
 
         setIsConfirmed(true);
     };
+
+
 
     return (
         <>
