@@ -10,6 +10,7 @@ interface WebsocketContextType {
     sendMessage: (action: string, id?: string) => void; // Solo necesitamos dos parámetros: action e id
     matchMakingState: string
     matchMakingMessage: object
+    gameId: string
 }
 
 export const WebsocketContext = createContext<WebsocketContextType | undefined>(undefined);
@@ -33,6 +34,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     const [screenMessages, setScreenMessages] = useState<Record<string, any>[]>([]);
     const [matchMakingState, setMatchMakingState] = useState<string>('');
     const [matchMakingMessage, setMatchMakingMessage] = useState<object>({});
+    const [gameId, setGameId] = useState<string>('');
 
     const pathname = usePathname();
 
@@ -91,6 +93,8 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                     if (newMessage.senderId) {
                         setMatchMakingState("found");
                         setMatchMakingMessage(newMessage);
+                        setGameId(newMessage.gameId);
+                        console.log("gameId:", newMessage.gameId);
                         console.log("Entrando al if: partida encontrada con amigo...");
                         return
                     }
@@ -102,12 +106,22 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                     } else if (newMessage.success === true && newMessage.opponentId) {
                         setMatchMakingState("found");
                         setMatchMakingMessage(newMessage);
+                        setGameId(newMessage.gameId);
+                        console.log("gameId:", newMessage.gameId);
                         console.log("Entrando al if: partida encontrada...");
                     } else if (newMessage.success === true && newMessage.opponent == 'bot') {
                         setMatchMakingState("botMatch");
                         setMatchMakingMessage(newMessage);
+                        setGameId(newMessage.gameId);
+                        console.log("gameId:", newMessage.gameId);
                         console.log("Entrando al if: partida con bot...");
                     } 
+
+                    //Para el juego
+
+                    if (newMessage.validMoves) {
+                        console.log("Mensaje de validMoves recibido:", newMessage);
+                    }
                     
 
                 } catch (error) {
@@ -174,7 +188,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     }, [IdToken]);
 
     // Enviar mensaje con el formato adecuado
-    const sendMessage = async (action: string, id?: string): Promise<void> => {
+    const sendMessage = async (action: string, id?: string, position?: string): Promise<void> => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             const message: Record<string> = { action };
     
@@ -190,6 +204,16 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                 console.log("Enviando solicitud de partida con bot...");
             } else if (action === "inviteFriendToGame") {
                 message.friendId = userId;
+            }
+
+            if (action === "getValidMoves") {
+                message.gameId = gameId;
+                message.position = position;
+            }
+
+            if (action === "makeMove") {
+                message.gameId = gameId;
+                message.move = position;
             }
     
             socket.send(JSON.stringify(message));
@@ -208,7 +232,9 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
         screenMessages,
         sendMessage,
         matchMakingState,
-        matchMakingMessage
+        matchMakingMessage,
+        gameId
+
     };
 
     return <WebsocketContext.Provider value={contextValue}>{children}</WebsocketContext.Provider>;

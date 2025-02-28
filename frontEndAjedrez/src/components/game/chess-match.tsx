@@ -6,9 +6,12 @@ import { Chessboard } from "react-chessboard"
 import ChessBoard from "@/components/game/chess-board"
 import { Button } from "@/components/ui/button"
 
-export default function ChessMatch() {
+
+export default function ChessMatch(gameId: string) {
     const [game, setGame] = useState(new Chess())
     const [moveHistory, setMoveHistory] = useState<string[]>([])
+
+    console.log(gameId)
 
     useEffect(() => {
         setMoveHistory(game.history())

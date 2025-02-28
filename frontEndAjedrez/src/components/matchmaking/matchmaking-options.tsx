@@ -26,7 +26,7 @@ export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOpti
     const [selectedOption, setSelectedOption] = useState<string | null>(null)
     const [showVsScreen, setShowVsScreen] = useState(false)
     const [showInviteModal, setShowInviteModal] = useState(false)
-    const { sendMessage, matchMakingState, matchMakingMessage } = useWebsocketContext();
+    const { sendMessage, matchMakingState, matchMakingMessage, gameId } = useWebsocketContext();
     const { userDataContext } = useUserContext();
 
     const handleOptionClick = (option: string) => {
@@ -70,6 +70,7 @@ export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOpti
                 gameMode={selectedOption}
                 opponentData={{ name: "CPU", image: "/profilePics/botAvatar.png" }}
                 userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                gameId={gameId}
                 />
             );
         
@@ -80,6 +81,7 @@ export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOpti
                                 gameMode="friend"
                                 opponentData={{ name: message.senderNickname, image: message.senderAvatar }}
                                 userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                                gameId={gameId}
                                 />
                             );
         } else {
@@ -96,6 +98,7 @@ export default function MatchmakingOptions({ onGameModeSelect }: MatchmakingOpti
                 gameMode={selectedOption}
                 opponentData={{ name: message.opponentNickName, image: message.opponentAvatar }}
                 userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                gameId={gameId}
                 />
             );
         }
