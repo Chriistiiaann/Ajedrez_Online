@@ -44,28 +44,27 @@ const Chessboard: React.FC = () => {
   const columns = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [pieces, setPieces] = useState<{ [key: string]: string }>(initialPieces);
   const [validMoves, setValidMoves] = useState<string[]>([]);
-  const { sendMessage, socket, gameId } = useWebsocketContext();
+  const { sendMessage, socket, gameId, gameStatus, playerColor, matchMakingState } = useWebsocketContext();
 
-  // Función para determinar si una pieza es blanca (tuya)
-  const isWhitePiece = (piece: string): boolean => {
-    return piece.includes("/white/");
+  // Determinar si una pieza pertenece al jugador según su color
+  const isPlayerPiece = (piece: string): boolean => {
+    const effectiveColor = playerColor || (matchMakingState === "botMatch" ? "w" : null);
+    if (!effectiveColor) return false;
+    return effectiveColor === "w" ? piece.includes("/white/") : piece.includes("/black/");
   };
 
-  // Convertir coordenadas de ajedrez a "x,y"
   const chessToCartesian = (coordinate: string): string => {
     const col = columns.indexOf(coordinate[0]);
     const row = 8 - parseInt(coordinate[1]);
     return `${col},${row}`;
   };
 
-  // Convertir coordenadas "x,y" de vuelta a notación de ajedrez
   const cartesianToChess = (x: number, y: number): string => {
     const col = columns[x];
     const row = 8 - y;
     return `${col}${row}`;
   };
 
-  // Manejar el arrastre y pedir movimientos válidos
   const handleDragStart = (e: React.DragEvent, piece: string, coordinate: string) => {
     e.dataTransfer.setData("piece", piece);
     e.dataTransfer.setData("from", coordinate);
@@ -76,14 +75,12 @@ const Chessboard: React.FC = () => {
     }
   };
 
-  // Escuchar mensajes del WebSocket
   useEffect(() => {
     if (!socket) return;
 
     const handleMessage = (event: MessageEvent) => {
       const message = JSON.parse(event.data);
 
-      // Movimientos válidos del jugador
       if (message.success && message.validMoves) {
         const moves = message.validMoves.map((move: { x: number; y: number }) =>
           cartesianToChess(move.x, move.y)
@@ -91,19 +88,17 @@ const Chessboard: React.FC = () => {
         setValidMoves(moves);
       }
 
-      // Movimiento del rival (bot o jugador)
       if (message.success && message.move && message.status === "Move") {
         const { startX, startY, endX, endY } = message.move;
-        const from = cartesianToChess(startX, startY); // Ej. "B8"
-        const to = cartesianToChess(endX, endY);       // Ej. "A6"
+        const from = cartesianToChess(startX, startY);
+        const to = cartesianToChess(endX, endY);
 
-        // Actualizar el estado de las piezas
         setPieces((prev) => {
           const updatedPieces = { ...prev };
-          const piece = updatedPieces[from]; // Obtener la pieza del rival
+          const piece = updatedPieces[from];
           if (piece) {
-            delete updatedPieces[from]; // Quitar de la posición inicial
-            updatedPieces[to] = piece;  // Mover a la posición final
+            delete updatedPieces[from];
+            updatedPieces[to] = piece;
           }
           return updatedPieces;
         });
@@ -116,26 +111,23 @@ const Chessboard: React.FC = () => {
     };
   }, [socket]);
 
-  // Limpiar los movimientos válidos al terminar el arrastre
   const handleDragEnd = () => {
     setValidMoves([]);
   };
 
-  // Manejar el soltado y enviar el movimiento del jugador solo si cambia la posición
   const handleDrop = (e: React.DragEvent, to: string) => {
     e.preventDefault();
     const piece = e.dataTransfer.getData("piece");
     const from = e.dataTransfer.getData("from");
 
-    // Si la pieza se suelta en la misma casilla, no hacemos nada
     if (from === to || !validMoves.includes(to)) {
       setValidMoves([]);
       return;
     }
 
-    const fromPosition = chessToCartesian(from); // Ej. "E2" -> "4,6"
-    const toPosition = chessToCartesian(to);     // Ej. "E4" -> "4,4"
-    const move = `${fromPosition},${toPosition}`; // Ej. "4,6,4,4"
+    const fromPosition = chessToCartesian(from);
+    const toPosition = chessToCartesian(to);
+    const move = `${fromPosition},${toPosition}`;
 
     if (gameId) {
       sendMessage("makeMove", gameId, move);
@@ -150,28 +142,42 @@ const Chessboard: React.FC = () => {
     setValidMoves([]);
   };
 
+  const effectiveColor = playerColor || (matchMakingState === "botMatch" ? "w" : null);
+  const displayRows = effectiveColor === "b" ? [...rows].reverse() : rows;
+  const displayColumns = effectiveColor === "b" ? [...columns].reverse() : columns;
+
+  useEffect(() => {
+    if (gameStatus) {
+      console.log("Estado del juego:", gameStatus.status, gameStatus.message);
+    }
+  }, [gameStatus]);
+
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="flex flex-col">
         <div className="flex">
           <div className="w-8 h-8"></div>
-          {columns.map((col) => (
+          {displayColumns.map((col) => (
             <div key={col} className="w-16 h-16 flex justify-center items-center">
               <p className="text-center font-bold">{col}</p>
             </div>
           ))}
         </div>
-        {rows.map((_, rowIndex) => (
+        {displayRows.map((_, rowIndex) => (
           <div key={rowIndex} className="flex">
             <div className="w-16 h-16 flex justify-center items-center">
-              <p className="text-center font-bold">{8 - rowIndex}</p>
+              <p className="text-center font-bold">
+                {effectiveColor === "b" ? rowIndex + 1 : 8 - rowIndex}
+              </p>
             </div>
-            {rows.map((_, colIndex) => {
+            {displayRows.map((_, colIndex) => {
               const isBlack = (rowIndex + colIndex) % 2 === 1;
-              const coordinate = `${columns[colIndex]}${8 - rowIndex}`;
+              const coordinate = `${displayColumns[colIndex]}${
+                effectiveColor === "b" ? rowIndex + 1 : 8 - rowIndex
+              }`;
               const isValidMove = validMoves.includes(coordinate);
               const piece = pieces[coordinate];
-              const canDrag = piece && isWhitePiece(piece); // Solo blancas son arrastrables
+              const canDrag = piece && isPlayerPiece(piece);
               return (
                 <div
                   key={`${rowIndex}-${colIndex}`}
@@ -186,7 +192,7 @@ const Chessboard: React.FC = () => {
                       src={piece}
                       width={50}
                       height={50}
-                      draggable={canDrag} // Solo true para piezas blancas
+                      draggable={canDrag}
                       onDragStart={canDrag ? (e) => handleDragStart(e, piece, coordinate) : undefined}
                       onDragEnd={canDrag ? handleDragEnd : undefined}
                       className={`cursor-${canDrag ? "pointer" : "default"}`}
@@ -198,6 +204,14 @@ const Chessboard: React.FC = () => {
             })}
           </div>
         ))}
+        {gameStatus && (
+          <div className="text-center mt-4">
+            <p className="text-xl font-bold">
+              {gameStatus.status === "Check" ? "¡Jaque!" : "¡Jaque Mate!"}
+            </p>
+            <p>{gameStatus.message}</p>
+          </div>
+        )}
       </div>
     </div>
   );
