@@ -15,6 +15,7 @@ interface WebsocketContextType {
     playerColor: string | null;
     chatMessages: Record<string, any>[];
     clearChatMessages: () => void;
+    friendRequestsNumber: number;
 }
 
 export const WebsocketContext = createContext<WebsocketContextType | undefined>(undefined);
@@ -42,6 +43,8 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     const [gameStatus, setGameStatus] = useState<Record<string, any> | null>(null);
     const [playerColor, setPlayerColor] = useState<string | null>(null);
     const [chatMessages, setChatMessages] = useState<Record<string, any>[]>([]);
+
+    const [friendRequestsNumber, setfriendRequestsNumber] = useState<number>(0);
 
     const pathname = usePathname();
 
@@ -144,10 +147,16 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         console.log("Estado del juego actualizado:", newMessage);
                     }
 
-                    if (newMessage.type === "chatMessage" && newMessage.gameId === gameId) {
+                    if (newMessage.gameChatMessage) {
                         setChatMessages((prevMessages) => [...prevMessages, newMessage]);
                         console.log("Mensaje de chat recibido:", newMessage);
                     }
+
+                    if (newMessage.friendRequestSent) {
+                        setfriendRequestsNumber((prevRequests) => prevRequests + 1);
+                        console.log("Mensaje de solicitud de amistad recibido:", newMessage);
+                    }
+
                 } catch (error) {
                     console.error("Error al parsear mensaje:", error);
                 }
@@ -215,7 +224,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                 message.move = position;
             } else if (action === "sendChatMessage") {
                 message.gameId = id;
-                message.content = position;
+                message.message = position;
             }
             socket.send(JSON.stringify(message));
             console.log("Mensaje enviado:", message);
@@ -236,6 +245,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
         playerColor,
         chatMessages,
         clearChatMessages,
+        friendRequestsNumber,
     };
 
     return <WebsocketContext.Provider value={contextValue}>{children}</WebsocketContext.Provider>;

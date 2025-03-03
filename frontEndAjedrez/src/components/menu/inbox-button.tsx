@@ -7,6 +7,7 @@ import { Inbox } from 'lucide-react'
 import { getAuth } from '@/actions/get-auth'
 import { AcceptButton } from './accept-button'
 import { RejectButton } from './reject-button'
+import { useWebsocketContext } from "@/contexts/webContext-Context";
 
 type FriendRequest = {
     requestId: number
@@ -20,6 +21,7 @@ export default function InboxButton() {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
     const [isOpen, setIsOpen] = useState(false)
+    const { friendRequestsNumber } = useWebsocketContext();
 
     // Función para obtener las solicitudes de amistad del servidor
     const fetchFriendRequests = async () => {
@@ -70,7 +72,7 @@ export default function InboxButton() {
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full bg-foreground">
                     <Inbox className="mr-2 h-4 w-4" />
-                    Bandeja de entrada ({friendRequests.length})
+                    Bandeja de entrada ({friendRequestsNumber})
                 </Button>
             </DialogTrigger>
 

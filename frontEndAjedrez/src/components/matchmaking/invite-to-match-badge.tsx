@@ -18,7 +18,7 @@ interface MatchMakingMessageType {
 }
 
 export default function InviteToMatchBadge({ friendId }: InvitationBadgeProps) {
-    const { sendMessage, matchMakingState, matchMakingMessage } = useWebsocketContext();
+    const { sendMessage, matchMakingState, matchMakingMessage, gameId } = useWebsocketContext();
     const { toast } = useToast();
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +61,7 @@ export default function InviteToMatchBadge({ friendId }: InvitationBadgeProps) {
                     gameMode="friend"
                     opponentData={{ name: message.senderNickName, image: message.senderAvatar }}
                     userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                    gameId={gameId}
                     />
                 );
     }
