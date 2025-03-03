@@ -5,21 +5,21 @@ import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useWebsocketContext } from "@/contexts/webContext-Context";
-import { send } from "process";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function GameInvitations() {
-    const { sendMessage } = useWebsocketContext();
+    const { gameInvites, acceptGameInvite, rejectGameInvite } = useWebsocketContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
 
     const handleAccept = (gameId: string) => {
-        sendMessage("acceptMatchInvitation", gameId);
+        acceptGameInvite(gameId);
     };
 
     const handleReject = (gameId: string) => {
-        sendMessage("rejectMatchInvitation", gameId);
+        rejectGameInvite(gameId);
     };
 
     return (
@@ -32,7 +32,7 @@ export default function GameInvitations() {
                 <Bell size={18} />
                 <span>Invitaciones</span>
                 {gameInvites.length > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                    <span className="absolute -top-2 -left-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                         {gameInvites.length}
                     </span>
                 )}
@@ -51,22 +51,26 @@ export default function GameInvitations() {
                             <p className="text-gray-400">No hay invitaciones pendientes.</p>
                         ) : (
                             gameInvites.map((invite) => (
-                                <div key={invite.id} className="flex items-center justify-between p-2 bg-gray-800 rounded-lg">
-                                    <span>{invite.senderName} te ha invitado a una partida</span>
+                                <div key={invite.gameId} className="flex items-center justify-between p-2 bg-foreground rounded-lg">
+                                    <Avatar>
+                                        <AvatarImage src={"https://localhost:7218/" + invite.senderAvatar} alt={invite.senderNickname} />
+                                        <AvatarFallback>{invite.senderNickname.slice(0, 2).toUpperCase()}</AvatarFallback>
+                                    </Avatar>
+                                    <span>{invite.senderNickname} te ha invitado a una partida</span>
                                     <div className="flex gap-2">
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            className="bg-green-500 hover:bg-green-600"
-                                            onClick={() => handleAccept(invite.id)}
+                                            className="bg-background hover:bg-accent"
+                                            onClick={() => handleAccept(invite.gameId)}
                                         >
                                             Aceptar
                                         </Button>
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            className="bg-red-500 hover:bg-red-600"
-                                            onClick={() => handleReject(invite.id)}
+                                            className="bg-background hover:bg-red-600"
+                                            onClick={() => handleReject(invite.gameId)}
                                         >
                                             Rechazar
                                         </Button>

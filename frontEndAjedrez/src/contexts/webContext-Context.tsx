@@ -20,6 +20,9 @@ interface WebsocketContextType {
     opponentData: { name: string; image: string } | null;
     setUserData: (data: { name: string; image: string }) => void;
     setOpponentData: (data: { name: string; image: string }) => void;
+    gameInvites: { gameId: string; senderNickname: string; senderAvatar: string }[];
+    acceptGameInvite: (gameId: string) => void;
+    rejectGameInvite: (gameId: string) => void;
 }
 
 export const WebsocketContext = createContext<WebsocketContextType | undefined>(undefined);
@@ -50,12 +53,23 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     const [friendRequestsNumber, setfriendRequestsNumber] = useState<number>(0);
     const [userData, setUserData] = useState<{ name: string; image: string } | null>(null);
     const [opponentData, setOpponentData] = useState<{ name: string; image: string } | null>(null);
+    const [gameInvites, setGameInvites] = useState<{ gameId: string; senderNickname: string; senderAvatar: string }[]>([]);
 
     const pathname = usePathname();
 
     const clearChatMessages = () => {
         setChatMessages([]);
         console.log("Chat vaciado para nueva partida");
+    };
+
+    const acceptGameInvite = (gameId: string) => {
+        sendMessage("acceptMatchInvitation", gameId);
+        setGameInvites((prev) => prev.filter((invite) => invite.gameId !== gameId));
+    };
+
+    const rejectGameInvite = (gameId: string) => {
+        sendMessage("rejectMatchInvitation", gameId);
+        setGameInvites((prev) => prev.filter((invite) => invite.gameId !== gameId));
     };
 
     useEffect(() => {
@@ -88,14 +102,17 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
             };
 
             ws.onmessage = (event: MessageEvent) => {
-                console.log("Recibiendo Mensaje", event.data);
+                console.log("Mensaje recibido del servidor (raw):", event.data);
                 
                 try {
                     const newMessage: Record<string, any> = JSON.parse(event.data);
-                    console.log("Mensaje recibido:", newMessage);
-                    if (newMessage.success != undefined) {
-                        console.log("success:", newMessage.success);
+                    console.log("Mensaje parseado:", newMessage);
+
+                    if (newMessage.success !== undefined) {
+                        console.log("Success flag:", newMessage.success);
                     }
+
+                    console.log("Estado actual de matchMakingState:", matchMakingState);
 
                     if (newMessage.totalUsersConnected) {
                         setMessages((prevMessages) => ({
@@ -108,31 +125,29 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         setScreenMessages([newMessage]);
                     }
 
+                    // Condiciones específicas primero
                     if (newMessage.senderId) {
+                        console.log("Condición senderId cumplida:", newMessage.senderId);
                         setMatchMakingState("found");
                         setMatchMakingMessage(newMessage);
                         setGameId(newMessage.gameId);
-                        console.log("gameId:", newMessage.gameId);
-                        console.log("Entrando al if: partida encontrada con amigo...");
-                        return;
-                    }
-
-                    if (newMessage.success !== true) {
-                        setMatchMakingState("searching");
-                        setMatchMakingMessage(newMessage);
-                        console.log("Entrando al if: buscando partida...");
+                        console.log("Partida encontrada con amigo - gameId:", newMessage.gameId);
                     } else if (newMessage.success === true && newMessage.opponentId) {
+                        console.log("Success === true y opponentId presente:", newMessage.opponentId);
                         setMatchMakingState("found");
                         setMatchMakingMessage(newMessage);
                         setGameId(newMessage.gameId);
-                        console.log("gameId:", newMessage.gameId);
-                        console.log("Entrando al if: partida encontrada...");
+                        console.log("Partida encontrada - gameId:", newMessage.gameId);
                     } else if (newMessage.success === true && newMessage.opponent == "bot") {
+                        console.log("Success === true y partida con bot");
                         setMatchMakingState("botMatch");
                         setMatchMakingMessage(newMessage);
                         setGameId(newMessage.gameId);
-                        console.log("gameId:", newMessage.gameId);
-                        console.log("Entrando al if: partida con bot...");
+                        console.log("Partida con bot - gameId:", newMessage.gameId);
+                    } else if (newMessage.success !== true) {
+                        console.log("Success !== true, estableciendo searching");
+                        setMatchMakingState("searching");
+                        setMatchMakingMessage(newMessage);
                     }
 
                     if (newMessage.playerColor) {
@@ -157,6 +172,23 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                     if (newMessage.friendRequestSent) {
                         setfriendRequestsNumber((prevRequests) => prevRequests + 1);
                         console.log("Mensaje de solicitud de amistad recibido:", newMessage);
+                    }
+
+                    if (newMessage.gameInvitation && newMessage.gameId) {
+                        console.log("Invitación de juego recibida:", newMessage);
+                        setGameInvites((prev) => [...prev, { 
+                            gameId: newMessage.gameId, 
+                            senderNickname: newMessage.senderNickname, 
+                            senderAvatar: newMessage.senderAvatar 
+                        }]);
+                    }
+
+                    if (newMessage.gameInvitationAccepted === true && newMessage.gameId) {
+                        setGameInvites((prev) => prev.filter((invite) => invite.gameId !== newMessage.gameId));
+                        console.log("Invitación de juego aceptada:", newMessage);
+                    } else if (newMessage.gameInvitationAccepted === false && newMessage.gameId) {
+                        setGameInvites((prev) => prev.filter((invite) => invite.gameId !== newMessage.gameId));
+                        console.log("Invitación de juego rechazada:", newMessage);
                     }
                 } catch (error) {
                     console.error("Error al parsear mensaje:", error);
@@ -226,6 +258,8 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
             } else if (action === "sendChatMessage") {
                 message.gameId = id;
                 message.message = position;
+            } else if (action === "acceptMatchInvitation" || action === "rejectMatchInvitation") {
+                message.gameId = id;
             }
             socket.send(JSON.stringify(message));
             console.log("Mensaje enviado:", message);
@@ -251,6 +285,9 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
         opponentData,
         setUserData,
         setOpponentData,
+        gameInvites,
+        acceptGameInvite,
+        rejectGameInvite,
     };
 
     return <WebsocketContext.Provider value={contextValue}>{children}</WebsocketContext.Provider>;

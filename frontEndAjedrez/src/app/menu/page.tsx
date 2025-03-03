@@ -24,7 +24,7 @@ export default function MenuPage() {
             </div>
             <div className="space-y-6">
               <InboxButton />
-              {/* <GameInvitations /> */}
+              <GameInvitations />
               <GlobalStats />
             </div>
           </div>
