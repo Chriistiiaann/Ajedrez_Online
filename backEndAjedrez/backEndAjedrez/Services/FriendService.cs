@@ -19,7 +19,7 @@ public class FriendService
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
         using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
 
-        if (fromUserId == toUserId) return false; 
+        if (fromUserId == toUserId) return false;
 
         var existingRequest = await _context.FriendRequests
             .FirstOrDefaultAsync(r =>
@@ -40,7 +40,7 @@ public class FriendService
 
         if (existingFriendship != null)
         {
-            return false; 
+            return false;
         }
 
         var request = new FriendRequest
@@ -64,7 +64,7 @@ public class FriendService
         var request = await _context.FriendRequests.FindAsync(requestId);
         if (request == null || request.Status != "Pending") return false;
 
-        
+
         request.Status = "Accepted";
 
         var friend1 = new Friend
@@ -85,7 +85,6 @@ public class FriendService
         return true;
     }
 
-    // Rechazar solicitud de amistad
     public async Task<bool> RejectFriendRequest(int requestId)
     {
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -99,7 +98,6 @@ public class FriendService
         return true;
     }
 
-    // Obtener solicitudes pendientes
     public async Task<List<FriendRequest>> GetPendingRequests(string userId)
     {
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -110,7 +108,6 @@ public class FriendService
             .ToListAsync();
     }
 
-    // Obtener amigos de un usuario
     public async Task<List<Friend>> GetFriends(string userId)
     {
         using IServiceScope scope = _serviceScopeFactory.CreateScope();

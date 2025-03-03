@@ -60,12 +60,12 @@ namespace backEndAjedrez.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest("Invalid request data.");
+                    return Ok("Invalid request data.");
                 }
 
                 if (request.UserId <= 0) 
                 {
-                    return BadRequest("Invalid user ID.");
+                    return Ok("Invalid user ID.");
                 }
 
                 IEnumerable<UserDto> users = string.IsNullOrWhiteSpace(request.Query)
@@ -74,7 +74,7 @@ namespace backEndAjedrez.Controllers
 
                 if (users == null || !users.Any())
                 {
-                    return BadRequest(new { message = "¡Vaya! Parece que no tienes ningún amigo con ese nombre." });
+                    return Ok(new { message = "¡Vaya! Parece que no tienes ningún amigo con ese nombre." });
                 }
 
                 return Ok(new { users });

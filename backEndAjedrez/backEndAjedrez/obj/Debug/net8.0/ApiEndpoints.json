@@ -69,37 +69,37 @@
   },
   {
     "ContainingType": "backEndAjedrez.Controllers.FriendController",
-    "Method": "GetFriends",
-    "RelativePath": "api/Friend",
-    "HttpMethod": "POST",
+    "Method": "DeleteFriend",
+    "RelativePath": "api/Friend/{friendId}",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "backEndAjedrez.Models.Dtos.SearchFriendsDTO",
+        "Name": "friendId",
+        "Type": "System.Int32",
         "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
   },
   {
     "ContainingType": "backEndAjedrez.Controllers.FriendController",
-    "Method": "DeleteFriend",
-    "RelativePath": "api/Friend",
-    "HttpMethod": "DELETE",
+    "Method": "GetFriends",
+    "RelativePath": "api/Friend/{userId}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "userId",
         "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "friendId",
-        "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -190,6 +190,32 @@
         "Name": "nickname",
         "Type": "System.String",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.UserController",
+    "Method": "GetUserHistory",
+    "RelativePath": "api/User/history/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

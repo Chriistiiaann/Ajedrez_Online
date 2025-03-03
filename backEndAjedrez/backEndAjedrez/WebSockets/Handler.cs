@@ -1,12 +1,10 @@
-﻿using backEndAjedrez.Models.Database.Entities;
-using backEndAjedrez.Models.Dtos;
+﻿using backEndAjedrez.Models.Dtos;
 using backEndAjedrez.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Hosting;
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 
 namespace backEndAjedrez.WebSockets;
@@ -16,17 +14,33 @@ public class Handler
     private readonly FriendService _friendService;  
     private readonly StatusService _statusService;
     private readonly MatchMakingService _matchMakingService;
+    private readonly GameMoveHandler _gameMoveHandler;
+    private readonly GameBoardManager _boardManager;
+    private readonly ChatHandler _chatHandler;
 
-    
-    public Handler(FriendService friendService, StatusService statusService, MatchMakingService matchMakingService)
+
+    public Handler(FriendService friendService, StatusService statusService, MatchMakingService matchMakingService, GameMoveHandler gameMoveHandler, GameBoardManager boardManager, ChatHandler chatHandler)
     {
         _friendService = friendService;
         _statusService = statusService;
         _matchMakingService = matchMakingService;
+        _gameMoveHandler = gameMoveHandler;
+        _boardManager = boardManager;
+        _chatHandler = chatHandler;
     }
+    private void InitializeBoard(string gameId)
+    {
+        if (!_boardManager.ContainsBoard(gameId))
+        {
+            _boardManager.InitializeBoard(gameId);
+            Console.WriteLine($"Tablero inicializado para gameId: {gameId}");
+        }
+    }
+    private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
     public async Task HandleAsync(HttpContext context, WebSocket webSocket)
     {
+
         var userId = context.Request.Query["userId"].ToString();
         if (string.IsNullOrEmpty(userId))
         {
@@ -39,7 +53,7 @@ public class Handler
         _connections[userId] = webSocket;
         Console.WriteLine($"🔗 Usuario {userId} conectado");
 
-        await SendTotalUsersConnectedToAll();
+        await SendStatsToAll();
 
         var buffer = new byte[1024 * 4];
 
@@ -60,11 +74,15 @@ public class Handler
                             {
                                 var toUserId = request["toUserId"];
                                 bool success = await _friendService.SendFriendRequest(userId, toUserId);
-                                var messageDto = new MessageDTO
+                                var invitedInfo = await _matchMakingService.GetUserInfoAsync(int.Parse(userId));
+                                var messageDto = new 
                                 {
                                     message = success
-                                        ? $"{userId} te ha enviado una solicitud de amistad."
-                                        : "Ya existe una solicitud pendiente o no puedes enviarla a ti mismo."
+                                        ? $"{invitedInfo.NickName} te ha enviado una solicitud de amistad."
+                                        : "Ya existe una solicitud pendiente o no puedes enviarla a ti mismo.",
+                                    friendRequestSent = success 
+                                        ? true
+                                        : false
                                 };
 
                                 var jsonMessage = JsonSerializer.Serialize(messageDto);
@@ -84,7 +102,8 @@ public class Handler
                                     requestId = requestId,
                                     message = success
                                             ? "Solicitud de amistad aceptada."
-                                            : "Error al aceptar la solicitud."
+                                            : "Error al aceptar la solicitud.",
+                                    friendRequestAccepted = true
                                 };
 
                                 var response = JsonSerializer.Serialize(responseInfo);
@@ -103,7 +122,8 @@ public class Handler
                                     requestId = requestId,
                                     message = success
                                            ? "Solicitud de amistad rechazada."
-                                           : "Error al rechazar la solicitud."
+                                           : "Error al rechazar la solicitud.",
+                                     friendRequestAccepted = false
                                 };
 
                                 var response = JsonSerializer.Serialize(responseInfo);
@@ -137,7 +157,9 @@ public class Handler
                                         senderNickname = userInfo.NickName,
                                         senderAvatar = userInfo.Avatar,
                                         gameId = match.GameId,
-                                        message = $"🎮 {userInfo.NickName} te ha invitado a jugar. Partida ID: {match.GameId}"
+                                        playerColor = "w",
+                                        message = $"🎮 {userInfo.NickName} te ha invitado a jugar. Partida ID: {match.GameId}",
+                                        gameInvitation = true
                                     };
                                     string jsonInvitation = System.Text.Json.JsonSerializer.Serialize(invitationData);
 
@@ -147,10 +169,13 @@ public class Handler
                                         success = true,
                                         gameId = match.GameId,
                                         invitedFriendId = friendId,
-                                        message = "✅ Invitación enviada con éxito."
+                                        playerColor = "w",
+                                        message = "✅ Invitación enviada con éxito.",
+                                        gameInvitation = true
                                     };
                                     string jsonConfirmation = System.Text.Json.JsonSerializer.Serialize(confirmationData);
                                     await SendMessageToUser(userId, jsonConfirmation);
+                                    await SendStatsToAll();
                                 }
                                 else
                                 {
@@ -164,35 +189,44 @@ public class Handler
                             {
                                 var gameId = request["gameId"];
                                 bool accepted = await _matchMakingService.AcceptMatchInvitationAsync(gameId, int.Parse(userId));
-
-                                var hostId = _matchMakingService.GetHostId(gameId);
-                                var invitedInfo = await _matchMakingService.GetUserInfoAsync(int.Parse(hostId));
-
-                                var responseInfo = new
+                                if (accepted)
                                 {
-                                    senderId = invitedInfo.Id,
-                                    senderNickname = invitedInfo.NickName,
-                                    senderAvatar = invitedInfo.Avatar,
-                                    gameId = gameId,
-                                    message = $"🎮 Has aceptado la invitación. ¡Partida {gameId} iniciada!"
-                                };
+                                    InitializeBoard(gameId);
+                                    var hostId = _matchMakingService.GetHostId(gameId);
+                                    var invitedInfo = await _matchMakingService.GetUserInfoAsync(int.Parse(hostId));
 
-                                var userInfo = await _matchMakingService.GetUserInfoAsync(int.Parse(userId));
-                                var responseHost = new
-                                {
-                                    senderId = userInfo.Id,
-                                    senderNickname = userInfo.NickName,
-                                    senderAvatar = userInfo.Avatar,
-                                    gameId = gameId,
-                                    message = $"🎮 Han aceptado la invitación. ¡Partida {gameId} iniciada!"
-                                };
+                                    var responseInfo = new
+                                    {
+                                        senderId = invitedInfo.Id,
+                                        senderNickname = invitedInfo.NickName,
+                                        senderAvatar = invitedInfo.Avatar,
+                                        gameId = gameId,
+                                        playerColor = "b",
+                                        message = $"🎮 Has aceptado la invitación. ¡Partida {gameId} iniciada!",
+                                        acceptGameInvitation = true
+                                    };
 
-                                string jsonInvitation = System.Text.Json.JsonSerializer.Serialize(responseHost);
-                                var response = JsonSerializer.Serialize(responseInfo);
-                                var responseHosts = JsonSerializer.Serialize(responseHost);
+                                    var userInfo = await _matchMakingService.GetUserInfoAsync(int.Parse(userId));
+                                    var responseHost = new
+                                    {
+                                        senderId = userInfo.Id,
+                                        senderNickname = userInfo.NickName,
+                                        senderAvatar = userInfo.Avatar,
+                                        gameId = gameId,
+                                        playerColor = "b",
+                                        message = $"🎮 Han aceptado la invitación. ¡Partida {gameId} iniciada!",
+                                        acceptGameInvitation = true
+                                    };
 
-                                await SendMessageToUser(userId, response);
-                                await SendMessageToUser(hostId, responseHosts);
+                                    string jsonInvitation = System.Text.Json.JsonSerializer.Serialize(responseHost);
+                                    var response = JsonSerializer.Serialize(responseInfo);
+                                    var responseHosts = JsonSerializer.Serialize(responseHost);
+
+                                    await SendMessageToUser(userId, response);
+                                    await SendMessageToUser(hostId, responseHosts);
+                                    await SendStatsToAll();
+                                }
+                                
                             }
                             break;
 
@@ -208,7 +242,8 @@ public class Handler
                                     gameId = gameId,
                                     message = rejected
                                             ? $"❌ Has rechazado la invitación a la partida."
-                                            : "⚠ No se pudo rechazar la invitación."
+                                            : "⚠ No se pudo rechazar la invitación.",
+                                    acceptGameInvitation = false
                                 };
                                 var responseHost = new
                                 {
@@ -216,7 +251,8 @@ public class Handler
                                     gameId = gameId,
                                     message = rejected
                                             ? $"❌ Han rechazado la invitación a la partida."
-                                            : "⚠ No se pudo rechazar la invitación."
+                                            : "⚠ No se pudo rechazar la invitación.",
+                                    acceptGameInvitation = false
                                 };
 
                                 var hostId = _matchMakingService.GetHostId(gameId);
@@ -234,26 +270,31 @@ public class Handler
 
                             if (matchRandom.GuestId != null)
                             {
-                                var userInfo = await _matchMakingService.GetUserInfoAsync(int.Parse(userId));
+                                InitializeBoard(matchRandom.GameId);
+
+                                var hostInfo = await _matchMakingService.GetUserInfoAsync(matchRandom.HostId);
+                                var guestInfo = await _matchMakingService.GetUserInfoAsync(matchRandom.GuestId.Value);
 
                                 var hostData = new
                                 {
                                     success = true,
                                     opponentId = matchRandom.GuestId,
-                                    opponentNickName = userInfo.NickName,
-                                    opponentAvatar = userInfo.Avatar,
+                                    opponentNickName = guestInfo.NickName, 
+                                    opponentAvatar = guestInfo.Avatar,
                                     gameId = matchRandom.GameId,
-                                    message = $"✅ Emparejado con {userInfo.NickName}. Partida: {matchRandom.GameId}"
+                                    playerColor = "w",
+                                    message = $"✅ Emparejado con {guestInfo.NickName}. Partida: {matchRandom.GameId}"
                                 };
 
                                 var guestData = new
                                 {
                                     success = true,
                                     opponentId = matchRandom.HostId,
-                                    opponentNickName = userInfo.NickName,
-                                    opponentAvatar = userInfo.Avatar,
+                                    opponentNickName = hostInfo.NickName, 
+                                    opponentAvatar = hostInfo.Avatar,
                                     gameId = matchRandom.GameId,
-                                    message = $"✅ Emparejado con {userInfo.NickName}. Partida: {matchRandom.GameId}"
+                                    playerColor = "b",
+                                    message = $"✅ Emparejado con {hostInfo.NickName}. Partida: {matchRandom.GameId}"
                                 };
 
                                 string jsonHost = JsonSerializer.Serialize(hostData);
@@ -261,6 +302,7 @@ public class Handler
 
                                 await SendMessageToUser(matchRandom.HostId.ToString(), jsonHost);
                                 await SendMessageToUser(matchRandom.GuestId.ToString(), jsonGuest);
+                                await SendStatsToAll();
                             }
                             else
                             {
@@ -278,17 +320,50 @@ public class Handler
 
                         case "playWithBot":
                             var matchBot = await _matchMakingService.CreateBotMatchAsync(int.Parse(userId));
-
+                            InitializeBoard(matchBot.GameId);
                             var responseData = new
                             {
                                 success = true,
                                 gameId = matchBot.GameId,
                                 opponent = "bot",
+                                playerColor = "w",
                                 message = $"🤖 Partida contra bot creada. Partida: {matchBot.GameId}"
                             };
 
                             string jsonResponse = JsonSerializer.Serialize(responseData);
                             await SendMessageToUser(userId, jsonResponse);
+                            await SendStatsToAll();
+                            break;
+
+                        case "makeMove":
+                            if (request.ContainsKey("gameId") && request.ContainsKey("move"))
+                            {
+                                var gameId = request["gameId"];
+                                var move = request["move"];
+                                var (success, isCheckmate) = await _gameMoveHandler.HandleMove(userId, gameId, move, SendMessageToUser);
+                                if (success && isCheckmate)
+                                {
+                                    await SendStatsToAll();
+                                }
+                            }
+                            break;
+
+                        case "getValidMoves":
+                            if (request.ContainsKey("gameId") && request.ContainsKey("position"))
+                            {
+                                var gameId = request["gameId"];
+                                var position = request["position"];
+                                await _gameMoveHandler.GetValidMoves(userId, gameId, position, SendMessageToUser);
+                            }
+                            break;
+
+                        case "sendChatMessage":
+                            if (request.ContainsKey("gameId") && request.ContainsKey("message"))
+                            {
+                                var gameId = request["gameId"];
+                                var messageContent = request["message"];
+                                await _chatHandler.HandleChatMessage(userId, gameId, messageContent, _connections);
+                            }
                             break;
 
                         default:
@@ -319,7 +394,7 @@ public class Handler
         finally
         {
             _connections.TryRemove(userId, out _);
-            await SendTotalUsersConnectedToAll();
+            await SendStatsToAll();
             await _statusService.ChangeStatusAsync(int.Parse(userId), "Disconnected");
             Console.WriteLine($"❌ Usuario {userId} desconectado");
 
@@ -333,7 +408,7 @@ public class Handler
 
                 if (!isInvitedMatch)
                 {
-              
+
                     bool removed = await _matchMakingService.RemovePlayerFromMatchAsync(gameId, userIdInt);
 
                     if (removed)
@@ -375,6 +450,7 @@ public class Handler
                         await SendMessageToUser(opponentId, jsonResponse);
                     }
                 }
+                _semaphore.Release();
             }
         }
     }
@@ -388,11 +464,18 @@ public class Handler
         }
     }
 
-    private async Task SendTotalUsersConnectedToAll()
+    public async Task SendStatsToAll()
     {
         int totalUsersConnected = _connections.Count;
+        int totalMatches = await _matchMakingService.GetTotalActiveMatchesAsync();
+        int playersInMatches = await _matchMakingService.GetPlayersInMatchesAsync();
 
-        var message = JsonSerializer.Serialize(new { totalUsersConnected });
+        var message = JsonSerializer.Serialize(new 
+            { 
+                totalUsersConnected,
+                totalMatches,  
+                playersInMatches,
+            });
 
         foreach (var webSocket in _connections.Values)
         {

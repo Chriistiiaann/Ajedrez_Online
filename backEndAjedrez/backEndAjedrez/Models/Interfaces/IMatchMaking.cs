@@ -16,8 +16,10 @@ namespace backEndAjedrez.Models.Interfaces
         Task<bool> RejectMatchInvitationAsync(string gameId, int userId);
         Task<string?> GetGameIdByUserAsync(string userId);
         Task<string?> GetOpponentIdAsync(string userId, string gameId);
-        //Task<string?> GetHostId(string gameId);
+        Task<MatchRequest> GetMatchByGameIdAsync(string gameId);
+        Task UpdateMatchStatusAsync(string gameId, string status);
         Task SendMatchUpdateAsync(string gameId, string message);
         Task SendMessageToUser(string userId, string message);
+        Task SaveMatchHistoryAsync(string gameId, string winner);
     }
 }

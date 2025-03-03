@@ -1,5 +1,4 @@
-﻿using backEndAjedrez.Models.Database.Entities;
-using backEndAjedrez.Models.Dtos;
+﻿using backEndAjedrez.Models.Dtos;
 using backEndAjedrez.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,26 +41,30 @@ public class FriendRepository : IFriendRepository
         return friendsDetails;
     }
 
-    public async Task<bool> DeleteFriendsAsync(int userId, int friendId)
+    public async Task<bool> RemoveFriend(string userId, string friendId)
     {
-        string userIdStr = userId.ToString();
-        string friendIdStr = friendId.ToString();
+        var friendship1 = await _context.Friends
+            .FirstOrDefaultAsync(f => f.UserId == userId && f.FriendId == friendId);
+        var friendship2 = await _context.Friends
+            .FirstOrDefaultAsync(f => f.UserId == friendId && f.FriendId == userId);
 
-        var friendship = await _context.Friends
-            .FirstOrDefaultAsync(f =>
-                (f.UserId == userIdStr && f.FriendId == friendIdStr) ||
-                (f.UserId == friendIdStr && f.FriendId == userIdStr));
-
-        if (friendship != null)
+        if (friendship1 == null && friendship2 == null)
         {
-            _context.Friends.Remove(friendship);
-            await _context.SaveChangesAsync();
-            return true; 
+            return false;
         }
 
-        return false; 
-    }
+        if (friendship1 != null)
+        {
+            _context.Friends.Remove(friendship1);
+        }
+        if (friendship2 != null)
+        {
+            _context.Friends.Remove(friendship2);
+        }
 
+        await _context.SaveChangesAsync();
+        return true;
+    }
     public async Task<List<PendingFriendRequestDto>> GetPendingRequestsAsync(string userId)
     {
         return await _context.FriendRequests

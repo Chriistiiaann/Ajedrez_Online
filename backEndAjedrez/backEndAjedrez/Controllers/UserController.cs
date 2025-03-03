@@ -3,6 +3,8 @@ using backEndAjedrez.Models.Dtos;
 using backEndAjedrez.Models.Mappers;
 using backEndAjedrez.Models.Interfaces;
 using backEndAjedrez.Models.Database;
+using backEndAjedrez.Services;
+using System.Text.Json;
 
 namespace backEndAjedrez.Controllers;
 
@@ -43,7 +45,6 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-            // Captura cualquier error inesperado y devuelve una respuesta de error 500
             return StatusCode(500, "Internal server error: " + ex.Message);
         }
     }
@@ -68,7 +69,7 @@ public class UserController : Controller
             UserDto userDto = _userMapper.ToDto(user);
 
             return Ok(userDto);
-        } 
+        }
         catch (Exception ex)
         {
             return StatusCode(500, "Internal server error: " + ex.Message);
@@ -118,13 +119,13 @@ public class UserController : Controller
         try
         {
             await _userIRepository.CreateUserAsync(userToAddDto);
-            return Ok(new {message = "Usuario registrado con éxito"});
+            return Ok(new { message = "Usuario registrado con éxito" });
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}. Inner Exception: {ex.InnerException?.Message}");
         }
-        
+
     }
     [HttpPut("update")]
     public async Task<IActionResult> UpdateUserAsync([FromForm] UserCreateDto userToAddDto)
@@ -145,7 +146,7 @@ public class UserController : Controller
 
         if (userToAddDto.NickName != null)
         {
-           string normalizedNickname = await _userIRepository.NormalizeNickname(userToAddDto.NickName);
+            string normalizedNickname = await _userIRepository.NormalizeNickname(userToAddDto.NickName);
 
             var existingNickname = await _userIRepository.GetUserByNickNameAsync(normalizedNickname);
             if (existingNickname != null)
@@ -155,7 +156,7 @@ public class UserController : Controller
                     message = "Nickname existente, por favor introduzca otro.",
                     code = "NICKNAME_ALREADY_EXISTS"
                 });
-            } 
+            }
         }
 
         if (userToAddDto.Email != null)
@@ -183,6 +184,21 @@ public class UserController : Controller
             return StatusCode(500, $"Internal server error: {ex.Message}. Inner Exception: {ex.InnerException?.Message}");
         }
 
+    }
+
+    [HttpGet("history/{userId}")]
+    public async Task<IActionResult> GetUserHistory(int userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var historyJson = await _userIRepository.GetUserHistory(userId, page, pageSize);
+        var historyData = JsonSerializer.Deserialize<dynamic>(historyJson); // O usa MatchHistoryResponse si prefieres tipado fuerte
+
+        // Verificar si está vacío
+        if (historyData.GetProperty("history").GetArrayLength() == 0)
+        {
+            return Ok(new { message = "El usuario no ha jugado aún ninguna partida." });
+        }
+
+        return Ok(historyJson);
     }
 }
 

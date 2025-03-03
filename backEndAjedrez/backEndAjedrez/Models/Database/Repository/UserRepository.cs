@@ -8,6 +8,7 @@ using backEndAjedrez.Services;
 using System.Globalization;
 using System.Text;
 using backEndAjedrez.Models.Mappers;
+using System.Text.Json;
 
 namespace backEndAjedrez.Models.Database.Repositories
 {
@@ -149,7 +150,6 @@ namespace backEndAjedrez.Models.Database.Repositories
                 throw new Exception("La variación del usuario no existe.");
             }
 
-            // Actualizar NickName solo si se proporciona un valor válido
             if (!string.IsNullOrWhiteSpace(user.NickName) && user.NickName != "string")
             {
                 usuarioVariado.NickName = user.NickName;
@@ -159,7 +159,6 @@ namespace backEndAjedrez.Models.Database.Repositories
                 user.NickName = usuarioVariado.NickName;
             }
 
-            // Actualizar Email solo si se proporciona un valor válido
             if (!string.IsNullOrWhiteSpace(user.Email) && user.Email != "string")
             {
                 usuarioVariado.Email = user.Email;
@@ -169,7 +168,6 @@ namespace backEndAjedrez.Models.Database.Repositories
                 user.Email = usuarioVariado.Email;
             }
 
-            // Actualizar Password solo si se proporciona un valor válido
             if (!string.IsNullOrWhiteSpace(user.Password) && user.Password != "string")
             {
                 var passwordHashedUpdated = _passwordHasher.Hash(user.Password);
@@ -180,7 +178,6 @@ namespace backEndAjedrez.Models.Database.Repositories
                 user.Password = usuarioVariado.Password;
             }
 
-            // Manejar avatar solo si se proporciona un archivo
             if (user.File != null)
             {
                 try
@@ -198,13 +195,54 @@ namespace backEndAjedrez.Models.Database.Repositories
             }
             else
             {
-                // Mantener el avatar existente
                 usuarioVariado.Avatar = usuarioVariado.Avatar;
             }
 
             _context.Users.Update(usuarioVariado);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<string> GetUserHistory(int userId, int page = 1, int pageSize = 10)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            var historyQuery = _context.MatchHistory
+                .Where(m => m.UserId == userId)
+                .OrderByDescending(m => m.MatchDate)
+                .Select(m => new MatchHistoryItem
+                {
+                    GameId = m.GameId,
+                    UserName = m.UserName,
+                    OpponentName = m.OpponentName,
+                    Winner = m.Winner,
+                    MatchDate = m.MatchDate.ToString("yyyy-MM-dd HH:mm:ss")
+                });
+
+            var paginatedHistory = await historyQuery
+                .Skip((page - 1) * pageSize) 
+                .Take(pageSize) 
+                .ToListAsync();
+
+            var totalMatches = await historyQuery.CountAsync();
+
+            var response = new MatchHistoryResponse
+            {
+                History = paginatedHistory
+            };
+
+            var paginatedResponse = new
+            {
+                history = response.History,
+                totalMatches = totalMatches,
+                currentPage = page,
+                pageSize = pageSize,
+                totalPages = (int)Math.Ceiling((double)totalMatches / pageSize)
+            };
+
+            return JsonSerializer.Serialize(paginatedResponse);
+        }
+
     }
 }
 

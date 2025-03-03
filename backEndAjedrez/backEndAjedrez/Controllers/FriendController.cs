@@ -1,7 +1,5 @@
 ﻿using backEndAjedrez.Models.Dtos;
 using backEndAjedrez.Models.Interfaces;
-using backEndAjedrez.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backEndAjedrez.Controllers;
@@ -17,10 +15,10 @@ public class FriendController : ControllerBase
         _friendRepository = friendRepository;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> GetFriends([FromBody] SearchFriendsDTO id)
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetFriends(int userId)
     {
-        var friends = await _friendRepository.GetFriendsAsync(id.UserId);
+        var friends = await _friendRepository.GetFriendsAsync(userId);
 
         if (friends == null || !friends.Any())
             return NotFound(new { message = "Aún no tienes amigos" });
@@ -29,10 +27,10 @@ public class FriendController : ControllerBase
         return Ok(new { friends });
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteFriend(int userId, int friendId)
+    [HttpDelete("{friendId}")]
+    public async Task<IActionResult> DeleteFriend([FromRoute] int friendId, [FromQuery] int userId)
     {
-        bool deleted = await _friendRepository.DeleteFriendsAsync(userId, friendId);
+        bool deleted = await _friendRepository.RemoveFriend(userId.ToString(), friendId.ToString());
 
         if (deleted)
         {
@@ -40,7 +38,7 @@ public class FriendController : ControllerBase
         }
         else
         {
-            return BadRequest(new { message = "Amigo Inexistente"});
+            return Ok(new { message = "Amigo inexistente" });
         }
     }
 
@@ -51,10 +49,9 @@ public class FriendController : ControllerBase
 
         if (requests == null || requests.Count == 0)
         {
-            return BadRequest(new { Message = "¡Vaya! Aún no tienes solicitudes de amistad pendientes." });
+            return Ok(new { Message = "¡Vaya! Aún no tienes solicitudes de amistad pendientes." });
         }
 
-        // Creamos un objeto que contiene la colección bajo el nombre 'pendingFriendshipRequest'
         var response = new
         {
             pendingFriendshipRequest = requests

@@ -6,6 +6,6 @@ namespace backEndAjedrez.Models.Interfaces;
 public interface IFriendRepository
 {
     Task<IEnumerable<UserDto>> GetFriendsAsync(int userId);
-    Task<bool> DeleteFriendsAsync(int userId, int friendId);
+    Task<bool> RemoveFriend(string userId, string friendId);
     Task<List<PendingFriendRequestDto>> GetPendingRequestsAsync(string userId);
 }

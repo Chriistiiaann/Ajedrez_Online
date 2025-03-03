@@ -15,9 +15,6 @@ namespace backEndAjedrez.Models.Interfaces
         Task<string> StoreImageAsync(IFormFile file, string modelName);
         Task<User> GetUserByEmailAsync(string email);
         Task<string> NormalizeNickname(string nickname);
-        //Task DeleteUserAsync(long id);
-        //Task UpdateUserAsync(UserCreateDTO user);
-
-
+        Task<string> GetUserHistory(int userId, int page = 1, int pageSize = 10);
     }
 }

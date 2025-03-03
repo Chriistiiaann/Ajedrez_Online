@@ -18,7 +18,6 @@ namespace backEndAjedrez.Services
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        // ✅ 1. INVITAR A UN AMIGO A UNA PARTIDA
         public async Task<MatchRequest?> InviteFriendAsync(int hostId, string friendId)
         {
             if (string.IsNullOrEmpty(friendId))
@@ -60,7 +59,6 @@ namespace backEndAjedrez.Services
             return null;
         }
 
-        // ✅ 2. PARTIDA ALEATORIA (MATCHMAKING AUTOMÁTICO)
         public async Task<MatchRequest> FindOrCreateMatchAsync(int userId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -100,7 +98,6 @@ namespace backEndAjedrez.Services
             return newMatch;
         }
 
-        // ✅ 3. PARTIDA CONTRA BOT
         public async Task<MatchRequest> CreateBotMatchAsync(int hostId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -121,7 +118,6 @@ namespace backEndAjedrez.Services
             return botMatch;
         }
 
-        // ✅ 4. ELIMINAR UNA PARTIDA
         public async Task<bool> RemoveRoomAsync(string gameId, int userId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -138,7 +134,6 @@ namespace backEndAjedrez.Services
             return true;
         }
 
-        // ✅ 5. OBTENER EL ESTADO DE UNA PARTIDA
         public async Task<MatchRequest?> GetRoomByIdAsync(string gameId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -147,7 +142,6 @@ namespace backEndAjedrez.Services
             return await _context.MatchRequests.FirstOrDefaultAsync(m => m.GameId == gameId);
         }
 
-        // ✅ 6. WEBSOCKET PARA ACTUALIZACIONES EN TIEMPO REAL
         public async Task SendMatchUpdateAsync(string gameId, string message)
         {
             if (_connections.TryGetValue(gameId, out WebSocket socket) && socket.State == WebSocketState.Open)
@@ -157,7 +151,6 @@ namespace backEndAjedrez.Services
             }
         }
 
-        // ✅ 7. CONECTAR UN WEBSOCKET A UNA PARTIDA
         public async Task<bool> ConnectToMatchWebSocketAsync(string gameId, WebSocket socket)
         {
             _connections[gameId] = socket;
@@ -172,7 +165,6 @@ namespace backEndAjedrez.Services
             await SendMatchUpdateAsync(gameId, "WebSocket conectado.");
             return true;
         }
-        // ✅ 8. ACEPTAR UNA PARTIDA
         public async Task<bool> AcceptMatchInvitationAsync(string gameId, int userId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -194,7 +186,6 @@ namespace backEndAjedrez.Services
             return true;
         }
 
-        // ✅ 8. RECHAZAR UNA PARTIDA
         public async Task<bool> RejectMatchInvitationAsync(string gameId, int userId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -214,7 +205,6 @@ namespace backEndAjedrez.Services
             return true;
         }
 
-        // ✅ 9. ELIMINAR JUGADOR DE LA PARTIDA
         public async Task<bool> RemovePlayerFromMatchAsync(string gameId, int userId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -257,7 +247,6 @@ namespace backEndAjedrez.Services
             return false;
         }
 
-        // ✅ 10. OBTENER ID DE LA PARTIDA MEDIANTE UN USUARIO   
         public async Task<string?> GetGameIdByUserAsync(string userId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -273,7 +262,6 @@ namespace backEndAjedrez.Services
             return match?.GameId;
         }
 
-        // ✅ 11. OBTENER ID DEL OPONENTE
         public async Task<string?> GetOpponentIdAsync(string userId, string gameId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -290,7 +278,6 @@ namespace backEndAjedrez.Services
             return match.HostId == userIdInt ? match.GuestId?.ToString() : match.HostId.ToString();
         }
 
-        // ✅ 12. VER SI ES UNA PARTIDA CON INVITACIÓN
         public async Task<bool> IsInvitedMatchAsync(string gameId)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -348,6 +335,109 @@ namespace backEndAjedrez.Services
                 var response = Encoding.UTF8.GetBytes(message);
                 await webSocket.SendAsync(new ArraySegment<byte>(response), WebSocketMessageType.Text, true, CancellationToken.None);
             }
+        }
+
+        public async Task<MatchRequest> GetMatchByGameIdAsync(string gameId)
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+            var match = await _context.MatchRequests
+                .FirstOrDefaultAsync(m => m.GameId == gameId);
+
+            if (match == null)
+            {
+                throw new Exception($"No se encontró ninguna partida con el GameId: {gameId}");
+            }
+
+            return match;
+        }
+
+        public async Task UpdateMatchStatusAsync(string gameId, string status)
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+            var match = await _context.MatchRequests
+                .FirstOrDefaultAsync(m => m.GameId == gameId);
+
+            if (match == null)
+            {
+                throw new Exception($"No se encontró ninguna partida con el GameId: {gameId}");
+            }
+
+            match.Status = status;
+            _context.MatchRequests.Update(match);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SaveMatchHistoryAsync(string gameId, string winnerColor)
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+            var match = await _context.MatchRequests
+                .FirstOrDefaultAsync(m => m.GameId == gameId);
+            if (match == null)
+            {
+                throw new Exception($"No se encontró la partida con GameId: {gameId}");
+            }
+
+            var hostInfo = await GetUserInfoAsync(match.HostId);
+            var guestInfo = match.GuestId.HasValue ? await GetUserInfoAsync(match.GuestId.Value) : null;
+
+            string hostName = hostInfo.NickName;
+            string guestName = match.IsBotGame ? "Bot" : guestInfo?.NickName;
+
+            bool hostIsWhite = true;
+            string winnerName = winnerColor == "White" ? hostName : guestName; 
+
+            var hostHistory = new MatchHistory
+            {
+                GameId = gameId,
+                UserId = match.HostId,
+                UserName = hostName,
+                OpponentId = match.GuestId,
+                OpponentName = guestName,
+                Winner = winnerName, 
+                MatchDate = DateTime.UtcNow
+            };
+            _context.MatchHistory.Add(hostHistory);
+
+            if (match.GuestId.HasValue && !match.IsBotGame)
+            {
+                var guestHistory = new MatchHistory
+                {
+                    GameId = gameId,
+                    UserId = match.GuestId.Value,
+                    UserName = guestName,
+                    OpponentId = match.HostId,
+                    OpponentName = hostName,
+                    Winner = winnerName,
+                    MatchDate = DateTime.UtcNow
+                };
+                _context.MatchHistory.Add(guestHistory);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> GetTotalActiveMatchesAsync()
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+            return await _context.MatchRequests
+                .CountAsync(m => m.Status == "Matched" || m.Status == "Active");
+        }
+
+        public async Task<int> GetPlayersInMatchesAsync()
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+            var matches = await _context.MatchRequests
+                .Where(m => m.Status == "Matched" || m.Status == "Active")
+                .ToListAsync();
+
+            return matches.Sum(m => m.GuestId.HasValue ? 2 : 1);
         }
     }
 }

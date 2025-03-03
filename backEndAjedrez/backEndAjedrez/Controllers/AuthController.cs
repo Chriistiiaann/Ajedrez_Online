@@ -34,7 +34,7 @@ namespace backEndAjedrez.Controllers
             string hashedPassword = _passwordHash.Hash(model.Password);
 
             var user = await _context.Users
-    .FirstOrDefaultAsync(u => (u.Email == model.User || u.NickName == model.User) && u.Password == hashedPassword);
+                .FirstOrDefaultAsync(u => (u.Email == model.User || u.NickName == model.User) && u.Password == hashedPassword);
 
 
             Console.WriteLine($"Login attempt with User: {model.User} and Password: {model.Password}");
@@ -65,7 +65,7 @@ namespace backEndAjedrez.Controllers
             }
             else
             {
-                return Unauthorized("Email o contraseña incorrecto");
+                return Ok("Email o contraseña incorrecto");
             }
         }
 
@@ -73,7 +73,6 @@ namespace backEndAjedrez.Controllers
         [HttpGet("secret")]
         public ActionResult GetSecret()
         {
-            // Si el usuario es admin, devuelve el secreto
             return Ok("Esto es un secreto que no todo el mundo debería leer");
         }
     }
