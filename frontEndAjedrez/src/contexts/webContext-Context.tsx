@@ -13,7 +13,8 @@ interface WebsocketContextType {
     gameId: string;
     gameStatus: Record<string, any> | null;
     playerColor: string | null;
-    chatMessages: Record<string, any>[]; // Nuevo estado para mensajes del chat
+    chatMessages: Record<string, any>[];
+    clearChatMessages: () => void;
 }
 
 export const WebsocketContext = createContext<WebsocketContextType | undefined>(undefined);
@@ -40,9 +41,15 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     const [gameId, setGameId] = useState<string>('');
     const [gameStatus, setGameStatus] = useState<Record<string, any> | null>(null);
     const [playerColor, setPlayerColor] = useState<string | null>(null);
-    const [chatMessages, setChatMessages] = useState<Record<string, any>[]>([]); // Nuevo estado
+    const [chatMessages, setChatMessages] = useState<Record<string, any>[]>([]);
 
     const pathname = usePathname();
+
+    // Función para limpiar los mensajes del chat
+    const clearChatMessages = () => {
+        setChatMessages([]);
+        console.log("Chat vaciado para nueva partida");
+    };
 
     // Obtener el IdToken al cargar el componente
     useEffect(() => {
@@ -123,7 +130,6 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         console.log("Entrando al if: partida con bot...");
                     }
 
-                    // Para el juego
                     if (newMessage.playerColor) {
                         setPlayerColor(newMessage.playerColor);
                         console.log("playerColor:", newMessage.playerColor);
@@ -133,18 +139,15 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         console.log("Mensaje de validMoves recibido:", newMessage);
                     }
 
-                    // Guardar estados de jaque o jaque mate
                     if (newMessage.success && (newMessage.status === "Check" || newMessage.status === "Checkmate")) {
                         setGameStatus(newMessage);
                         console.log("Estado del juego actualizado:", newMessage);
                     }
 
-                    // Guardar mensajes del chat
-                    if (newMessage.gameChatMessage) {
+                    if (newMessage.type === "chatMessage" && newMessage.gameId === gameId) {
                         setChatMessages((prevMessages) => [...prevMessages, newMessage]);
                         console.log("Mensaje de chat recibido:", newMessage);
                     }
-
                 } catch (error) {
                     console.error("Error al parsear mensaje:", error);
                 }
@@ -153,17 +156,13 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
             ws.onclose = (event) => {
                 console.log("WebSocket desconectado.");
                 setSocket(null);
-
                 console.log("⚡ WebSocket desconectado:", event);
-
                 if (event.wasClean) {
                     console.log("✅ Conexión cerrada limpiamente.");
                 } else {
                     console.warn("🚨 Conexión cerrada de manera inesperada.");
                 }
-
                 console.log(`📌 Código de cierre: ${event.code}, Razón: ${event.reason}`);
-
                 if (!event.wasClean) {
                     console.warn("Conexión cerrada inesperadamente, intentado reconectar...");
                     setTimeout(() => {
@@ -196,8 +195,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
 
     const sendMessage = async (action: string, id?: string, position?: string): Promise<void> => {
         if (socket && socket.readyState === WebSocket.OPEN) {
-            const message: Record<string> = { action };
-    
+            const message: Record<string, any> = { action };
             const userId = String(id);
             if (action === "sendFriendRequest") {
                 message.toUserId = userId;
@@ -209,28 +207,23 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                 console.log("Enviando solicitud de partida con bot...");
             } else if (action === "inviteFriendToGame") {
                 message.friendId = userId;
-            }
-
-            if (action === "getValidMoves") {
+            } else if (action === "getValidMoves") {
                 message.gameId = gameId;
                 message.position = position;
             } else if (action === "makeMove") {
                 message.gameId = id;
                 message.move = position;
-            }
-
-            if (action === "sendChatMessage") {
+            } else if (action === "sendChatMessage") {
                 message.gameId = id;
-                message.message = position;
+                message.content = position;
             }
-    
             socket.send(JSON.stringify(message));
             console.log("Mensaje enviado:", message);
         } else {
             throw new Error("No hay conexión WebSocket activa.");
         }
     };
-    
+
     const contextValue: WebsocketContextType = {
         socket,
         messages,
@@ -241,7 +234,8 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
         gameId,
         gameStatus,
         playerColor,
-        chatMessages, // Exponemos el nuevo estado
+        chatMessages,
+        clearChatMessages,
     };
 
     return <WebsocketContext.Provider value={contextValue}>{children}</WebsocketContext.Provider>;
