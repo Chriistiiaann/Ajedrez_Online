@@ -16,6 +16,10 @@ interface WebsocketContextType {
     chatMessages: Record<string, any>[];
     clearChatMessages: () => void;
     friendRequestsNumber: number;
+    userData: { name: string; image: string } | null;
+    opponentData: { name: string; image: string } | null;
+    setUserData: (data: { name: string; image: string }) => void;
+    setOpponentData: (data: { name: string; image: string }) => void;
 }
 
 export const WebsocketContext = createContext<WebsocketContextType | undefined>(undefined);
@@ -43,18 +47,17 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     const [gameStatus, setGameStatus] = useState<Record<string, any> | null>(null);
     const [playerColor, setPlayerColor] = useState<string | null>(null);
     const [chatMessages, setChatMessages] = useState<Record<string, any>[]>([]);
-
     const [friendRequestsNumber, setfriendRequestsNumber] = useState<number>(0);
+    const [userData, setUserData] = useState<{ name: string; image: string } | null>(null);
+    const [opponentData, setOpponentData] = useState<{ name: string; image: string } | null>(null);
 
     const pathname = usePathname();
 
-    // Función para limpiar los mensajes del chat
     const clearChatMessages = () => {
         setChatMessages([]);
         console.log("Chat vaciado para nueva partida");
     };
 
-    // Obtener el IdToken al cargar el componente
     useEffect(() => {
         async function LeerToken() {
             const authData = await getAuth();
@@ -64,7 +67,6 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
         LeerToken();
     }, [pathname]);
 
-    // Configurar el WebSocket cuando se obtiene el IdToken
     useEffect(() => {
         if (!IdToken) {
             if (socket) {
@@ -156,7 +158,6 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         setfriendRequestsNumber((prevRequests) => prevRequests + 1);
                         console.log("Mensaje de solicitud de amistad recibido:", newMessage);
                     }
-
                 } catch (error) {
                     console.error("Error al parsear mensaje:", error);
                 }
@@ -246,6 +247,10 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
         chatMessages,
         clearChatMessages,
         friendRequestsNumber,
+        userData,
+        opponentData,
+        setUserData,
+        setOpponentData,
     };
 
     return <WebsocketContext.Provider value={contextValue}>{children}</WebsocketContext.Provider>;

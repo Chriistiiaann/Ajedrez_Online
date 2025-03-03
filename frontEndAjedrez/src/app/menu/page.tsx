@@ -6,6 +6,7 @@ import InboxButton from "@/components/menu/inbox-button";
 import GlobalStats from "@/components/menu/global-stats";
 import { PlaySection } from "@/components/menu/play-section";
 import MatchHistory from "@/components/menu/match-history"; // Nuevo componente
+import GameInvitations from "@/components/menu/game-invitations";
 
 export default function MenuPage() {
   return (
@@ -23,6 +24,7 @@ export default function MenuPage() {
             </div>
             <div className="space-y-6">
               <InboxButton />
+              {/* <GameInvitations /> */}
               <GlobalStats />
             </div>
           </div>

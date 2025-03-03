@@ -26,37 +26,38 @@ export interface UserData {
 
 export default function UserProfile() {
     const [userData, setUserData] = useState<UserData | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [isModalOpen, setIsModalOpen] = useState(false)
-
-    const handleOpenModal = () => setIsModalOpen(true)
-    const handleCloseModal = () => setIsModalOpen(false)
+    const handleOpenModal = () => setIsModalOpen(true);
+    const handleCloseModal = () => setIsModalOpen(false);
 
     const handleSaveUserData = (newUserData: UserData) => {
-        setUserData(newUserData)
-        // In a real application, you would typically send this data to a server here
-        console.log("Saving user data:", newUserData)
-    }
+        // Actualizar el estado local
+        setUserData(newUserData);
+
+        // Actualizar la cookie userData
+        Cookies.set("userData", JSON.stringify(newUserData), { expires: 7 }); // Expira en 7 días
+        console.log("User data saved and cookie updated:", newUserData);
+    };
 
     useEffect(() => {
         const userCookie = Cookies.get("userData");
         console.log("Cookie obtenida (sin decodificar):", userCookie);
 
         if (userCookie) {
-        try {
-            // Decodifica y parsea la cookie
-            const decodedCookie = decodeURIComponent(userCookie);
-            console.log("Cookie decodificada:", decodedCookie);
+            try {
+                const decodedCookie = decodeURIComponent(userCookie);
+                console.log("Cookie decodificada:", decodedCookie);
 
-            const parsedData: UserData = JSON.parse(decodedCookie);
-            console.log("Datos parseados:", parsedData);
+                const parsedData: UserData = JSON.parse(decodedCookie);
+                console.log("Datos parseados:", parsedData);
 
-            setUserData(parsedData);
-        } catch (error) {
-            console.error("Error al decodificar o parsear la cookie:", error);
-        }
+                setUserData(parsedData);
+            } catch (error) {
+                console.error("Error al decodificar o parsear la cookie:", error);
+            }
         } else {
-        console.warn("La cookie userData no está disponible.");
+            console.warn("La cookie userData no está disponible.");
         }
     }, []);
 
@@ -69,23 +70,23 @@ export default function UserProfile() {
         <div className="bg-gradient-to-r from-accent to-primary p-6 rounded-lg shadow-lg text-white">
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                <Avatar className="h-20 w-20 border-2 border-white">
-                    <AvatarImage src={`https://localhost:7218/${userData.user.Avatar}`} alt={userData.user.NickName} />
-                    <AvatarFallback>
-                    {userData.user.NickName.slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                </Avatar>
-                <div>
-                    <h2 className="text-2xl font-bold">{userData.user.NickName}</h2>
-                    <p className="text-sm opacity-75">{userData.user.Email}</p>
-                    <UserIconButton onClick={handleOpenModal} />
-                    <UserEditModal
-                        isOpen={isModalOpen}
-                        onClose={handleCloseModal}
-                        onSave={handleSaveUserData}
-                        initialData={userData}
-                    />
-                </div>
+                    <Avatar className="h-20 w-20 border-2 border-white">
+                        <AvatarImage src={`https://localhost:7218/${userData.user.Avatar}`} alt={userData.user.NickName} />
+                        <AvatarFallback>
+                            {userData.user.NickName.slice(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <h2 className="text-2xl font-bold">{userData.user.NickName}</h2>
+                        <p className="text-sm opacity-75">{userData.user.Email}</p>
+                        <UserIconButton onClick={handleOpenModal} />
+                        <UserEditModal
+                            isOpen={isModalOpen}
+                            onClose={handleCloseModal}
+                            onSave={handleSaveUserData}
+                            initialData={userData}
+                        />
+                    </div>
                 </div>
                 <Button className="bg-foreground hover:border-accent hover:bg-background" variant="outline" onClick={() => logoutAction()}>
                     Cerrar sesión
@@ -95,18 +96,6 @@ export default function UserProfile() {
                 <div className="text-center">
                     <p className="text-2xl font-bold">ID: {userData.user.Id}</p>
                     <p className="text-sm opacity-75">Identificador de usuario</p>
-                </div>
-                <div className="text-center">
-                    <p className="text-2xl font-bold">{"24"}</p>
-                    <p className="text-sm opacity-75">Victorias</p>
-                </div>
-                <div className="text-center">
-                    <p className="text-2xl font-bold">{"12"}</p>
-                    <p className="text-sm opacity-75">Derrotas</p>
-                </div>
-                <div className="text-center">
-                    <p className="text-2xl font-bold">{"54.0"}%</p>
-                    <p className="text-sm opacity-75">Ratio</p>
                 </div>
             </div>
         </div>
