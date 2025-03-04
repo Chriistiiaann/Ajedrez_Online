@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "Hash": "EjcgLD2o8QVzO2Uu7ThqAETKvBAVbHsZDmBckWC5Gx0=",
+  "Source": "backEndAjedrez",
+  "BasePath": "_content/backEndAjedrez",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "backEndAjedrez\\wwwroot",
+      "Source": "backEndAjedrez",
+      "ContentRoot": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\",
+      "BasePath": "_content/backEndAjedrez",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\christian.jpg",
+      "SourceId": "backEndAjedrez",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\",
+      "BasePath": "_content/backEndAjedrez",
+      "RelativePath": "images/christian.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\christian.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\default.png",
+      "SourceId": "backEndAjedrez",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\",
+      "BasePath": "_content/backEndAjedrez",
+      "RelativePath": "images/default.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\default.png"
+    },
+    {
+      "Identity": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\manolo.jpg",
+      "SourceId": "backEndAjedrez",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\",
+      "BasePath": "_content/backEndAjedrez",
+      "RelativePath": "images/manolo.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\manolo.jpg"
+    }
+  ]
+}
