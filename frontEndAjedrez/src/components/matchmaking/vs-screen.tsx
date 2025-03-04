@@ -18,16 +18,15 @@ export default function VsScreen({ gameMode, opponentData, userData, gameId }: V
 
     // Establecer datos en el contexto y redirigir después de 5 segundos
     useEffect(() => {
-        // Solo establecer los datos si no están ya establecidos o han cambiado
         setUserData(userData);
         setOpponentData(opponentData);
 
         const timer = setTimeout(() => {
             router.push(`/menu/juego?gameId=${gameId}`);
-        }, 5000);
+        }, 3500);
 
         return () => clearTimeout(timer);
-    }, [gameId, userData.name, userData.image, opponentData.name, opponentData.image, router, setUserData, setOpponentData]); // Dependencias específicas
+    }, [gameId, userData.name, userData.image, opponentData.name, opponentData.image, router, setUserData, setOpponentData]);
 
     const userDetails = {
         name: userData.name,
@@ -40,7 +39,7 @@ export default function VsScreen({ gameMode, opponentData, userData, gameId }: V
     };
 
     return (
-        <div className="flex flex-col items-center justify-center text-white">
+        <div className="flex flex-col items-center justify-center h-screen w-screen bg-black text-white">
             <div className="flex items-center justify-center w-full max-w-4xl">
                 <div className="flex flex-col items-center mr-8">
                     <Image

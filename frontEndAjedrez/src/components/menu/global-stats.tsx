@@ -21,10 +21,14 @@ export default  function GlobalStats() {
     const stats =  getGlobalStats()
     const {messages} = useWebsocketContext();
        const [totalUsersConnected, setTotalUsersConnected] = useState(0);
+       const [totalActiveMatches, setTotalActiveMatches] = useState(0);
+       const [totalPlayersInMatch, setTotalPlayersInMatch] = useState(0);
        useEffect(() =>{
         console.log("mensaje recibido", messages);
         if (messages.totalUsersConnected !=undefined ){
           setTotalUsersConnected(messages.totalUsersConnected);
+          setTotalActiveMatches(messages.totalMatches);
+          setTotalPlayersInMatch(messages.playersInMatches);
         }
        }, [messages])
        console.log(messages?.totalUsersConnected ?? "Cargando...");
@@ -46,14 +50,14 @@ export default  function GlobalStats() {
             <Swords className="h-6 w-6 text-red-500" />
             <div>
                 <p className="text-sm font-medium">Partidas en curso</p>
-                <p className="text-2xl font-bold">{stats.activeMatches.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{totalActiveMatches}</p>
             </div>
             </div>
             <div className="flex items-center space-x-4">
             <Users className="h-6 w-6 text-blue-500" />
             <div>
                 <p className="text-sm font-medium">Jugadores en partida</p>
-                <p className="text-2xl font-bold">{stats.playersInMatch.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{totalPlayersInMatch}</p>
             </div>
             </div>
         </CardContent>

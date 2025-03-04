@@ -1,26 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useWebsocketContext } from "@/contexts/webContext-Context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
+import VsScreen from "@/components/matchmaking/vs-screen";
+import { useUserContext } from "@/contexts/user-context";
 
 export default function GameInvitations() {
-    const { gameInvites, acceptGameInvite, rejectGameInvite } = useWebsocketContext();
+    const { gameInvites, acceptGameInvite, rejectGameInvite, matchMakingState, gameId, matchMakingMessage } = useWebsocketContext();
+    const { userDataContext } = useUserContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showVsScreen, setShowVsScreen] = useState(false);
+    const [acceptedGameId, setAcceptedGameId] = useState<string | null>(null);
+    const router = useRouter();
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
 
     const handleAccept = (gameId: string) => {
         acceptGameInvite(gameId);
+        setAcceptedGameId(gameId); // Guardamos el gameId aceptado
+        setIsModalOpen(false); // Cerramos el modal inmediatamente
     };
 
     const handleReject = (gameId: string) => {
         rejectGameInvite(gameId);
     };
+
+    // Detectar cuando la aceptación se confirma y mostrar VsScreen
+    useEffect(() => {
+        if (acceptedGameId && matchMakingState === "found" && gameId === acceptedGameId) {
+            console.log("Invitación aceptada, mostrando VsScreen...");
+            setShowVsScreen(true);
+
+            // Redirigir al juego después de 3.5 segundos
+            const timer = setTimeout(() => {
+                setShowVsScreen(false);
+                router.push(`/menu/juego?gameId=${gameId}`);
+            }, 9000);
+
+            return () => clearTimeout(timer); // Limpiar el temporizador al desmontar
+        }
+    }, [matchMakingState, gameId, acceptedGameId, router]);
+
+    // Renderizar VsScreen en pantalla completa cuando corresponda
+    if (showVsScreen && acceptedGameId) {
+        const invite = gameInvites.find((inv) => inv.gameId === acceptedGameId);
+        const message = matchMakingMessage as { senderNickname: string; senderAvatar: string };
+        return (
+            <div className="fixed inset-0 z-50 h-screen w-screen">
+                <VsScreen
+                    gameMode="friend"
+                    opponentData={{ name: invite?.senderNickname || message.senderNickname, image: invite?.senderAvatar || message.senderAvatar }}
+                    userData={{ name: userDataContext?.user.NickName || "", image: userDataContext?.user.Avatar || "" }}
+                    gameId={gameId}
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="relative">

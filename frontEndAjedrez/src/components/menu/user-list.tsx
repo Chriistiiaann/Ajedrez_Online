@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserRoundPlus } from "lucide-react";
+import { UserRoundPlus, UserRoundX } from "lucide-react";
 import { Button } from "../ui/button";
 import StateBadge from "./state-badge";
 import { getAuth } from "@/actions/get-auth";
 import { UserSearchModal } from "./user-search-modal";
+import { useUserContext } from "@/contexts/user-context";
 
 type Friend = {
     id: string;
@@ -23,6 +24,9 @@ export default function FriendsList() {
     const [error, setError] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [emptyListMessage, setEmptyListMessage] = useState("");
+    const { userDataContext } = useUserContext();
+
+    console.log("userDataContext:", userDataContext);
 
     useEffect(() => {
         const fetchFriends = async () => {
@@ -40,7 +44,7 @@ export default function FriendsList() {
                 if (!response.ok) throw new Error("Error al obtener los amigos");
 
                 const result = await response.json();
-                const users = Array.isArray(result.users) ? result.users : []; // Validación
+                const users = Array.isArray(result.users) ? result.users : [];
                 setFriends(users); 
 
                 if (users.length === 0) {
@@ -60,6 +64,41 @@ export default function FriendsList() {
         return () => clearTimeout(debounceTimeout);
     }, [searchTerm]);
 
+    const deleteFriend = async (friendId: string) => {
+        if (!userDataContext?.user.Id) {
+            setError("No se pudo identificar al usuario actual.");
+            return;
+        }
+
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`https://localhost:7218/api/Friend/${friendId}?userId=${userDataContext.user.Id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    // Si el endpoint requiere autenticación, podrías añadir el token aquí
+                    // "Authorization": `Bearer ${authData.token.accessToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.text();
+                throw new Error(errorData || "Error al eliminar al amigo");
+            }
+
+            // Actualizar la lista de amigos eliminando al amigo localmente
+            setFriends((prevFriends) => prevFriends.filter((friend) => friend.id !== friendId));
+            console.log(`Amigo con ID ${friendId} eliminado exitosamente`);
+        } catch (err: any) {
+            setError(err.message);
+            console.error("Error al eliminar amigo:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="bg-foreground border p-4 rounded-lg shadow space-y-4">
             <h2 className="text-xl font-semibold">Amigos</h2>
@@ -78,8 +117,10 @@ export default function FriendsList() {
             </div>
 
             {loading && <p className="text-sm text-gray-500">Cargando...</p>}
-            {error && <p className="text-md text-gray-500">{error}</p>}
-            {emptyListMessage && <p className="text-md text-gray-500">{emptyListMessage}</p>}
+            {error && <p className="text-md text-red-500">{error}</p>}
+            {emptyListMessage && !friends.length && !loading && !error && (
+                <p className="text-md text-gray-500">{emptyListMessage}</p>
+            )}
             
             <ul className="space-y-2">
                 {friends.length > 0 ? (
@@ -95,7 +136,17 @@ export default function FriendsList() {
                                 </Avatar>
                                 <span>{friend.nickName}</span>
                             </div>
-                            <StateBadge status="connected" />
+                            <div className="flex items-center space-x-2">
+                                <StateBadge status="connected" />
+                                <Button 
+                                    variant="destructive" 
+                                    size="icon"
+                                    onClick={() => deleteFriend(friend.id)}
+                                    disabled={loading}
+                                >
+                                    <UserRoundX className="h-4 w-4" />
+                                </Button>
+                            </div>
                         </li>
                     ))
                 ) : (

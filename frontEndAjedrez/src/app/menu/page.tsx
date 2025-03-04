@@ -23,8 +23,10 @@ export default function MenuPage() {
               <MatchHistory /> {/* Añadido aquí */}
             </div>
             <div className="space-y-6">
-              <InboxButton />
-              <GameInvitations />
+              <div className="space-y-4">
+                <InboxButton />
+                <GameInvitations />
+              </div>
               <GlobalStats />
             </div>
           </div>

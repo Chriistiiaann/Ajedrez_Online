@@ -121,6 +121,20 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         }));
                     }
 
+                    if (newMessage.totalMatches) {
+                        setMessages((prevMessages) => ({
+                            ...prevMessages,
+                            ...newMessage,
+                        }));
+                    } 
+
+                    if (newMessage.playersInMatches) {
+                        setMessages((prevMessages) => ({
+                            ...prevMessages,
+                            ...newMessage,
+                        }));
+                    }
+
                     if (newMessage.Message) {
                         setScreenMessages([newMessage]);
                     }
