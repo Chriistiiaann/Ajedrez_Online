@@ -158,7 +158,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
                         setMatchMakingMessage(newMessage);
                         setGameId(newMessage.gameId);
                         console.log("Partida con bot - gameId:", newMessage.gameId);
-                    } else if (newMessage.success !== true) {
+                    } else if (newMessage.searchingOpponent) {
                         console.log("Success !== true, estableciendo searching");
                         setMatchMakingState("searching");
                         setMatchMakingMessage(newMessage);
