@@ -16,5 +16,7 @@ namespace backEndAjedrez.Models.Interfaces
         Task<User> GetUserByEmailAsync(string email);
         Task<string> NormalizeNickname(string nickname);
         Task<string> GetUserHistory(int userId, int page = 1, int pageSize = 10);
+        Task<bool> UpdateUserRoleAsync(int userId, string newRole);
+        Task<UserDto> GetUserByIdAsync(int userId);
     }
 }

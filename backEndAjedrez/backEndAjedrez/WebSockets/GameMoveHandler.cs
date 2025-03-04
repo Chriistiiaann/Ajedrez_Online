@@ -24,7 +24,7 @@ public class GameMoveHandler
         if (!_boardManager.ContainsBoard(gameId))
         {
             await sendMessageToUser(userId, JsonSerializer.Serialize(new { success = false, message = "Partida no encontrada." }));
-            return (false, false); 
+            return (false, false);
         }
 
         var match = await _matchMakingService.GetMatchByGameIdAsync(gameId);
@@ -34,28 +34,48 @@ public class GameMoveHandler
             return (false, false);
         }
 
+        var board = _boardManager.GetBoard(gameId);
+
+        bool isUserWhite = match.HostId.ToString() == userId;
+        bool isUserBlack = match.GuestId.ToString() == userId;
+
+        if ((board.CurrentTurn == "White" && !isUserWhite) || (board.CurrentTurn == "Black" && !isUserBlack))
+        {
+            await sendMessageToUser(userId, JsonSerializer.Serialize(new { success = false, message = "No es tu turno." }));
+            return (false, false);
+        }
+
         var coords = move.Split(',').Select(int.Parse).ToArray();
         var (startX, startY, endX, endY) = (coords[0], coords[1], coords[2], coords[3]);
 
-        var board = _boardManager.GetBoard(gameId);
         var piece = board.GetPiece(startX, startY);
-
         if (piece == null)
         {
             await sendMessageToUser(userId, JsonSerializer.Serialize(new { success = false, message = "No hay pieza en la posición inicial." }));
             return (false, false);
         }
 
-        bool isWhiteTurn = (match.HostId.ToString() == userId && piece.Color == "White") ||
-                          (match.GuestId.ToString() == userId && piece.Color == "Black");
-
-        if (!isWhiteTurn)
+        if ((isUserWhite && piece.Color != "White") || (isUserBlack && piece.Color != "Black"))
         {
-            await sendMessageToUser(userId, JsonSerializer.Serialize(new { success = false, message = "No es tu turno o no controlas esa pieza." }));
+            await sendMessageToUser(userId, JsonSerializer.Serialize(new { success = false, message = "No controlas esa pieza.", notYourTurn = true }));
             return (false, false);
         }
 
+        var pieceAtStartBefore = board.GetPiece(startX, startY);
+        var pieceAtEndBefore = board.GetPiece(endX, endY);
+
         board.MovePiece(startX, startY, endX, endY);
+
+        var pieceAtStartAfter = board.GetPiece(startX, startY);
+        var pieceAtEndAfter = board.GetPiece(endX, endY);
+
+        if (pieceAtStartAfter == pieceAtStartBefore && pieceAtEndAfter == pieceAtEndBefore)
+        {
+            await sendMessageToUser(userId, JsonSerializer.Serialize(new { success = false, message = "Movimiento inválido.", invalidMove = true}));
+            return (false, false);
+        }
+
+        board.CurrentTurn = board.CurrentTurn == "White" ? "Black" : "White";
 
         string opponentColor = piece.Color == "White" ? "Black" : "White";
         string gameStatus = board.EstaEnJaqueMate(opponentColor) ? "Checkmate" :
@@ -87,11 +107,6 @@ public class GameMoveHandler
             await _matchMakingService.UpdateMatchStatusAsync(gameId, "Finished");
             return (true, true);
         }
-
-        //if (match.IsBotGame == true && match.GuestId == -1)
-        //{
-        //    await MakeBotMove(gameId, opponentColor, sendMessageToUser);
-        //}
 
         if (match.IsBotGame && match.GuestId == -1 && piece.Color == "White")
         {
@@ -189,36 +204,36 @@ public class GameMoveHandler
                 foreach (var (endX, endY) in moves)
                 {
                     var destinationPiece = board.GetPiece(endX, endY);
-                    // Filtrar movimientos que capturan piezas del mismo color
+                    // Filtrar capturas de piezas aliadas antes de simular
                     if (destinationPiece != null && destinationPiece.Color == botColor)
                     {
-                        Console.WriteLine($"Movimiento inválido descartado: ({startX},{startY}) a ({endX},{endY}) captura pieza aliada.");
+                        Console.WriteLine($"Descartado movimiento inválido: ({startX},{startY}) a ({endX},{endY}) captura pieza aliada.");
                         continue;
                     }
 
-                    // Probar el movimiento
+                    // Simular el movimiento
                     Piece capturedPiece = destinationPiece;
                     board.MovePiece(startX, startY, endX, endY);
 
-                    // Verificar si el rey sigue en jaque
                     if (!board.EstaEnJaque(botColor))
                     {
                         validDefensiveMoves.Add((startX, startY, endX, endY));
-                        // No ejecutar aún, solo agregar a la lista
                     }
 
-                    // Deshacer el movimiento
+                    // Restaurar el tablero
                     board.MovePiece(endX, endY, startX, startY);
+                    // Nota: No podemos restaurar capturedPiece sin PlacePiece, pero filtramos antes para minimizar el impacto
                 }
             }
 
             if (validDefensiveMoves.Count > 0)
             {
-                // Elegir un movimiento válido de la lista
-                var move = validDefensiveMoves[random.Next(validDefensiveMoves.Count)];
-                var (startX, startY, endX, endY) = move;
+                // Elegir un movimiento válido y ejecutarlo solo una vez
+                var Move = validDefensiveMoves[random.Next(validDefensiveMoves.Count)];
+                var (startX, startY, endX, endY) = Move;
 
                 board.MovePiece(startX, startY, endX, endY);
+
                 var botData = new
                 {
                     success = true,
@@ -233,7 +248,7 @@ public class GameMoveHandler
                 return;
             }
 
-            // Si no hay movimientos válidos, es jaque mate
+            // Jaque mate si no hay movimientos válidos
             Console.WriteLine($"Bot no puede salir del jaque en GameId: {gameId}. Jaque mate.");
             var checkmateData = new
             {
@@ -263,7 +278,7 @@ public class GameMoveHandler
                 }
                 else
                 {
-                    Console.WriteLine($"Movimiento inválido descartado: ({x},{y}) a ({endX},{endY}) captura pieza aliada.");
+                    Console.WriteLine($"Descartado movimiento inválido: ({x},{y}) a ({endX},{endY}) captura pieza aliada.");
                 }
             }
         }
@@ -302,5 +317,4 @@ public class GameMoveHandler
             await _matchMakingService.UpdateMatchStatusAsync(gameId, "Finished");
         }
     }
-
 }

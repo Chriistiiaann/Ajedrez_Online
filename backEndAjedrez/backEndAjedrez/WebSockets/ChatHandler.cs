@@ -38,6 +38,7 @@ public class ChatHandler
 
         var receiverMessage = new ChatDTO
         {
+            gameChatMessage = true,
             GameId = gameId,
             SenderId = userId,
             SenderName = senderName,
@@ -48,6 +49,7 @@ public class ChatHandler
 
         var senderMessage = new ChatDTO
         {
+            gameChatMessage = true,
             GameId = gameId,
             SenderId = userId,
             SenderName = senderName,

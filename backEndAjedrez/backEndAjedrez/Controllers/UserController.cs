@@ -5,6 +5,8 @@ using backEndAjedrez.Models.Interfaces;
 using backEndAjedrez.Models.Database;
 using backEndAjedrez.Services;
 using System.Text.Json;
+using backEndAjedrez.Models.Database.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backEndAjedrez.Controllers;
 
@@ -190,15 +192,40 @@ public class UserController : Controller
     public async Task<IActionResult> GetUserHistory(int userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
         var historyJson = await _userIRepository.GetUserHistory(userId, page, pageSize);
-        var historyData = JsonSerializer.Deserialize<dynamic>(historyJson); // O usa MatchHistoryResponse si prefieres tipado fuerte
+        var historyData = JsonSerializer.Deserialize<dynamic>(historyJson); 
 
-        // Verificar si está vacío
         if (historyData.GetProperty("history").GetArrayLength() == 0)
         {
             return Ok(new { message = "El usuario no ha jugado aún ninguna partida." });
         }
 
         return Ok(historyJson);
+    }
+
+    [HttpPut("update-role")]
+    public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserDTO request)
+    {
+        bool success = await _userIRepository.UpdateUserRoleAsync(request.UserId, request.NewRole);
+
+        if (!success)
+        {
+            return BadRequest("Error al actualizar el rol o rol inválido.");
+        }
+
+        return Ok(new { message = "Rol actualizado correctamente." });
+    }
+
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUserById(int userId)
+    {
+        var user = await _userIRepository.GetUserByIdAsync(userId);
+
+        if (user == null)
+        {
+            return NotFound(new { message = "Usuario no encontrado." });
+        }
+
+        return Ok(user);
     }
 }
 

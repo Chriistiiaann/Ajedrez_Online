@@ -1,10 +1,13 @@
-﻿using backEndAjedrez.Models.Database;
+﻿using backEndAjedrez.Chess_Game;
+using backEndAjedrez.Models.Database;
 using backEndAjedrez.Models.Database.Entities;
 using backEndAjedrez.Models.Dtos;
 using backEndAjedrez.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace backEndAjedrez.Services
 {
@@ -389,7 +392,7 @@ namespace backEndAjedrez.Services
             string guestName = match.IsBotGame ? "Bot" : guestInfo?.NickName;
 
             bool hostIsWhite = true;
-            string winnerName = winnerColor == "White" ? hostName : guestName; 
+            string winnerName = winnerColor == "White" ? hostName : guestName;
 
             var hostHistory = new MatchHistory
             {
@@ -398,7 +401,7 @@ namespace backEndAjedrez.Services
                 UserName = hostName,
                 OpponentId = match.GuestId,
                 OpponentName = guestName,
-                Winner = winnerName, 
+                Winner = winnerName,
                 MatchDate = DateTime.UtcNow
             };
             _context.MatchHistory.Add(hostHistory);
@@ -433,11 +436,80 @@ namespace backEndAjedrez.Services
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
             var matches = await _context.MatchRequests
                 .Where(m => m.Status == "Matched" || m.Status == "Active")
                 .ToListAsync();
 
-            return matches.Sum(m => m.GuestId.HasValue ? 2 : 1);
+            return matches.Sum(m => m.GuestId.HasValue
+                ? (m.GuestId == -1 ? 1 : 2)
+                : 1);
         }
+
+        public async Task<MatchRequest?> RematchAsync(string gameId, string user1Id, string user2Id)
+        {
+            if (string.IsNullOrEmpty(gameId) || string.IsNullOrEmpty(user1Id) || string.IsNullOrEmpty(user2Id))
+            {
+                return null;
+            }
+
+            // Verificar que user1Id y user2Id sean diferentes
+            if (user1Id == user2Id)
+            {
+                Console.WriteLine("⚠️ Error: El solicitante y el oponente no pueden ser el mismo usuario.");
+                return null;
+            }
+
+            using var scope = _serviceScopeFactory.CreateScope();
+            using var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+            var existingMatch = await context.MatchRequests
+                .FirstOrDefaultAsync(m => m.GameId == gameId && m.Status == "Finished");
+            if (existingMatch == null)
+            {
+                Console.WriteLine("⚠️ La partida no está terminada o no se encuentra en la base de datos.");
+                return null;
+            }
+
+            var user1 = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == user1Id);
+            var user2 = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == user2Id);
+            if (user1 == null || user2 == null)
+            {
+                Console.WriteLine("⚠️ Uno o ambos jugadores no existen.");
+                return null;
+            }
+
+            var newMatch = new MatchRequest
+            {
+                GameId = Guid.NewGuid().ToString(),
+                HostId = user1.Id,
+                GuestId = user2.Id,
+                Status = "Pending",
+                IsInvitedMatch = true,
+                IsBotGame = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            context.MatchRequests.Add(newMatch);
+            await context.SaveChangesAsync();
+
+            Console.WriteLine($"Nueva revancha creada entre {user1Id} y {user2Id} con el GameId: {newMatch.GameId}");
+            return newMatch;
+        }
+
+        public async Task<string> GetGameStatusAsync(string gameId)
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+            var game = await _context.MatchRequests.FirstOrDefaultAsync(g => g.GameId == gameId);
+
+            if (game == null)
+            {
+                return "Game not found";
+            }
+
+            return game.Status;
+        }
+
     }
 }

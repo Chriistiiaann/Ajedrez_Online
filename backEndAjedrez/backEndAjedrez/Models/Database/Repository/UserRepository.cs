@@ -40,11 +40,10 @@ namespace backEndAjedrez.Models.Database.Repositories
         public async Task<IEnumerable<UserDto>> GetUsers(int userId)
         {
             var users = await _context.Users
-                .Where(u => u.Id != userId) // Excluir al usuario que realiza la búsqueda
+                .Where(u => u.Id != userId)
                 .OrderBy(u => u.Id)
                 .ToListAsync();
 
-            // Mapeamos los usuarios a UserDto
             return users.Select(user => _mapper.ToDto(user));
         }
 
@@ -57,6 +56,27 @@ namespace backEndAjedrez.Models.Database.Repositories
                 .ToListAsync();
 
             return nicknames.FirstOrDefault(u => NormalizeNickname(u.NickName).Result == normalizedNickname);
+        }
+        public async Task<UserDto> GetUserByIdAsync(int userId)
+        {
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                NickName = user.NickName,
+                Avatar = user.Avatar,
+                Role = user.Role,
+            };
+
+            return userDto;
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -74,14 +94,14 @@ namespace backEndAjedrez.Models.Database.Repositories
             var normalized = await NormalizeIdentifier(nickname);
             return normalized;
         }
-        
+
         public async Task<string> NormalizeIdentifier(string identifier)
         {
             var normalizedIdentifier = identifier.ToLower();
-            
+
             normalizedIdentifier = new string(normalizedIdentifier
-                .Normalize(NormalizationForm.FormD)  
-                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark) 
+                .Normalize(NormalizationForm.FormD)
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
                 .ToArray());
 
             return normalizedIdentifier;
@@ -117,7 +137,8 @@ namespace backEndAjedrez.Models.Database.Repositories
             {
                 NickName = userCreateDto.NickName,
                 Email = userCreateDto.Email,
-                Password = userCreateDto.Password
+                Password = userCreateDto.Password,
+                Role = userCreateDto.Role ?? "None",
             };
 
             var passwordHasher = new PasswordService();
@@ -129,7 +150,8 @@ namespace backEndAjedrez.Models.Database.Repositories
                 {
                     user.Avatar = await StoreImageAsync(userCreateDto.File, userCreateDto.NickName);
                 }
-                catch(Exception ex) {
+                catch (Exception ex)
+                {
                     throw new Exception("Error al guardar la imagen: " + ex.Message);
                 }
             }
@@ -220,8 +242,8 @@ namespace backEndAjedrez.Models.Database.Repositories
                 });
 
             var paginatedHistory = await historyQuery
-                .Skip((page - 1) * pageSize) 
-                .Take(pageSize) 
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             var totalMatches = await historyQuery.CountAsync();
@@ -241,6 +263,34 @@ namespace backEndAjedrez.Models.Database.Repositories
             };
 
             return JsonSerializer.Serialize(paginatedResponse);
+        }
+
+        public async Task<bool> UpdateUserRoleAsync(int userId, string newRole)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return false; 
+            }
+
+            var validRoles = new List<string> { "None", "Admin", "Banned" };
+            if (!validRoles.Contains(newRole))
+            {
+                return false;  
+            }
+
+            // Actualizar el rol
+            user.Role = newRole;
+
+            try
+            {
+                await _context.SaveChangesAsync();  
+                return true;
+            }
+            catch (Exception)
+            {
+                return false; 
+            }
         }
 
     }

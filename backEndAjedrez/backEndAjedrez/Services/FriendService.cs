@@ -1,5 +1,6 @@
 ﻿using backEndAjedrez.Models.Database;
 using backEndAjedrez.Models.Database.Entities;
+using backEndAjedrez.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -116,5 +117,32 @@ public class FriendService
         return await _context.Friends
             .Where(f => f.FriendId == userId || f.UserId == userId)
             .ToListAsync();
+    }
+
+   
+
+    public async Task<UserDto> GetUserByIdAsync(int userId)
+    {
+        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+        using DataContext _context = scope.ServiceProvider.GetRequiredService<DataContext>();
+        var user = await _context.Users
+            .Where(u => u.Id == userId)
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        var userDto = new UserDto
+        {
+            Id = user.Id,
+            NickName = user.NickName,
+            Avatar = user.Avatar,
+            Role = user.Role,
+        };
+
+        return userDto;
+
     }
 }

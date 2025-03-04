@@ -10,5 +10,6 @@ public class User
     public string Password { get; set; }
     public string? Avatar { get; set; }
     public string Status { get; set; } = "Disconnected";
+    public string? Role { get; set; } = "None";
 
 }

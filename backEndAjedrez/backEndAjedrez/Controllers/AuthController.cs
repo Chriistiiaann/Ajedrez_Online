@@ -48,7 +48,8 @@ namespace backEndAjedrez.Controllers
                         { "Id", user.Id },
                         { "NickName", user.NickName },
                         { "Email", user.Email },
-                        { "Avatar", user.Avatar}
+                        { "Avatar", user.Avatar},
+                        { "Role", user.Role }
                         
                     },
                     Expires = DateTime.UtcNow.AddHours(2),

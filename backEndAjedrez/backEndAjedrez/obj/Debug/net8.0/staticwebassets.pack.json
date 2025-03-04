@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\christian.jpg",
+      "PackagePath": "staticwebassets\\images\\christian.jpg"
+    },
+    {
       "Id": "C:\\Users\\chrro\\OneDrive\\Escritorio\\Ajedrez_Online\\backEndAjedrez\\backEndAjedrez\\wwwroot\\images\\default.png",
       "PackagePath": "staticwebassets\\images\\default.png"
     },

@@ -196,6 +196,22 @@
   },
   {
     "ContainingType": "backEndAjedrez.Controllers.UserController",
+    "Method": "GetUserById",
+    "RelativePath": "api/User/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.UserController",
     "Method": "GetUserHistory",
     "RelativePath": "api/User/history/{userId}",
     "HttpMethod": "GET",
@@ -252,6 +268,11 @@
         "Name": "File",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
+      },
+      {
+        "Name": "Role",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -288,6 +309,27 @@
         "Name": "File",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
+      },
+      {
+        "Name": "Role",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backEndAjedrez.Controllers.UserController",
+    "Method": "UpdateUserRole",
+    "RelativePath": "api/User/update-role",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "backEndAjedrez.Models.Dtos.UpdateUserDTO",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

@@ -8,6 +8,7 @@ public class Board
 {
     public Piece[,] Grid { get; private set; }
     public bool IsWhiteTurn { get; private set; } = true;
+    public string CurrentTurn { get; set; } = "White";
     public Board()
     {
         Grid = new Piece[8, 8];
@@ -211,6 +212,7 @@ public class Board
                         if (!sigueEnJaque)
                         {
                             Console.WriteLine($"Movimiento salvador encontrado: {pieza.Symbol} de ({startX},{startY}) a ({endX},{endY})");
+                            MovePiece(startX, startY, endX, endY);
                             return false;
                         }
                     }
@@ -254,6 +256,16 @@ public class Board
         }
         return false;
     }
+    public void RestartGame()
+    {
+        InitializeBoard();
+
+        IsWhiteTurn = true;
+        CurrentTurn = "White";
+
+        Console.WriteLine("El juego ha sido reiniciado.");
+    }
+
     public Board Clone()
     {
         Board clonedBoard = new Board();

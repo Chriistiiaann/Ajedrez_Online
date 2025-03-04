@@ -48,9 +48,6 @@ public class Program
 
         builder.Services.AddScoped<middleware>();
 
-
-
-
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -94,7 +91,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        app.UseAuthentication();
         app.UseWebSockets();
         app.UseMiddleware<middleware>();
 
