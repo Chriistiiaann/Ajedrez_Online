@@ -23,6 +23,7 @@ interface WebsocketContextType {
     gameInvites: { gameId: string; senderNickname: string; senderAvatar: string }[];
     acceptGameInvite: (gameId: string) => void;
     rejectGameInvite: (gameId: string) => void;
+    notYourTurn: boolean;
 }
 
 export const WebsocketContext = createContext<WebsocketContextType | undefined>(undefined);
@@ -54,6 +55,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
     const [userData, setUserData] = useState<{ name: string; image: string } | null>(null);
     const [opponentData, setOpponentData] = useState<{ name: string; image: string } | null>(null);
     const [gameInvites, setGameInvites] = useState<{ gameId: string; senderNickname: string; senderAvatar: string }[]>([]);
+    const [notYourTurn, setNotYourTurn] = useState<boolean>(false);
 
     const pathname = usePathname();
 
@@ -171,6 +173,11 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
 
                     if (newMessage.validMoves) {
                         console.log("Mensaje de validMoves recibido:", newMessage);
+                    }
+
+                    if (newMessage.notYourTurn) {
+                        setNotYourTurn(true);
+                        console.log("notYourTurn:", newMessage.notYourTurn);
                     }
 
                     if (newMessage.success && (newMessage.status === "Check" || newMessage.status === "Checkmate")) {
@@ -302,6 +309,7 @@ export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
         gameInvites,
         acceptGameInvite,
         rejectGameInvite,
+        notYourTurn
     };
 
     return <WebsocketContext.Provider value={contextValue}>{children}</WebsocketContext.Provider>;

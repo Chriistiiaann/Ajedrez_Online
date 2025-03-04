@@ -118,6 +118,7 @@ export const registerAction = async (_actionState: ActionState, formData: FormDa
     registerFormData.append("NickName", nickname);
     registerFormData.append("Email", email);
     registerFormData.append("Password", password);
+    registerFormData.append("Role", "");
 
     try {
         const response = await fetch("https://localhost:7218/api/User/register", {

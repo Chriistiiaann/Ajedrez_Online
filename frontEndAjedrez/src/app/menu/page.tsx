@@ -7,8 +7,12 @@ import GlobalStats from "@/components/menu/global-stats";
 import { PlaySection } from "@/components/menu/play-section";
 import MatchHistory from "@/components/menu/match-history"; // Nuevo componente
 import GameInvitations from "@/components/menu/game-invitations";
+// import { useUserContext } from "@/contexts/user-context";
 
 export default function MenuPage() {
+
+  // const { userDataContext } = useUserContext();
+
   return (
     <div className="flex h-screen">
       <main className="flex-1 overflow-y-auto p-4 md:p-6">

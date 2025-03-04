@@ -8,6 +8,7 @@ type decodedToken = {
   Nickname: string,
   Avatar: string,
   Email: string,
+  Role: string,
   Exp: number,
 }
 

@@ -48,7 +48,9 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ onMove }) => {
     const columns = ["A", "B", "C", "D", "E", "F", "G", "H"];
     const [pieces, setPieces] = useState<{ [key: string]: string }>(initialPieces);
     const [validMoves, setValidMoves] = useState<string[]>([]);
-    const { sendMessage, socket, gameId, gameStatus, playerColor, matchMakingState } = useWebsocketContext();
+    const [pendingMove, setPendingMove] = useState<{ from: string; to: string; piece: string } | null>(null);
+    const [localGameStatus, setLocalGameStatus] = useState<{ status: string; message: string } | null>(null); // Estado local para gameStatus
+    const { sendMessage, socket, gameId, playerColor, matchMakingState } = useWebsocketContext();
 
     const isPlayerPiece = (piece: string): boolean => {
         const effectiveColor = playerColor || (matchMakingState === "botMatch" ? "w" : null);
@@ -78,43 +80,6 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ onMove }) => {
         }
     };
 
-    useEffect(() => {
-        if (!socket) return;
-
-        const handleMessage = (event: MessageEvent) => {
-            const message = JSON.parse(event.data);
-
-            if (message.success && message.validMoves) {
-                const moves = message.validMoves.map((move: { x: number; y: number }) =>
-                    cartesianToChess(move.x, move.y)
-                );
-                setValidMoves(moves);
-            }
-
-            if (message.success && message.move && message.status === "Move") {
-                const { startX, startY, endX, endY } = message.move;
-                const from = cartesianToChess(startX, startY);
-                const to = cartesianToChess(endX, endY);
-
-                setPieces((prev) => {
-                    const updatedPieces = { ...prev };
-                    const piece = updatedPieces[from];
-                    if (piece) {
-                        delete updatedPieces[from];
-                        updatedPieces[to] = piece;
-                        if (onMove) onMove(from, to, true); // Notificar movimiento del oponente
-                    }
-                    return updatedPieces;
-                });
-            }
-        };
-
-        socket.addEventListener("message", handleMessage);
-        return () => {
-            socket.removeEventListener("message", handleMessage);
-        };
-    }, [socket, onMove]);
-
     const handleDragEnd = () => {
         setValidMoves([]);
     };
@@ -129,6 +94,9 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ onMove }) => {
             return;
         }
 
+        console.log("Moviendo de", from, "a", to);
+        setPendingMove({ from, to, piece });
+
         const fromPosition = chessToCartesian(from);
         const toPosition = chessToCartesian(to);
         const move = `${fromPosition},${toPosition}`;
@@ -136,26 +104,84 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ onMove }) => {
         if (gameId) {
             sendMessage("makeMove", gameId, move);
         }
-
-        setPieces((prev) => {
-            const updatedPieces = { ...prev };
-            delete updatedPieces[from];
-            updatedPieces[to] = piece;
-            if (onMove) onMove(from, to); // Notificar movimiento del jugador
-            return updatedPieces;
-        });
         setValidMoves([]);
     };
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleMessage = (event: MessageEvent) => {
+            const message = JSON.parse(event.data);
+            console.log("Mensaje del servidor:", message);
+
+            // Movimientos válidos
+            if (message.success && message.validMoves) {
+                const moves = message.validMoves.map((move: { x: number; y: number }) =>
+                    cartesianToChess(move.x, move.y)
+                );
+                setValidMoves(moves);
+            }
+
+            // Movimiento del oponente (sin pendingMove)
+            if (message.success && message.move && !pendingMove) {
+                const { startX, startY, endX, endY } = message.move;
+                const from = cartesianToChess(startX, startY);
+                const to = cartesianToChess(endX, endY);
+
+                setPieces((prev) => {
+                    const updatedPieces = { ...prev };
+                    const piece = updatedPieces[from];
+                    if (piece) {
+                        delete updatedPieces[from];
+                        updatedPieces[to] = piece;
+                        if (onMove) onMove(from, to, true);
+                    }
+                    return updatedPieces;
+                });
+                // Limpiar gameStatus a menos que el nuevo estado sea Check o Checkmate
+                if (message.status === "Check" || message.status === "Checkmate") {
+                    setLocalGameStatus({ status: message.status, message: message.message || "" });
+                } else {
+                    setLocalGameStatus(null);
+                }
+                console.log("Movimiento del oponente aplicado:", from, "a", to);
+            }
+
+            // Movimiento del jugador confirmado (Move o Check)
+            if (message.success && pendingMove && (message.status === "Move" || message.status === "Check")) {
+                setPieces((prev) => {
+                    const updatedPieces = { ...prev };
+                    delete updatedPieces[pendingMove.from];
+                    updatedPieces[pendingMove.to] = pendingMove.piece;
+                    if (onMove) onMove(pendingMove.from, pendingMove.to);
+                    return updatedPieces;
+                });
+                // Actualizar gameStatus solo si es Check o Checkmate
+                if (message.status === "Check" || message.status === "Checkmate") {
+                    setLocalGameStatus({ status: message.status, message: message.message || "" });
+                } else {
+                    setLocalGameStatus(null);
+                }
+                setPendingMove(null);
+                console.log("Movimiento confirmado (Move o Check):", pendingMove.from, "a", pendingMove.to);
+            }
+
+            // Movimiento rechazado (no es tu turno o inválido)
+            if ((message.notYourTurn || message.success === false) && pendingMove) {
+                console.log("Movimiento rechazado, pieza queda en", pendingMove.from);
+                setPendingMove(null);
+            }
+        };
+
+        socket.addEventListener("message", handleMessage);
+        return () => {
+            socket.removeEventListener("message", handleMessage);
+        };
+    }, [socket, onMove, pendingMove]);
 
     const effectiveColor = playerColor || (matchMakingState === "botMatch" ? "w" : null);
     const displayRows = effectiveColor === "b" ? [...rows].reverse() : rows;
     const displayColumns = effectiveColor === "b" ? [...columns].reverse() : columns;
-
-    useEffect(() => {
-        if (gameStatus) {
-            console.log("Estado del juego:", gameStatus.status, gameStatus.message);
-        }
-    }, [gameStatus]);
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -209,12 +235,12 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ onMove }) => {
                         })}
                     </div>
                 ))}
-                {gameStatus && (
+                {localGameStatus && (
                     <div className="text-center mt-4">
                         <p className="text-xl font-bold">
-                            {gameStatus.status === "Check" ? "¡Jaque!" : "¡Jaque Mate!"}
+                            {localGameStatus.status === "Check" ? "¡Jaque!" : "¡Jaque Mate!"}
                         </p>
-                        <p>{gameStatus.message}</p>
+                        <p>{localGameStatus.message}</p>
                     </div>
                 )}
             </div>

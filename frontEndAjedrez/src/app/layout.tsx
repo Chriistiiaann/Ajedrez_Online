@@ -28,8 +28,6 @@ export default  async function RootLayout({
   const authData = await getAuth();
   const idToken = authData.decodedToken?.Id ?? null;
 
- 
-
   return (
     <html suppressHydrationWarning lang="en" className="dark">
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
